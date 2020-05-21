@@ -1,6 +1,7 @@
 <template>
-  <div class="headerContainer">
-    header
+  <div>
+    <!-- 模版 -->
+    路由3
   </div>
 </template>
 
@@ -10,6 +11,7 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+
     };
   },
   components: {},
@@ -32,6 +34,7 @@ export default {
     
   },
   mounted() {
+    
   },
   beforeUpdate() {
 
@@ -50,13 +53,5 @@ export default {
 </script>
 
 <style scoped lang="less" >
-.headerContainer {
-  width: 100%;
-  height: 100px;
-  line-height: 100px;
-  background: #409EFF;
-  font-size: 23px;
-  color: #fff;
-  text-align: center;
-}
+
 </style>

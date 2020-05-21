@@ -1,6 +1,7 @@
 <template>
-  <div class="headerContainer">
-    header
+  <div class="homeLeftContainer">
+    <!-- 模版 -->
+     <router-view/>
   </div>
 </template>
 
@@ -10,11 +11,12 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+
     };
   },
   components: {},
   computed: {
-    // ...mapState([''])
+    ...mapState([''])
   },
   methods: {
     // ...mapMutations(['']),
@@ -32,6 +34,7 @@ export default {
     
   },
   mounted() {
+    
   },
   beforeUpdate() {
 
@@ -50,13 +53,10 @@ export default {
 </script>
 
 <style scoped lang="less" >
-.headerContainer {
-  width: 100%;
-  height: 100px;
-  line-height: 100px;
-  background: #409EFF;
-  font-size: 23px;
-  color: #fff;
-  text-align: center;
+.homeLeftContainer {
+  width: 200px;
+  height: 100%;
+  flex: 1;
+  font-size: 30px;
 }
 </style>
