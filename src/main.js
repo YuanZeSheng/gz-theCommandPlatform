@@ -10,7 +10,8 @@ import router from './router'
 import store from './store/store';
 import api from './api/api.js'  
 import filter from "./filter/filter.js"
-
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
