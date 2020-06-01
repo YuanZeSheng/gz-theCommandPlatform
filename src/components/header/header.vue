@@ -2,7 +2,7 @@
   <div class="headerContainer">
     <i v-if="!collapse" class="el-icon-s-fold" @click="handleCollapseChage"></i>
     <i v-else class="el-icon-s-unfold" @click="handleCollapseChage"></i>
-    <span>示范城市评价系统</span>
+    <span>杭州示范城市评价系统</span>
     <!-- <span>admin 退出</span> -->
   </div>
 </template>

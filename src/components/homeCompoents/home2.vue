@@ -8,51 +8,55 @@
         :key="index"
         style="font-size: 18px"
       >
-        <div class="index3Content" v-for="(item3, index3) in item.index3List" :key="index3">
-          
-          
-          <p>
-            <el-tag effect="dark" type="success">三级项：</el-tag>
-            <br />
-            <span class="marginLeft10">{{item3.index2}}</span>
-          </p>
+        <p class="title">{{item.index2}}</p>
 
+        <!-- 表头 -->
+        <div class="tableHeader">
+          <span
+            v-for="(tabelHeaderItem, index3) in item.tabelHeaderList"
+            :key="index3"
+          >{{tabelHeaderItem.name}}</span>
+        </div>
 
-          <!-- 任务 -->
-          <p class="item3Left">
-            <el-tag effect="dark" type="success">评价内容：</el-tag>
-            <br />
-            <span class="marginLeft10">{{item3.index3Name}}</span>
-          </p>
-
-          <p class="item3Middle">
-            <el-tag effect="dark" type="success">任务：</el-tag>
-              <br />
-            <span v-for="(item3Detail, index3Detail) in item3.index3DetailList" :key="index3Detail">
-              <span class="marginLeft10">{{item3Detail.name}}- {{item3Detail.num}}</span>
-              <br />
-            </span>
-          </p>
-
-          <p>
-            <el-tag effect="dark" type="success">责任单位：</el-tag>
-            <br />
-            <span class="marginLeft10">{{item3.department}}</span>
-          </p>
-
-          <p class="item3Right">
-            <el-tag effect="dark" type="success">提交材料：</el-tag>
-            <br />
-            <span
-              v-for="(item4index3Materials, index3MaterialsIndex) in item3.index3Materials"
-              :key="index3MaterialsIndex"
-              class="marginLeft10"
-            >
-              {{item4index3Materials}}
-              <br />
-            </span>
-          </p>
-
+        <!-- 表 -->
+        <div class="tableContent">
+          <div
+            class="scoreContent"
+            v-for="(scoreContentItem, scoreContentIndex) in item.tabelDetailList"
+            :key="scoreContentIndex"
+          >
+            <!-- 评价内容 -->
+            <div style="width: 20%" class="textCenter">
+              <p class="textLeft">{{scoreContentItem.scoreContent}}</p>
+            </div>
+            <!-- 任务 -->
+            <div class="rightBox" style="width: 80%">
+              <div
+                v-for="(items, index) in scoreContentItem.list"
+                :key="index"
+                class="rightContent"
+              >
+                <p class="" style="width: 25%; paddingLeft: 15px">{{items.task}}</p>
+                <!-- 责任单位 -->
+                <p class="textCenter" style="width: 25%">{{items.department}}</p>
+                <!-- 提交材料 -->
+                <div style="width:25%">
+                  <div
+                    v-for="(materialsListItem, materialsListIndex) in items.materialsList"
+                    :key="materialsListIndex"
+                  >{{materialsListItem.name}}</div>
+                </div>
+                <!-- 状态 -->
+                <div class="textCenter flexCenter" style="width: 25%">
+                  <el-tag
+                    :type="items.status == 2 ? 'warning' : 'success'"
+                    effect="dark"
+                  >{{items.status == 1 ? '已完成' : '未完成'}}</el-tag>
+                </div>
+                <!-- <p>{{items.task}}</p> -->
+              </div>
+            </div>
+          </div>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -70,7 +74,7 @@ export default {
   },
   components: {},
   computed: {
-    ...mapState(["evaluateList"])
+    ...mapState(["evaluateList", "tabelDetailList"])
   },
   methods: {
     // ...mapMutations(['']),
@@ -88,40 +92,16 @@ export default {
 </script>
 
 <style scoped lang="less" >
+.title {
+  margin: 10px 0 20px;
+  text-align: center;
+}
 .home3Container {
   height: 100%;
   .el-table {
     min-height: 100%;
     font-size: 20px;
     overflow: inherit;
-  }
-  .index3Content {
-    margin-top: 30px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ebeef5;
-    padding-bottom: 10px;
-    p  {
-      width: 18%;
-      margin-bottom: 30px;
-    }
-    p:nth-child(1) {
-      width: 15%;
-    }
-    p:nth-child(2) {
-      width: 15%;
-    }
-    p:nth-child(3) {
-      width: 24%;
-    }
-
-    p:nth-child(4) {
-      width: 10%;
-    }
-
-    p:nth-child(5) {
-      width: 30%;
-    }
   }
 }
 
@@ -130,5 +110,69 @@ export default {
 }
 .el-tag {
   margin-bottom: 10px;
+}
+
+.textAlign {
+  text-align: center;
+  font-size: 20px;
+}
+
+.tableHeader {
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+  color: black;
+  span {
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+  }
+}
+
+.scoreContent {
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+// .tableHeader::before {
+//   left: 5%;
+//   bottom: 0;
+//   width: 90%;
+//   height: 1px;
+//   content: "";
+//   position: absolute;
+//   background-color: #ebeef5;
+//   z-index: 1;
+// }
+
+.rightBox {
+  width: 75%;
+  .rightContent {
+    display: flex;
+    margin-bottom: 20px;
+    p {
+      width: 25%;
+    }
+  }
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.textLeft {
+  display: inline-block;
+  text-align: left;
+}
+
+
+.scoreContent {
+  margin-top: 20px;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
