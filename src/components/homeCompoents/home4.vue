@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 模版 -->
-    资源上传
+    任务分派
   </div>
 </template>
 

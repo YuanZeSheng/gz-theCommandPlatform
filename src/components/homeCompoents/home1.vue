@@ -5,15 +5,20 @@
       <div class="wrapper-header">
         <div class="wrapepr-header-left">
           <ul>
-            <li>85</li>
+            <li style="font-size: 60px">85</li>
             <li>自得分</li>
           </ul>
         </div>
         <div class="wrapepr-header-right">
           <div>评价日志:</div>
-          <ul>
+          <!-- <ul>
             <li v-for="(item,index) in list" :key="index">{{item}}</li>
-          </ul>
+          </ul> -->
+          <el-table :data="tableData" style="width: 400px%">
+            <el-table-column prop="date" label="日期" width="180"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+            <el-table-column prop="address" label="评价内容"></el-table-column>
+          </el-table>
         </div>
       </div>
       <div class="wrapepr-echarts">
@@ -30,6 +35,23 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      tableData: [{
+            date: '2020-5-30 12:06:35',
+            name: '王小虎',
+            address: '各个单位评价内容'
+          }, {
+            date: '2020-5-30 12:06:35',
+            name: '王小虎',
+            address: '各个单位评价内容'
+          }, {
+            date: '2020-5-30 12:06:35',
+            name: '王小虎',
+            address: '各个单位评价内容'
+          }, {
+            date: '2020-5-30 12:06:35',
+            name: '王小虎',
+            address: '各个单位评价内容'
+          }],
       list: ["2020-5-30 12:06:35", "2020-5-30 12:06:35"],
       dataX: [
         "源头治理",
@@ -40,16 +62,16 @@ export default {
         "监督管理",
         "监督管理"
       ],
-      dataInY: [700, 600, 500, 400, 300, 200, 100],
-      dataOutY: [   1000,   1000,    1000,   1000,    1000,   1000,    1000],
+      dataInY: [100, 200, 300, 400, 300, 200, 100],
+      dataOutY: [200, 300, 400, 500, 400, 300, 200],
       datapie: [
-        { value: 20, name: "源头治理" },
-        { value: 30, name: "风险防控" },
-        { value: 25, name: "监督管理" },
-        { value: 25, name: "源头治理" },
-        { value: 20, name: "治安管理" },
-        { value: 35, name: "区政管理" },
-        { value: 30, name: "水污管理" },
+        { value: 20, name: "市监委(3分)" },
+        { value: 30, name: "市委组织部(2分)" },
+        { value: 25, name: "市委宣传部(3分)" },
+        { value: 25, name: "市委政法委(3分)" },
+        { value: 20, name: "市检察院(3分)" },
+        { value: 35, name: "市委编办(3分)" },
+        { value: 30, name: "市经信局(3分)" }
       ]
     };
   },
@@ -211,24 +233,31 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },           
+        },
         legend: {
-                orient: 'vertical',
-                x: 'right',
-                y:'50',
-                data: ['源头治理', '风险防控', '监督管理', '源头治理', '治安管理','区政管理','水污管理'],
-                icon:"circle",
-                formatter:function(name){
-                    let target;
-                    for(let i=0;i<dataPie.length;i++){
-                        if(dataPie[i].name===name){
-                            target=dataPie[i].value
-                        }
-                    }
-                    let arr=[target+name]
-                    return arr.join("\n")
-
-                },
+          orient: "vertical",
+          x: "right",
+          y: "50",
+          data: [
+            "市监委",
+            "市委组织部",
+            "市委宣传部",
+            "市委政法委",
+            "市检察院",
+            "市委编办",
+            "市经信局"
+          ],
+          icon: "circle",
+          formatter: function(name) {
+            let target;
+            for (let i = 0; i < dataPie.length; i++) {
+              if (dataPie[i].name === name) {
+                target = dataPie[i].value;
+              }
+            }
+            let arr = [target + name];
+            return arr.join("\n");
+          }
         },
 
         series: [
@@ -248,22 +277,21 @@ export default {
 </script>
 
 <style scoped lang="less" >
-.wrapepr {
-  width: 90%;
-  height: 100%;
-  // background: #ccc;
-  margin: 0 auto;
-}
+// .wrapepr {
+//   width: 90%;
+//   height: 100%;
+//   // background: #ccc;
+//   margin: 0 auto;
+// }
 
 .wrapper-header {
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 60px;
+  margin-bottom: 80px;
   .wrapepr-header-left {
     width: 30%;
-    height: 60px;
     font-size: 20px;
     text-align: left;
     ul {
@@ -277,15 +305,17 @@ export default {
     }
   }
   .wrapepr-header-right {
-    width: 80%;
     font-size: 20px;
     display: flex;
     text-align: left;
     // justify-content: center;
     align-items: center;
-    div {
-      width: 30%;
+    div:nth-child(1) {
       text-align: center;
+      margin-right: 20px;
+    }
+    .el-table {
+      width: 500px !important;
     }
   }
 }
@@ -297,6 +327,6 @@ export default {
 .wrapper-content-echarts {
   width: 50%;
   height: 100%;
-  margin-top:20px;
+  margin-top: 20px;
 }
 </style>

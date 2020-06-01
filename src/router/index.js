@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
   const routes = [
 
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     // route level code-splitting
     // this generates a separate chunk (Home.[hash].js) for this route
@@ -16,16 +15,20 @@ Vue.use(VueRouter)
     redirect: '/home/index1',
     children: [
       {
-        path: 'index1',
-        component: () => import(/* webpackChunkName: "Home" */ '../components/homeCompoents/home1.vue'),
+        path: 'home/index1',
+        component: () => import(/* webpackChunkName: "home1" */ '../components/homeCompoents/home1.vue'),
       },
       {
-        path: 'index2',
-        component: () => import(/* webpackChunkName: "Home" */ '../components/homeCompoents/home2.vue'),
+        path: 'home/index2',
+        component: () => import(/* webpackChunkName: "home2" */ '../components/homeCompoents/home2.vue'),
       },
       {
-        path: 'index3',
-        component: () => import(/* webpackChunkName: "Home" */ '../components/homeCompoents/home3.vue'),
+        path: 'home/index3',
+        component: () => import(/* webpackChunkName: "home3" */ '../components/homeCompoents/home3.vue'),
+      },
+      {
+        path: 'home/index4',
+        component: () => import(/* webpackChunkName: "home4" */ '../components/homeCompoents/home4.vue'),
       },
     ]
   }

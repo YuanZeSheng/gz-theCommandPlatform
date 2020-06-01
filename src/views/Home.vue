@@ -2,14 +2,12 @@
   <div class="homeContainer">
     <!-- header -->
     <HeaderContainer></HeaderContainer>
-    <div class="homeContent">
 
-      <!-- homeLeft -->
-      <HomeLeftContainer></HomeLeftContainer>
+    <!-- homeLeft -->
+    <HomeLeftContainer></HomeLeftContainer>
 
-      <!-- homeRight -->
-      <HomeRightContainer></HomeRightContainer>
-    </div>
+    <!-- homeRight -->
+    <HomeRightContainer></HomeRightContainer>
     
   </div>
 </template>
@@ -30,11 +28,4 @@ export default {
 
 
 <style scoped lang="less" >
-.homeContainer {
-  height: 100%;
-  .homeContent {
-    height: calc(100% - 100px);
-    display: flex;
-  }
-}
 </style>

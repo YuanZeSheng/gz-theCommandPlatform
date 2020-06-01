@@ -4,4 +4,8 @@ export default {
 
         state.handleTestMutations = data
     },
+
+      handleChangeCollapseFlag(state, data) {
+        state.collapse = !state.collapse
+      }
 }

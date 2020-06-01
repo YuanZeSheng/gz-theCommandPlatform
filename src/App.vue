@@ -6,7 +6,11 @@
 
 <style lang="less">
 #app {
-  min-width: 1280px;
+  width: 100%;
   height: 100%;
+  overflow: hidden;
+}
+.el-tabs__item {
+  font-size: 20px !important;
 }
 </style>

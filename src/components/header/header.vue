@@ -1,6 +1,9 @@
 <template>
   <div class="headerContainer">
-    header
+    <i v-if="!collapse" class="el-icon-s-fold" @click="handleCollapseChage"></i>
+    <i v-else class="el-icon-s-unfold" @click="handleCollapseChage"></i>
+    <span>示范城市评价系统</span>
+    <!-- <span>admin 退出</span> -->
   </div>
 </template>
 
@@ -10,6 +13,7 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      collapse: false
     };
   },
   components: {},
@@ -17,46 +21,39 @@ export default {
     // ...mapState([''])
   },
   methods: {
-    // ...mapMutations(['']),
-   },
-  watch: {
-    
-   },
-  beforeCreate() {
-
+    ...mapMutations(['handleChangeCollapseFlag']),
+    handleCollapseChage() {
+      this.collapse = !this.collapse;
+      this.handleChangeCollapseFlag()
+    }
   },
-  created() {
-    
-  },
-  beforeMount() {
-    
-  },
-  mounted() {
-  },
-  beforeUpdate() {
-
-  },
-  updated() {
-    
-  },
-  beforeDestroy() {
-    
-  },
-  destroyed() {
-
-  },
-
+  watch: {},
+  beforeCreate() {},
+  created() {},
+  beforeMount() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {},
+  beforeDestroy() {},
+  destroyed() {}
 };
 </script>
 
 <style scoped lang="less" >
 .headerContainer {
   width: 100%;
-  height: 100px;
-  line-height: 100px;
-  background: #409EFF;
-  font-size: 23px;
+  height: 70px;
+  line-height: 70px;
+  background: #242f42;
+  font-size: 22px;
   color: #fff;
-  text-align: center;
+  position: relative;
+  z-index: 2;
+  
+}
+
+i {
+  cursor: pointer;
+  padding: 0 21px;
 }
 </style>
