@@ -8,12 +8,14 @@
         :key="index"
         style="font-size: 18px"
       >
-        <p class="title">{{item.index2}}</p>
+      <div v-for="(it, ind) in item.content" :key="ind">
+
+        <p class="title">{{ind + 1}}. {{it.title}}</p>
 
         <!-- 表头 -->
         <div class="tableHeader">
           <span
-            v-for="(tabelHeaderItem, index3) in item.tabelHeaderList"
+            v-for="(tabelHeaderItem, index3) in it.tabelHeaderList"
             :key="index3"
           >{{tabelHeaderItem.name}}</span>
         </div>
@@ -22,32 +24,46 @@
         <div class="tableContent">
           <div
             class="scoreContent"
-            v-for="(scoreContentItem, scoreContentIndex) in item.tabelDetailList"
+            v-for="(scoreContentItem, scoreContentIndex) in it.tabelDetailList"
             :key="scoreContentIndex"
           >
             <!-- 评价内容 -->
-            <div style="width: 20%" class="textCenter">
+            <div style="width: 16.666%" class="textCenter">
               <p class="textLeft">{{scoreContentItem.scoreContent}}</p>
             </div>
             <!-- 任务 -->
-            <div class="rightBox" style="width: 80%">
+            <div class="rightBox">
               <div
                 v-for="(items, index) in scoreContentItem.list"
                 :key="index"
                 class="rightContent"
               >
-                <p class="" style="width: 25%; paddingLeft: 15px">{{items.task}}</p>
+                <p class="" style="width: 20%; paddingLeft: 35px">{{items.task}}</p>
                 <!-- 责任单位 -->
-                <p class="textCenter" style="width: 25%">{{items.department}}</p>
+                <p class="textCenter" style="width: 20%">{{items.department}}</p>
                 <!-- 提交材料 -->
-                <div style="width:25%">
+                <div style="width:20%">
                   <div
                     v-for="(materialsListItem, materialsListIndex) in items.materialsList"
                     :key="materialsListIndex"
-                  >{{materialsListItem.name}}</div>
+                  >{{materialsListItem.name}}
+                  </div>
                 </div>
+
+                <div class="textCenter flexCente" style="width: 20%">
+                  <div v-for="(materialsListItem, materialsListIndex) in items.materialsList" 
+                       :key="materialsListIndex"
+                       style="display: block;">
+                    <el-tag
+                    :type="materialsListItem.status == 2 ? 'warning' : 'success'"
+                    effect="dark"
+                    >{{materialsListItem.status == 1 ? '已完成' : '未完成'}}</el-tag>
+                  </div>
+                  
+                </div>
+
                 <!-- 状态 -->
-                <div class="textCenter flexCenter" style="width: 25%">
+                <div class="textCenter flexCenter" style="width: 20%">
                   <el-tag
                     :type="items.status == 2 ? 'warning' : 'success'"
                     effect="dark"
@@ -58,6 +74,8 @@
             </div>
           </div>
         </div>
+        </div>
+
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -94,7 +112,8 @@ export default {
 <style scoped lang="less" >
 .title {
   margin: 10px 0 20px;
-  text-align: center;
+  text-align: left;
+  font-size: 28px;
 }
 .home3Container {
   height: 100%;
@@ -123,7 +142,7 @@ export default {
   color: black;
   span {
     display: inline-block;
-    width: 20%;
+    width: 16.666%;
     text-align: center;
   }
 }
@@ -146,12 +165,12 @@ export default {
 // }
 
 .rightBox {
-  width: 75%;
+  width: 100%;
   .rightContent {
     display: flex;
     margin-bottom: 20px;
     p {
-      width: 25%;
+      width: 16.666%;
     }
   }
 }
@@ -175,4 +194,5 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
 </style>

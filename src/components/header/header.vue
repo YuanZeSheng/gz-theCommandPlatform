@@ -1,9 +1,26 @@
 <template>
   <div class="headerContainer">
-    <i v-if="!collapse" class="el-icon-s-fold" @click="handleCollapseChage"></i>
-    <i v-else class="el-icon-s-unfold" @click="handleCollapseChage"></i>
+    <i v-if="!collapse" class="el-icon-s-fold leftIcon" @click="handleCollapseChage"></i>
+    <i v-else class="el-icon-s-unfold leftIcon" @click="handleCollapseChage"></i>
     <span>杭州示范城市评价系统</span>
-    <!-- <span>admin 退出</span> -->
+
+    <el-dropdown class="loginName" trigger="click">
+      <span class="el-dropdown-link">
+        陶超
+        <i class="el-icon-caret-bottom"></i>
+      </span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item>个人页面</el-dropdown-item>
+        <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+
+    <span class="log">
+      <img
+        src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591040221730&di=6c9b20cea1ecfd01cfa5423e024b4193&imgtype=0&src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180508%2F11%2F1525751854-AiZaDNfSOp.jpg"
+        alt
+      />
+    </span>
   </div>
 </template>
 
@@ -21,10 +38,10 @@ export default {
     // ...mapState([''])
   },
   methods: {
-    ...mapMutations(['handleChangeCollapseFlag']),
+    ...mapMutations(["handleChangeCollapseFlag"]),
     handleCollapseChage() {
       this.collapse = !this.collapse;
-      this.handleChangeCollapseFlag()
+      this.handleChangeCollapseFlag();
     }
   },
   watch: {},
@@ -49,11 +66,29 @@ export default {
   color: #fff;
   position: relative;
   z-index: 2;
-  
 }
 
-i {
+.leftIcon {
   cursor: pointer;
   padding: 0 21px;
+}
+
+.loginName {
+  float: right;
+  margin-right: 50px;
+  font-size: 14px;
+  color: #fff !important;
+  cursor: pointer;
+}
+
+.log {
+  float: right;
+  margin-right: 20px;
+}
+
+.log img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 </style>
