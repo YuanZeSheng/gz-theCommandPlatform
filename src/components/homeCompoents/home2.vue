@@ -45,6 +45,8 @@
                 <div style="width:20%">
                   <div
                     v-for="(materialsListItem, materialsListIndex) in items.materialsList"
+                    :class="[materialsListIndex == 1 ? 'red': 'cur']"
+                    @click="handleShowPdf(materialsListIndex)"
                     :key="materialsListIndex"
                   >{{materialsListItem.name}}
                   </div>
@@ -96,6 +98,26 @@ export default {
   },
   methods: {
     // ...mapMutations(['']),
+
+    handleShowPdf(index) {
+      if( index == 0 ) {
+        this.$message({
+          message: "请先上传材料",
+          type: "error"
+        });
+
+        return false
+      }
+
+          const url = '/showpdf.pdf'
+          const link = document.createElement('a');
+          let fname = 'report.pdf';
+          link.href = url;
+          link.target='_blank'
+          // link.setAttribute('download', fname);
+          document.body.appendChild(link);
+          link.click();
+    },
   },
   watch: {},
   beforeCreate() {},
@@ -191,6 +213,16 @@ export default {
 .flexCenter {
   display: flex;
   justify-content: center;
+}
+
+
+.red {
+  color: #67C23A;
+  cursor: pointer;
+}
+
+.cur {
+  cursor: pointer;
 }
 
 

@@ -69,6 +69,9 @@
         <el-form-item label="任务">
           <el-input v-model="updateForm.taskValue"></el-input>
         </el-form-item>
+        <el-form-item label="考核分值">
+          <el-input v-model="updateForm.taskNumValue"></el-input>
+        </el-form-item>
         <el-form-item label="责任单位">
           <!-- <el-input v-model="updateForm.departmentValue"></el-input> -->
 
@@ -106,6 +109,9 @@
       <el-form ref="updateForm" :model="addForm" label-width="70px">
         <el-form-item label="任务">
           <el-input v-model="addForm.taskValue"></el-input>
+        </el-form-item>
+        <el-form-item label="考核分值">
+          <el-input v-model="addForm.taskNumValue"></el-input>
         </el-form-item>
         <el-form-item label="责任单位">
           <!-- <el-input v-model="updateForm.departmentValue"></el-input> -->
@@ -176,13 +182,15 @@ export default {
       updateForm: {
         taskValue: "",
         departmentValue: "",
-        evaluationListValue: []
+        evaluationListValue: [],
+        taskNumValue: ''
       },
 
       addForm: {
         taskValue: "",
         departmentValue: "",
-        evaluationListValue: []
+        evaluationListValue: [],
+        taskNumValue: ''
       },
 
       indexObj: {},
