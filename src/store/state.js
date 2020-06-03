@@ -2,6 +2,7 @@ export default {
   // vuex
   vuexState: 'vuex',
   collapse: false,
+  userFlag: true,
   leftNavList: [{
     name: '综合治理平台',
     childrenList: [{
@@ -237,7 +238,7 @@ export default {
         }]
       },{
         task: '国土空间总体规划（城市总体规划）',
-        department: '市发展改革委',
+        department: '市委编办',
         evaluationList: [{
           name: '专项规划文本，并体现综合防灾、公共安全要求;',
         },{
@@ -245,7 +246,7 @@ export default {
         }]
       },{
         task: '综合防灾减灾规划和年度实施计划',
-        department: '市发展改革委',
+        department: '市人防办',
         evaluationList: [{
           name: '专项规划文本，并体现综合防灾、公共安全要求;',
         },{
@@ -253,7 +254,7 @@ export default {
         }]
       },{
         task: '防震减灾规划和年度实施计划',
-        department: '市发展改革委',
+        department: '市委宣传部',
         evaluationList: [{
           name: '专项规划文本，并体现综合防灾、公共安全要求;',
         },{
@@ -277,7 +278,7 @@ export default {
 
       tabelDetailList: [{
         task: '建设项目按规定开展安全预评价（设立安全评价）',
-        department: '市发展改革委',
+        department: '市民政局',
         evaluationList: [{
           name: '专项规划文本，并体现综合防灾、公共安全要求;',
         },{
@@ -285,7 +286,7 @@ export default {
         }]
       },{
         task: '国土空间总体规划（城市总体规划）',
-        department: '市发展改革委',
+        department: '市公安局',
         evaluationList: [{
           name: '专项规划文本，并体现综合防灾、公共安全要求;',
         },{
@@ -293,7 +294,7 @@ export default {
         }]
       },{
         task: '综合防灾减灾规划和年度实施计划',
-        department: '市发展改革委',
+        department: '市财政局',
         evaluationList: [{
           name: '专项规划文本，并体现综合防灾、公共安全要求;',
         },{
@@ -301,7 +302,7 @@ export default {
         }]
       },{
         task: '防震减灾规划和年度实施计划',
-        department: '市发展改革委',
+        department: '市国资委',
         evaluationList: [{
           name: '专项规划文本，并体现综合防灾、公共安全要求;',
         },{

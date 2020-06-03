@@ -37,5 +37,12 @@ export default {
 
 
         console.log(addFromData)
+      },
+
+
+      handleChangeUser(state, data) {
+
+        state.userFlag = !state.userFlag
+
       }
 }

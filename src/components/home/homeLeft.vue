@@ -10,32 +10,35 @@
       active-text-color="#20a0ff"
       unique-opened
     >
-      <el-menu-item :index="'/home/index1'"  @click="handleToHomePage">
+
+      <el-menu-item :index="'/home/index1'"  @click="handleToHomePage" v-if="userFlag">
         <i class="el-icon-menu"></i>
         <span slot="title">
           首页
         </span>
       </el-menu-item>
+      
       <el-submenu index="/home/index2">
         <template slot="title">
           <i class="el-icon-location"></i>
-          <span slot="title">
+          <span slot="title" class="titleText">
             评价
           </span>
         </template>
         <el-menu-item-group>
           <!-- <span slot="title">分组一</span> -->
-          <el-menu-item index="/home/index2">
+          <el-menu-item index="/home/index2" v-if="userFlag">
             <router-link to="/home/index2" class="routeBtn" tag="li">城市自评</router-link>
           </el-menu-item>
-          <el-menu-item index="/home/index3">
+          <el-menu-item :index="'/home/index3'" v-if="!userFlag">
             <router-link to="/home/index3" class="routeBtn" tag="li">材料上传</router-link>
           </el-menu-item>
-          <el-menu-item index="/home/index4">
+          <el-menu-item index="/home/index4" v-if="userFlag">
             <router-link to="/home/index4" class="routeBtn" tag="li">任务分派</router-link>
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+
     </el-menu>
   </div>
 </template>
@@ -51,7 +54,7 @@ export default {
   },
   components: {},
   computed: {
-    ...mapState(["collapse"]),
+    ...mapState(["collapse", "userFlag"]),
     onRoutes() {
       return this.$route.path.replace("/", "");
     }
@@ -92,5 +95,11 @@ export default {
 
 ul {
   height: 100%;
+  li {
+    font-size: 20px;
+  }
+  .titleText {
+    font-size: 20px;
+  }
 }
 </style>
