@@ -64,7 +64,7 @@
     </el-tabs>
 
     <!-- 编辑弹出框 -->
-    <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+    <el-dialog title="编辑" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="updateForm" :model="updateForm" label-width="70px">
         <el-form-item label="任务">
           <el-input v-model="updateForm.taskValue"></el-input>
@@ -105,8 +105,8 @@
 
     <!-- 新增弹出框 -->
 
-    <el-dialog title="新增" :visible.sync="addEditVisible" width="30%">
-      <el-form ref="updateForm" :model="addForm" label-width="70px">
+    <el-dialog title="新增" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
+      <el-form ref="addForm" :model="addForm" label-width="70px">
         <el-form-item label="任务">
           <el-input v-model="addForm.taskValue"></el-input>
         </el-form-item>

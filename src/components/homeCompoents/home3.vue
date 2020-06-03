@@ -82,7 +82,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog title="上传材料" :visible.sync="editVisible" width="30%">
+    <el-dialog title="上传材料" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="fileFrom" :model="fileFrom" label-width="70px">
         <el-form-item label="材料：">
           <el-upload
@@ -203,7 +203,7 @@ export default {
 
       if (!extension && !extension2) {
         this.$message({
-          message: "上传文件只能是 pdf格式!",
+          message: "上传文件真的只能是 pdf格式!",
           type: "warning"
         });
       }

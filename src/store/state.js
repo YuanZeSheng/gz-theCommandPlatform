@@ -37,10 +37,10 @@ export default {
           department: '市发展改革委',
           materialsList: [{
             name: '1. 专项规划文本，并体现综合防灾、公共安全要求;',
-            status: 1
+            status: 2
           }, {
             name: '2. 规划年度实施计划;',
-            status: 2
+            status: 1
           }],
           status: 2
         }, {
@@ -48,13 +48,13 @@ export default {
           department: '市自然资源局',
           materialsList: [{
             name: '1. 专项规划文本，并体现综合防灾、公共安全要求;',
-            status: 1
+            status: 2
 
           }, {
             name: '2. 规划年度实施计划;',
             status: 1
           }],
-          status: 1
+          status: 2
         }, ]
       },],
     }, {
@@ -81,10 +81,10 @@ export default {
           department: '市发展改革委',
           materialsList: [{
             name: '1. 专项规划文本，并体现综合防灾、公共安全要求;',
-            status: 1
+            status: 2
           }, {
             name: '2. 规划年度实施计划;',
-            status: 2
+            status: 1
           }],
           status: 2
         }, ]
