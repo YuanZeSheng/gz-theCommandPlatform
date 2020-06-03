@@ -8,56 +8,65 @@
         :key="index"
         style="font-size: 18px"
       >
-      <div v-for="(it, ind) in item.content" :key="ind">
+        <div v-for="(it, ind) in item.content" :key="ind">
+          <p class="title">{{ind + 1}}. {{it.title}}</p>
 
-        <p class="title">{{ind + 1}}. {{it.title}}</p>
+          <!-- 表头 -->
+          <div class="tableHeader">
+            <span
+              v-for="(tabelHeaderItem, index3) in it.tabelHeaderList"
+              :key="index3"
+            >{{tabelHeaderItem.name}}</span>
+          </div>
 
-        <!-- 表头 -->
-        <div class="tableHeader">
-          <span
-            v-for="(tabelHeaderItem, index3) in it.tabelHeaderList"
-            :key="index3"
-          >{{tabelHeaderItem.name}}</span>
-        </div>
+          <!-- 表 -->
+          <div class="tableContent">
+            <div
+              class="scoreContent"
+              v-for="(scoreContentItem, scoreContentIndex) in it.tabelDetailList"
+              :key="scoreContentIndex"
+            >
+              <!-- 评价内容 -->
 
-        <!-- 表 -->
-        <div class="tableContent">
-          <div
-            class="scoreContent"
-            v-for="(scoreContentItem, scoreContentIndex) in it.tabelDetailList"
-            :key="scoreContentIndex"
-          >
-            <!-- 评价内容 -->
-            <div style="width: 25%" class="textCenter">
-              <p class="textLeft">{{scoreContentItem.scoreContent}}</p>
-            </div>
-            <!-- 任务 -->
-            <div class="rightBox">
-              <div
-                v-for="(items, index) in scoreContentItem.list"
-                :key="index"
-                class="rightContent"
-              >
-                <p class="textCenter" style="width: 25%; ">{{items.task}}</p>
-                <!-- 责任单位 -->
-                <p class="textCenter" style="width: 25%">{{items.department}}</p>
-                <!-- 提交材料 -->
-                <div style="width:25%">
-                  <div
-                    v-for="(materialsListItem, materialsListIndex) in items.materialsList"
-                    :key="materialsListIndex"
-                  >{{materialsListItem.name}}
+              <!-- 任务 -->
+              <div class="rightBox">
+                <div
+                  v-for="(items, index) in scoreContentItem.list"
+                  :key="index"
+                  class="rightContent"
+                >
+                  <p class="textCenter textLeft padding" style="width: 33%; ">{{items.task}}</p>
+
+                  <!-- 提交材料 -->
+                  <div style="width:33%">
+                    <div
+                      v-for="(materialsListItem, materialsListIndex) in items.materialsList"
+                      :key="materialsListIndex"
+                      style="marginBottom: 20px"
+                    >{{materialsListItem.name}}</div>
                   </div>
-                </div>
 
-               
-                <!-- <p>{{items.task}}</p> -->
+                  <!-- 操作 -->
+
+                  <div style="width:33%">
+                    <div
+                      style="marginBottom: 20px"
+                      class="flexCenter"
+                      v-for="(materialsListItem, materialsListIndex) in items.materialsList"
+                      :key="materialsListIndex"
+                    >
+                      <el-button type="primary" class="btnStyle" :disabled="materialsListIndex == 1 ? true: false ">上传材料</el-button>
+
+                      <el-button type="primary" class="btnStyle">删除材料</el-button>
+                    </div>
+                  </div>
+
+                  <!-- <p>{{items.task}}</p> -->
+                </div>
               </div>
             </div>
           </div>
         </div>
-        </div>
-
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -124,7 +133,7 @@ export default {
   color: black;
   span {
     display: inline-block;
-    width: 20%;
+    width: 33%;
     text-align: center;
   }
 }
@@ -132,7 +141,6 @@ export default {
 .scoreContent {
   width: 100%;
   display: flex;
-  border-bottom: 1px solid #f0f0f0;
 }
 
 // .tableHeader::before {
@@ -145,7 +153,10 @@ export default {
 //   background-color: #ebeef5;
 //   z-index: 1;
 // }
-
+.editBtn {
+  margin: 0 auto;
+  display: block;
+}
 .rightBox {
   width: 100%;
   .rightContent {
@@ -159,13 +170,17 @@ export default {
 
 .textCenter {
   text-align: center;
+  box-sizing: border-box;
+}
+
+.padding {
+  padding: 0 50px;
 }
 
 .textLeft {
   display: inline-block;
   text-align: left;
 }
-
 
 .scoreContent {
   margin-top: 20px;
@@ -174,7 +189,9 @@ export default {
 .flexCenter {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
+.btnStyle {
+  height: 40px;
+}
 </style>

@@ -8,7 +8,7 @@
         :key="index"
         style="font-size: 18px"
       >
-      <div v-for="(it, ind) in item.content" :key="ind">
+      <div v-for="(it, ind) in item.content" :key="ind" style="marginBottom: 50px">
 
         <p class="title">{{ind + 1}}. {{it.title}}</p>
 
@@ -28,9 +28,9 @@
             :key="scoreContentIndex"
           >
             <!-- 评价内容 -->
-            <div style="width: 16.666%" class="textCenter">
+            <!-- <div style="width: 16.666%" class="textCenter">
               <p class="textLeft">{{scoreContentItem.scoreContent}}</p>
-            </div>
+            </div> -->
             <!-- 任务 -->
             <div class="rightBox">
               <div
@@ -38,7 +38,7 @@
                 :key="index"
                 class="rightContent"
               >
-                <p class="" style="width: 20%; paddingLeft: 35px">{{items.task}}</p>
+                <p class="" style="width: 20%;">{{items.task}}</p>
                 <!-- 责任单位 -->
                 <p class="textCenter" style="width: 20%">{{items.department}}</p>
                 <!-- 提交材料 -->
@@ -142,7 +142,7 @@ export default {
   color: black;
   span {
     display: inline-block;
-    width: 16.666%;
+    width: 20%;
     text-align: center;
   }
 }
@@ -150,7 +150,6 @@ export default {
 .scoreContent {
   width: 100%;
   display: flex;
-  border-bottom: 1px solid #f0f0f0;
 }
 
 // .tableHeader::before {
@@ -170,7 +169,7 @@ export default {
     display: flex;
     margin-bottom: 20px;
     p {
-      width: 16.666%;
+      width: 20%;
     }
   }
 }
@@ -192,7 +191,8 @@ export default {
 .flexCenter {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
+
+
 
 </style>

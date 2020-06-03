@@ -6,7 +6,7 @@
 
     <el-dropdown class="loginName" trigger="click">
       <span class="el-dropdown-link">
-        陶超
+        管理员
         <i class="el-icon-caret-bottom"></i>
       </span>
       <el-dropdown-menu slot="dropdown">

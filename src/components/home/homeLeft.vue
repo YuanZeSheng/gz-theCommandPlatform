@@ -26,10 +26,10 @@
         <el-menu-item-group>
           <!-- <span slot="title">分组一</span> -->
           <el-menu-item index="/home/index2">
-            <router-link to="/home/index2" class="routeBtn" tag="li">评价管理</router-link>
+            <router-link to="/home/index2" class="routeBtn" tag="li">城市自评</router-link>
           </el-menu-item>
           <el-menu-item index="/home/index3">
-            <router-link to="/home/index3" class="routeBtn" tag="li">资源上传</router-link>
+            <router-link to="/home/index3" class="routeBtn" tag="li">材料上传</router-link>
           </el-menu-item>
           <el-menu-item index="/home/index4">
             <router-link to="/home/index4" class="routeBtn" tag="li">任务分派</router-link>
