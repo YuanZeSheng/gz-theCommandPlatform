@@ -30,6 +30,10 @@ Vue.use(VueRouter)
         path: 'home/index4',
         component: () => import(/* webpackChunkName: "home4" */ '../components/homeCompoents/home4.vue'),
       },
+      {
+        path: 'home/index5',
+        component: () => import(/* webpackChunkName: "home5" */ '../components/homeCompoents/home5.vue'),
+      },
     ]
   }
 ]

@@ -2,14 +2,16 @@
   <div class="home3Container">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
-      <el-tab-pane
-        :label="item.name"
-        v-for="(item, index) in dataEvaluateList"
-        :key="index"
-        style="font-size: 18px"
-      >
-        <div v-for="(it, ind) in item.content" :key="ind">
-          <p class="title">{{ind + 1}}. {{it.title}}</p>
+      <el-tab-pane v-for="(item, index) in dataEvaluateList" :key="index" style="font-size: 18px">
+        <span slot="label">
+          <span v-html="item.name"></span>
+        </span>
+        <div v-for="(it, ind) in item.content" :key="ind" style="marginBottom: 20px">
+          <p class="title">
+            <span class="titleIcon"></span>
+            {{ind + 1}}. {{it.title}}
+            <span>(总分：{{it.allNumber}})</span>
+          </p>
 
           <!-- 表头 -->
           <div class="tableHeader">
@@ -22,9 +24,9 @@
           <!-- 表 -->
           <div class="tableContent">
             <div
-              class="scoreContent"
               v-for="(scoreContentItem, scoreContentIndex) in it.tabelDetailList"
               :key="scoreContentIndex"
+              :class="['scoreContent']"
             >
               <!-- 评价内容 -->
 
@@ -34,8 +36,9 @@
                   v-for="(items, index) in scoreContentItem.list"
                   :key="index"
                   class="rightContent"
+                  :class="['scoreContent', index % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
                 >
-                  <p class="textCenter textLeft padding" style="width: 33%; ">{{items.task}}</p>
+                  <p class="textCenter textLeft padding fontStless" style="width: 33%; ">{{items.task}}</p>
 
                   <!-- 提交材料 -->
                   <div style="width:33%">
@@ -59,17 +62,25 @@
                     >
                       <el-button
                         :type="materialsListIndex == 0 ? 'primary': 'primary'  "
-                        class="btnStyle"
+                        class="addItemBtn operationBtn"
                         :disabled="materialsListIndex == 1 ? true: false "
-                        @click="handleClickUploading"
-                      >上传材料</el-button>
-
+                        :class="[materialsListIndex !== 2 ? '': 'deleteBtn']"
+                        
+                        @click="handleClickUploading()"
+                      >
+                        <i class="addIcon operationBtnIcon updateBtns"></i>
+                        <span>上传资料</span>
+                      </el-button>
                       <el-button
                         type="danger"
-                        class="btnStyle"
+                        class="addItemBtn operationBtn deleteBtnBox"
                         @click="handleClickDeleteFile"
                         :disabled="materialsListIndex !== 1 ? true: false "
-                      >删除材料</el-button>
+                        :class="[materialsListIndex !== 0 ? '': 'deleteBtn']"
+                      >
+                        <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
+                        <span>删除资料</span>
+                      </el-button>
                     </div>
                   </div>
 
@@ -84,7 +95,7 @@
 
     <el-dialog title="上传材料" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="fileFrom" :model="fileFrom" label-width="70px">
-        <el-form-item label="材料：">
+        <el-form-item label>
           <el-upload
             class="upload-demo"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -95,8 +106,12 @@
             :before-upload="handleBeforeUpload"
             :file-list="fileList"
           >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传pdf文件</div>
+            <div class="pdfBox">
+              <i class="pdfUpdate"></i>
+              <div slot="tip" class="el-upload__tip">只能上传pdf文件</div>
+            </div>
+
+            <!-- <el-button size="small" type="primary">点击上传</el-button> -->
           </el-upload>
         </el-form-item>
       </el-form>
@@ -105,17 +120,13 @@
         <el-button type="primary" @click="handleUploadingFile">确 定</el-button>
       </span>
     </el-dialog>
-
-
-
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
 
-import axios from 'axios'
-
+import axios from "axios";
 
 export default {
   data() {
@@ -141,26 +152,24 @@ export default {
     handleClickUploading() {
       this.editVisible = true;
 
-
-      this.fileList = []
+      this.fileList = [];
     },
 
     // 确定上传
     handleUploadingFile() {
-
-     
       this.$message({
         message: "上传成功!",
         type: "success"
       });
 
-      this.editVisible = false
+      this.editVisible = false;
     },
     // 删除文件
     handleClickDeleteFile() {
-       this.$confirm("确定要删除吗？", "提示", {
+      this.$confirm("确定要删除吗？", "提示", {
         type: "warning"
-      }).then(() => {
+      })
+        .then(() => {
           this.$message.success("删除成功");
         })
         .catch(() => {});
@@ -211,25 +220,24 @@ export default {
     },
 
     handleShowPdf(index) {
-
-      if( index == 0 ) {
+      if (index == 0) {
         this.$message({
           message: "请先上传材料",
           type: "error"
         });
 
-        return false
+        return false;
       }
 
-          const url = '/showpdf.pdf'
-          const link = document.createElement('a');
-          let fname = 'report.pdf';
-          link.href = url;
-          link.target='_blank'
-          // link.setAttribute('download', fname);
-          document.body.appendChild(link);
-          link.click();
-      }
+      const url = "/showpdf.pdf";
+      const link = document.createElement("a");
+      let fname = "report.pdf";
+      link.href = url;
+      link.target = "_blank";
+      // link.setAttribute('download', fname);
+      document.body.appendChild(link);
+      link.click();
+    }
   },
   watch: {},
   beforeCreate() {},
@@ -245,7 +253,6 @@ export default {
 
 <style scoped lang="less" >
 .title {
-  margin: 10px 0 20px;
   text-align: left;
   font-size: 28px;
 }
@@ -304,7 +311,6 @@ export default {
   width: 100%;
   .rightContent {
     display: flex;
-    margin-bottom: 20px;
     p {
       width: 20%;
     }
@@ -326,7 +332,6 @@ export default {
 }
 
 .scoreContent {
-  margin-top: 20px;
 }
 
 .flexCenter {
@@ -339,11 +344,228 @@ export default {
 }
 
 .red {
-  color: #67C23A;
+  color: #67c23a;
   cursor: pointer;
 }
 
 .cur {
   cursor: pointer;
+}
+
+.titleIcon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background: url("../../assets/img/iconIndex.png") no-repeat;
+  background-size: 100% 100%;
+  margin-right: 16px;
+}
+
+.title {
+  font-size: 24px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: rgba(55, 128, 248, 1);
+  border-bottom: 1px solid rgba(90, 90, 90, 0.5);
+  padding-bottom: 21px;
+  margin-bottom: 14px;
+}
+.titleIcon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background: url("../../assets/img/iconIndex.png") no-repeat;
+  background-size: 100% 100%;
+  margin-right: 16px;
+}
+
+.tableHeader {
+  height: 50px;
+  background: rgba(81, 155, 236, 0.15);
+  // opacity:0.15;
+  line-height: 50px;
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+  font-weight: 600;
+  border-bottom: 1px dashed rgba(90, 90, 90, 1);
+  color: rgba(55, 128, 248, 1);
+}
+
+.rightContent {
+  margin-bottom: 0;
+  border: 0;
+  border-bottom: 1px dashed rgba(90, 90, 90, 0.53);
+  padding: 20px 0;
+}
+.backgroundBlue {
+  background: rgba(81, 155, 236, 0.05);
+}
+
+.bakcgroundFFF {
+  background: rgba(81, 155, 236, 0.15);
+}
+
+.margimBottom {
+  margin-bottom: 20px;
+}
+
+.lastMarginBottom {
+  margin-bottom: 0;
+}
+.blockFlex {
+  display: flex;
+}
+
+.zpywc {
+  display: inline-block;
+  width: 31px;
+  height: 31px;
+  background: url("../../assets/img/zpywc.png") no-repeat;
+  margin-right: 10px;
+  background-size: 100% 100%;
+}
+
+.zpwwc {
+  display: inline-block;
+  width: 31px;
+  height: 31px;
+  background: url("../../assets/img/zpwwc.png") no-repeat;
+  margin-right: 10px;
+  background-size: 100% 100%;
+}
+
+.zpywcStyle {
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: rgba(108, 173, 238, 1);
+}
+.zpwwcStyle {
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: rgba(213, 130, 75, 1);
+}
+
+.fontStyle {
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: rgba(82, 82, 82, 1);
+  font-size: 18px;
+}
+.backgroundBlue {
+  background: rgba(81, 155, 236, 0.05);
+}
+
+.bakcgroundFFF {
+  background: rgba(81, 155, 236, 0.15);
+}
+
+.el-form {
+  position: relative;
+}
+
+.pdfUpdate {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  background: url("../../assets/img/updatePdfBtn.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.pdfBox {
+  width: 200px;
+  // position: absolute;
+  //   left: 50%;
+  margin-left: 50%;
+  margin-top: 50px;
+}
+
+.el-upload__tip {
+  font-size: 24px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: rgba(82, 82, 82, 1);
+}
+
+.operationBtnIcon {
+  margin-left: 20px;
+  margin-top: 7px;
+}
+
+.addIcon {
+  background: url("../../assets/img/rwaddbtn.png") no-repeat;
+  background-size: 100% 100%;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  float: left;
+  margin-left: 30px;
+  margin-top: 5px;
+}
+
+.updateBtns {
+  background: url("../../assets/img/rwUpdateBtn.png") no-repeat;
+}
+
+.rwDeleteBtn {
+  background: url("../../assets/img/rwUpdateBtn.png") no-repeat;
+}
+.deleteBtnBox {
+  background: linear-gradient(
+    -8deg,
+    rgba(231, 121, 47, 1) 0%,
+    rgba(238, 166, 108, 1) 100%
+  );
+  border: none;
+}
+
+.addItemBtn {
+  float: right;
+  width: 118px;
+  height: 32px;
+
+  border-radius: 10px 8px 10px 10px;
+  line-height: 32px;
+  padding: 0 !important;
+  position: relative;
+  span {
+    float: left;
+  }
+}
+
+.operationBtn {
+  width: 128px;
+}
+
+.deleteBtnBox {
+  background: linear-gradient(
+    -8deg,
+    rgba(231, 121, 47, 1) 0%,
+    rgba(238, 166, 108, 1) 100%
+  );
+  border: none;
+}
+
+.operationBtnIcon {
+  margin-left: 20px;
+}
+
+.updateBtns {
+  background: url("../../assets/img/rwUpdateBtn.png") no-repeat;
+}
+
+.rwDeleteBtn {
+  background: url("../../assets/img/rwDeleteBtn.png") no-repeat;
+}
+
+.fontStless {
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+.deleteBtn {
+  background: #fab6b6;
 }
 </style>

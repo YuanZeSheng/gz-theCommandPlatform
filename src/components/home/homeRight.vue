@@ -2,11 +2,11 @@
   <div class="homeRigtContainer marginLeft" :class="{'content-collapse':collapse}">
     <!-- 模版 -->
     <transition name="move" mode="out-in">
-      <div class="rightContent" >
+      <div :class="isHomePage ? 'homeRightHeight' : 'rightContent'" >
         <router-view />
       </div>
     </transition>
-    <el-backtop target=".rightContent"></el-backtop>
+    <el-backtop v-if="!isHomePage" target=".rightContent"></el-backtop>
   </div>
 </template>
 
@@ -15,7 +15,9 @@ import { mapState, mapMutations } from "vuex";
 
 export default {
   data() {
-    return {};
+    return {
+      isHomePage: true
+    };
   },
   components: {},
   computed: {
@@ -24,11 +26,26 @@ export default {
   methods: {
     // ...mapMutations(['']),
   },
-  watch: {},
+  watch: {
+    $route () {
+      console.log()
+      if( this.$route.path == '/home/index1' ) {
+        this.isHomePage = true
+      } else {
+        this.isHomePage = false
+      }
+    }
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    if( this.$route.path == '/home/index1' ) {
+      this.isHomePage = true
+    } else {
+      this.isHomePage = false
+    }
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
@@ -38,7 +55,7 @@ export default {
 
 <style scoped lang="less" >
 .homeRigtContainer {
-  height: 100%;
+  min-width: 1049px;
   font-size: 30px;
   box-sizing: border-box;
   position: absolute;
@@ -47,22 +64,32 @@ export default {
   right: 0;
   top: 70px;
   bottom: 0;
-  background: #f0f0f0;
-  padding: 10px;
-  padding-bottom: 140px;
+  background: url('../../assets/img/homeRightBackground.jpg') no-repeat;
+  background-size: 100% 100%;
+  padding: 30px;
   -webkit-transition: left .3s ease-in-out;
     transition: left .3s ease-in-out;
+
+  
 }
 
 .rightContent {
   background: #fff;
   height: 100%;
-  border-radius: 10px;
-  padding: 30px;
   overflow-y: scroll;
+  box-shadow:6px 10px 8px 0px rgba(0, 0, 0, 0.16);
+  border-radius:10px;
+  padding: 37px;
+  box-sizing: border-box;
 }
 
 .content-collapse {
   left: 65px;
 }
+
+.homeRightHeight {
+  height: 100%;
+}
+
+
 </style>

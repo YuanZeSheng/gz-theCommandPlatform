@@ -28,4 +28,8 @@ export default {
 
 
 <style scoped lang="less" >
+.homeContainer {
+  height: 100%;
+ 
+}
 </style>

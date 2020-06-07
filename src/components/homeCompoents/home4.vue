@@ -2,18 +2,18 @@
   <div class="home3Container">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
-      <el-tab-pane
-        :label="item.name"
-        v-for="(item, index) in taskList"
-        :key="index"
-        style="font-size: 18px"
-      >
-        <div v-for="(it, ind) in item.content" :key="ind">
+      <el-tab-pane v-for="(item, index) in taskList" :key="index" style="font-size: 18px">
+        <span slot="label">
+          <span v-html="item.name"></span>
+        </span>
+        <div v-for="(it, ind) in item.content" :key="ind" style="marginBottom: 35px">
           <p class="title">
+            <span class="titleIcon"></span>
             {{ind + 1}}. {{it.title}}
+            <span>(总分：{{it.allNumber}})</span>
             <el-button type="primary" class="addItemBtn" @click="handleClickItemBtn(index, ind)">
-              新增
-              <i class="el-icon-circle-plus-outline el-icon--right"></i>
+              <i class="addIcon"></i>
+              <span>新增</span>
             </el-button>
           </p>
 
@@ -28,34 +28,42 @@
           <!-- 表 -->
           <div class="tableContent">
             <div
-              class="tabContent"
               v-for="(tabelDetailListItem, tabelDetailListIndex) in it.tabelDetailList"
               :key="tabelDetailListIndex"
+              :class="['tabContent', tabelDetailListIndex % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
             >
               <!-- 任务 -->
-              <div class="task">{{tabelDetailListIndex + 1}}. {{tabelDetailListItem.task}}</div>
+              <div class="task fontStyle">{{tabelDetailListIndex + 1}}. {{tabelDetailListItem.task}}</div>
 
               <div class="department textCenter">{{tabelDetailListItem.department}}</div>
 
               <div class="evaluationList">
                 <p
-                  v-for="(tabelDetailListItem, tabelDetailListIndex) in tabelDetailListItem.evaluationList"
+                  v-for="(tabelDetailListItems, tabelDetailListIndex) in tabelDetailListItem.evaluationList"
                   :key="tabelDetailListIndex"
-                >{{tabelDetailListIndex + 1}}. {{tabelDetailListItem.name}}</p>
+                  :class="tabelDetailListIndex == tabelDetailListItem.evaluationList.length - 1 ? 'lastMarginBottom' : 'margimBottom'"
+                >{{tabelDetailListIndex + 1}}. {{tabelDetailListItems.name}}</p>
               </div>
 
-              <div class="textCenter">
+              <div class="textCenter flexCenter">
                 <el-button
-                  type="text"
-                  icon="el-icon-edit"
+                  type="primary"
+                  class="addItemBtn operationBtn"
                   @click="handleClickEdit(index, ind, tabelDetailListIndex)"
-                >编辑</el-button>
+                >
+                  <i class="addIcon operationBtnIcon updateBtns"></i>
+                  <span>编辑</span>
+                </el-button>
                 <el-button
-                  type="text"
-                  icon="el-icon-delete"
-                  class="red"
+                  type="primary"
+                  class="addItemBtn operationBtn deleteBtnBox"
                   @click="handleDelete(index, ind, tabelDetailListIndex)"
-                >删除</el-button>
+                >
+                  <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
+                  <span>删除</span>
+                </el-button>
+
+                
               </div>
             </div>
           </div>
@@ -65,13 +73,13 @@
 
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
-      <el-form ref="updateForm" :model="updateForm" label-width="70px">
+      <el-form ref="updateForm" :model="updateForm" label-width="100px" :label-position="lebelPosi">
         <el-form-item label="任务">
           <el-input v-model="updateForm.taskValue"></el-input>
         </el-form-item>
-        <el-form-item label="考核分值">
+        <!-- <el-form-item label="考核分值">
           <el-input v-model="updateForm.taskNumValue"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="责任单位">
           <!-- <el-input v-model="updateForm.departmentValue"></el-input> -->
 
@@ -86,15 +94,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="提交材料">
-          <p v-for="(item, index) in updateForm.evaluationListValue" :key="index">
-            <el-input
-              v-model="item.nameValue"
-              style="width: 80%; margin-top: 10px"
-            >
-            </el-input>
-            <i class="el-icon-remove-outline deleteBtn" @click="handleClickDeleteBtnEditItem(index)"></i>
+          <p v-for="(item, index) in updateForm.evaluationListValue" :key="index" style="overflow: hidden;">
+            <el-input v-model="item.nameValue" style="width: 80%; margin-top: 10px"></el-input>
+             <i class="deleteBtn deleteClIcon"
+              @click="handleClickDeleteBtnEditItem(index)"
+            ></i>
           </p>
-          <i class="el-icon-circle-plus-outline addBtn" @click="handleClickAddBtn"></i>
+          <i class="addBtn addClIcon" @click="handleClickAddBtn"></i>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -106,13 +112,13 @@
     <!-- 新增弹出框 -->
 
     <el-dialog title="新增" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
-      <el-form ref="addForm" :model="addForm" label-width="70px">
+      <el-form ref="addForm" :model="addForm" label-width="100px" :label-position="lebelPosi">
         <el-form-item label="任务">
           <el-input v-model="addForm.taskValue"></el-input>
         </el-form-item>
-        <el-form-item label="考核分值">
+        <!-- <el-form-item label="考核分值">
           <el-input v-model="addForm.taskNumValue"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="责任单位">
           <!-- <el-input v-model="updateForm.departmentValue"></el-input> -->
 
@@ -127,17 +133,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="提交材料">
-
-          <p v-for="(item, index) in addForm.evaluationListValue" :key="index">
-            <el-input
-              v-model="item.nameValue"
-              style="width: 80%; margin-top: 10px"
-            >
-            </el-input>
-            <i class="el-icon-remove-outline deleteBtn" @click="handleClickDeleteBtnAddItem(index)"></i>
+          <p
+            v-for="(item, index) in addForm.evaluationListValue"
+            :key="index"
+            style="overflow: hidden"
+          >
+            <el-input v-model="item.nameValue" style="width: 80%; margin-top: 10px"></el-input>
+            <i class="deleteBtn deleteClIcon" @click="handleClickDeleteBtnAddItem(index)"></i>
           </p>
 
-          <i class="el-icon-circle-plus-outline addBtn" @click="handleClickAddItemBtn"></i>
+          <i class="addBtn addClIcon" @click="handleClickAddItemBtn"></i>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -154,6 +159,7 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      lebelPosi: "left",
       options: [
         {
           value: "市公安交警局",
@@ -183,14 +189,14 @@ export default {
         taskValue: "",
         departmentValue: "",
         evaluationListValue: [],
-        taskNumValue: ''
+        taskNumValue: ""
       },
 
       addForm: {
         taskValue: "",
         departmentValue: "",
         evaluationListValue: [],
-        taskNumValue: ''
+        taskNumValue: ""
       },
 
       indexObj: {},
@@ -344,11 +350,11 @@ export default {
     },
 
     handleClickDeleteBtnEditItem(index) {
-      this.updateForm.evaluationListValue.splice(index,1)
+      this.updateForm.evaluationListValue.splice(index, 1);
     },
 
     handleClickDeleteBtnAddItem(index) {
-      this.addForm.evaluationListValue.splice(index,1)
+      this.addForm.evaluationListValue.splice(index, 1);
     },
 
     handleClickAddItemBtn() {
@@ -412,6 +418,19 @@ export default {
     width: 25%;
     text-align: center;
   }
+
+  span:nth-child(1) {
+    width: 25%;
+  }
+  span:nth-child(2) {
+    width: 25%;
+  }
+  span:nth-child(3) {
+    width: 30%;
+  }
+  span:nth-child(4) {
+    width: 20%;
+  }
 }
 
 .scoreContent {
@@ -471,11 +490,24 @@ export default {
 
 .tabContent {
   display: flex;
-
-  margin: 20px 0;
+  padding: 23px 0;
+  border-bottom: 1px dashed rgba(90, 90, 90, 0.53);
 
   div {
     width: 25%;
+  }
+
+  div:nth-child(1) {
+    width: 25%;
+  }
+  div:nth-child(2) {
+    width: 25%;
+  }
+  div:nth-child(3) {
+    width: 30%;
+  }
+  div:nth-child(4) {
+    width: 20%;
   }
 }
 
@@ -490,14 +522,194 @@ export default {
   margin-top: 10px;
 }
 
-.addItemBtn {
-  float: right;
-  margin-right: 160px;
-}
-
 .deleteBtn {
   color: red;
   font-size: 25px;
   cursor: pointer;
 }
+
+.title {
+  font-size: 24px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: rgba(55, 128, 248, 1);
+  border-bottom: 1px solid rgba(90, 90, 90, 0.5);
+  padding-bottom: 21px;
+  margin-bottom: 14px;
+  margin-top: 0;
+}
+.titleIcon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background: url("../../assets/img/iconIndex.png") no-repeat;
+  background-size: 100% 100%;
+  margin-right: 16px;
+}
+
+.tableHeader {
+  height: 50px;
+  background: rgba(81, 155, 236, 0.15);
+  // opacity:0.15;
+  line-height: 50px;
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+  font-weight: 600;
+  border-bottom: 1px dashed rgba(90, 90, 90, 1);
+  color: rgba(55, 128, 248, 1);
+}
+
+.rightContent {
+  // background: rgba(81, 155, 236, 0.05);
+  margin-bottom: 0;
+  border: 0;
+  border-bottom: 1px dashed rgba(90, 90, 90, 0.53);
+  padding: 23px 0px;
+}
+
+.margimBottom {
+  margin-bottom: 20px;
+}
+
+.lastMarginBottom {
+  margin-bottom: 0;
+}
+.blockFlex {
+  display: flex;
+}
+
+.zpywc {
+  display: inline-block;
+  width: 31px;
+  height: 31px;
+  background: url("../../assets/img/zpywc.png") no-repeat;
+  margin-right: 10px;
+  background-size: 100% 100%;
+}
+
+.zpwwc {
+  display: inline-block;
+  width: 31px;
+  height: 31px;
+  background: url("../../assets/img/zpwwc.png") no-repeat;
+  margin-right: 10px;
+  background-size: 100% 100%;
+}
+
+.zpywcStyle {
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: rgba(108, 173, 238, 1);
+}
+.zpwwcStyle {
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: rgba(213, 130, 75, 1);
+}
+
+.fontStyle {
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: rgba(82, 82, 82, 1);
+  font-size: 18px;
+}
+.backgroundBlue {
+  background: rgba(81, 155, 236, 0.05);
+}
+
+.bakcgroundFFF {
+  background: rgba(81, 155, 236, 0.15);
+}
+
+.task {
+  padding-left: 40px;
+  box-sizing: border-box;
+}
+
+.addItemBtn {
+  float: right;
+  width: 118px;
+  height: 32px;
+  background: linear-gradient(
+    -8deg,
+    rgba(47, 120, 231, 1) 0%,
+    rgba(108, 173, 238, 1) 100%
+  );
+  border-radius: 10px 8px 10px 10px;
+  line-height: 32px;
+  padding: 0 !important;
+  position: relative;
+  span {
+    float: left;
+  }
+}
+
+.addIcon {
+  background: url("../../assets/img/rwaddbtn.png") no-repeat;
+  background-size: 100% 100%;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  float: left;
+  margin-left: 30px;
+  margin-top: 5px;
+}
+
+.operationBtn {
+  width: 98px;
+}
+
+.operationBtnIcon {
+  margin-left: 20px;
+}
+
+.updateBtns {
+  background: url("../../assets/img/rwUpdateBtn.png") no-repeat;
+}
+
+.rwDeleteBtn {
+  background: url("../../assets/img/rwUpdateBtn.png") no-repeat;
+}
+.deleteBtnBox {
+  background: linear-gradient(
+    -8deg,
+    rgba(231, 121, 47, 1) 0%,
+    rgba(238, 166, 108, 1) 100%
+  );
+  border: none;
+}
+
+.addClIcon {
+  background: url("../../assets/img/addBtn.png") no-repeat;
+  background-size: 100% 100%;
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+}
+
+.el-input {
+  float: left;
+  margin-top: 0 !important;
+  margin-bottom: 10px;
+}
+
+.el-select {
+  width: 100%;
+}
+
+.deleteClIcon {
+  background: url("../../assets/img/deleteBtn.png") no-repeat;
+  background-size: 100% 100%;
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+  float: left;
+  margin-left: 10px;
+  margin-top: 0;
+}
+
+// 弹出窗
 </style>

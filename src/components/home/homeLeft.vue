@@ -36,6 +36,9 @@
           <el-menu-item index="/home/index4" v-if="userFlag">
             <router-link to="/home/index4" class="routeBtn" tag="li">任务分派</router-link>
           </el-menu-item>
+          <el-menu-item index="/home/index5" v-if="userFlag">
+            <router-link to="/home/index5" class="routeBtn" tag="li">组织结构</router-link>
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
 
