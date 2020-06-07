@@ -23,7 +23,7 @@
 
       
     </span>
-    <span class="changeUserName" @click="handleChangeUsers">切换账号</span>
+    <span class="changeUserName" @click="handleChangeUser">切换账号</span>
 
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
     ...mapState(['userFlag'])
   },
   methods: {
-    ...mapMutations(["handleChangeCollapseFlag", 'handleChangeUser']),
+    ...mapMutations(["handleChangeCollapseFlag", 'handleChangeUsers']),
     handleCollapseChage() {
       this.collapse = !this.collapse;
       this.handleChangeCollapseFlag();
@@ -52,11 +52,11 @@ export default {
 
     // 切换账号
 
-    handleChangeUsers() {
+    handleChangeUser() {
 
       this.userName =  this.userFlag ? '市发改委' :  '管理员'
       
-      this.handleChangeUser()
+      this.handleChangeUsers()
 
 
       if( this.userFlag ) {
@@ -71,7 +71,9 @@ export default {
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
@@ -92,6 +94,7 @@ export default {
   height: 70px;
   line-height: 70px;
   background: #242f42;
+  // background:linear-gradient(-2deg,rgba(47,120,231,1) 0%,rgba(108,173,238,1) 100%);
   font-size: 22px;
   color: #fff;
   position: relative;

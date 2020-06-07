@@ -54,7 +54,7 @@
                         :key="materialsListIndex"
                       >
                         <div class="blockFlex">
-                          <div style="width: 33.3%;">{{materialsListItem.name}}</div>
+                          <div style="width: 33.3%;" :class="[materialsListItem.status == 1 ? 'fontywc' : 'fontwwc']">{{materialsListItem.name}}</div>
                           <div style="width: 33.3%" :class="['flexCenter']">
                             <span :class="[materialsListItem.status == 1 ? 'zpywc': 'zpwwc']"></span>
                             <span
@@ -356,5 +356,9 @@ export default {
   font-weight:400;
   color:rgba(82,82,82,1);
   font-size:18px;
+}
+
+.fontywc {
+  color: #22AC38;
 }
 </style>

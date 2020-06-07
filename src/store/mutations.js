@@ -40,7 +40,7 @@ export default {
       },
 
 
-      handleChangeUser(state, data) {
+      handleChangeUsers(state, data) {
 
         state.userFlag = !state.userFlag
 

@@ -27,16 +27,16 @@
         </template>
         <el-menu-item-group>
           <!-- <span slot="title">分组一</span> -->
-          <el-menu-item index="/home/index2" v-if="userFlag">
+          <el-menu-item :index="'/home/index2'" v-if="userFlag">
             <router-link to="/home/index2" class="routeBtn" tag="li">城市自评</router-link>
           </el-menu-item>
           <el-menu-item :index="'/home/index3'" v-if="!userFlag">
             <router-link to="/home/index3" class="routeBtn" tag="li">材料上传</router-link>
           </el-menu-item>
-          <el-menu-item index="/home/index4" v-if="userFlag">
+          <el-menu-item :index="'/home/index4'" v-if="userFlag">
             <router-link to="/home/index4" class="routeBtn" tag="li">任务分派</router-link>
           </el-menu-item>
-          <el-menu-item index="/home/index5" v-if="userFlag">
+          <el-menu-item :index="'/home/index5'" v-if="userFlag">
             <router-link to="/home/index5" class="routeBtn" tag="li">组织结构</router-link>
           </el-menu-item>
         </el-menu-item-group>

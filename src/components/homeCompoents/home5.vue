@@ -60,7 +60,7 @@
           <el-input v-model="updateForm.sort"></el-input>
         </el-form-item>
         <el-form-item label="组织名称">
-          <el-select v-model="updateForm.name" placeholder="请选择">
+          <!-- <el-select v-model="updateForm.name" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -68,7 +68,9 @@
               :value="item.value"
               :disabled="item.disabled"
             ></el-option>
-          </el-select>
+          </el-select> -->
+
+          <el-input v-model="updateForm.name"></el-input>
         </el-form-item>
         <el-form-item label="组织编号">
           <el-input v-model="updateForm.number"></el-input>
@@ -94,15 +96,7 @@
           <el-input v-model="addForm.sort"></el-input>
         </el-form-item>
         <el-form-item label="组织名称">
-          <el-select v-model="addForm.name" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              :disabled="item.disabled"
-            ></el-option>
-          </el-select>
+          <el-input v-model="updateForm.name"></el-input>
         </el-form-item>
         <el-form-item label="组织编号">
           <el-input v-model="addForm.number"></el-input>
