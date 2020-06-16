@@ -35,19 +35,22 @@ import { mapState, mapMutations } from "vuex";
 // 业务平台
 import businessPlatformContainer from "../homeChildren/businessPlatformContainer";
 // 评价日志
-import evaluationContainer from "../homeChildren/evaluationContainer"
+import evaluationContainer from "../homeChildren/evaluationContainer";
 // 系统得分
-import scoringSystemContainer from "../homeChildren/scoringSystemContainer"
+import scoringSystemContainer from "../homeChildren/scoringSystemContainer";
 // 单位丢分
-import dropPointsContainer from "../homeChildren/dropPointsContainer"
-
-
+import dropPointsContainer from "../homeChildren/dropPointsContainer";
 
 export default {
   data() {
     return {};
   },
-  components: { businessPlatformContainer, evaluationContainer, scoringSystemContainer, dropPointsContainer },
+  components: {
+    businessPlatformContainer,
+    evaluationContainer,
+    scoringSystemContainer,
+    dropPointsContainer
+  },
   computed: {
     ...mapState(["homeList"])
   },
@@ -109,5 +112,4 @@ export default {
 .itemContent {
   height: 300px;
 }
-
 </style>

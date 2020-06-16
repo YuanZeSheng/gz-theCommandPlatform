@@ -29,11 +29,6 @@
               v-for="(scoreContentItem, scoreContentIndex) in it.tabelDetailList"
               :key="scoreContentIndex"
             >
-              <!-- 评价内容 -->
-              <!-- <div style="width: 16.666%" class="textCenter">
-              <p class="textLeft">{{scoreContentItem.scoreContent}}</p>
-              </div>-->
-              <!-- 任务 -->
               <div class="rightBox">
                 <div
                   v-for="(items, index) in scoreContentItem.list"
@@ -50,11 +45,15 @@
                       <div
                         v-for="(materialsListItem, materialsListIndex) in items.materialsList"
                         :class="['fontStyle', materialsListIndex == 1 ? 'red': 'cur', materialsListIndex == items.materialsList.length - 1 ? 'lastMarginBottom' : 'margimBottom']"
-                        @click="handleShowPdf(materialsListIndex)"
+                       
                         :key="materialsListIndex"
                       >
                         <div class="blockFlex">
-                          <div style="width: 33.3%;" :class="[materialsListItem.status == 1 ? 'fontywc' : 'fontwwc']">{{materialsListItem.name}}</div>
+                          <div
+                           @click="handleShowPdf(materialsListIndex)"
+                            style="width: 33.3%;"
+                            :class="[materialsListItem.status == 1 ? 'fontywc' : 'fontwwc']"
+                          >{{materialsListItem.name}}</div>
                           <div style="width: 33.3%" :class="['flexCenter']">
                             <span :class="[materialsListItem.status == 1 ? 'zpywc': 'zpwwc']"></span>
                             <span
@@ -65,41 +64,12 @@
                           <div
                             class="textCenter flexCenter deductMarks"
                             style="width: 33.3%"
+                            v-if="materialsListItem.status == 1"
                           >{{items.deductMarks}}</div>
                         </div>
                       </div>
                     </div>
-
-                    <!-- <div style="width: 33.3%;">
-                      <div
-                        class="flexCenter"
-                        v-for="(materialsListItem, materialsListIndex) in items.materialsList"
-                        :key="materialsListIndex"
-                      >
-                        <span></span>
-                        <span>{{materialsListItem.status == 1 ? '已完成' : '未完成'}}</span>
-                      </div>
-                    </div>-->
                   </div>
-
-                  <!-- <div class="textCenter flexCente" style="width: 20%">
-                    <div
-                      v-for="(materialsListItem, materialsListIndex) in items.materialsList"
-                      :key="materialsListIndex"
-                      style="display: block;"
-                    >
-                      <div>
-                        <span></span>
-                        <span>{{materialsListItem.status == 1 ? '已完成' : '未完成'}}</span>
-                      </div>
-                    </div>
-                  </div>-->
-
-                  <!-- 评分 -->
-                  <!-- <div
-                    class="textCenter flexCenter deductMarks"
-                    style="width: 20%"
-                  >{{items.deductMarks}}</div>-->
                 </div>
               </div>
             </div>
@@ -136,7 +106,7 @@ export default {
         return false;
       }
 
-      const url = "/showpdf.pdf";
+      const url = "http://210.76.75.221:9181/wkk-report/cszp/showpdf.pdf";
       const link = document.createElement("a");
       let fname = "report.pdf";
       link.href = url;
@@ -270,7 +240,7 @@ export default {
   font-family: Microsoft YaHei;
   font-weight: 400;
   color: rgba(55, 128, 248, 1);
-  border-bottom: 1px solid rgba(90, 90, 90, .5);
+  border-bottom: 1px solid rgba(90, 90, 90, 0.5);
   padding-bottom: 21px;
   margin-bottom: 14px;
 }
@@ -306,7 +276,7 @@ export default {
 }
 
 .bakcgroundFFF {
-  background:rgba(81,155,236,.15);
+  background: rgba(81, 155, 236, 0.15);
 }
 
 .margimBottom {
@@ -352,13 +322,13 @@ export default {
 }
 
 .fontStyle {
-  font-family:Microsoft YaHei;
-  font-weight:400;
-  color:rgba(82,82,82,1);
-  font-size:18px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: rgba(82, 82, 82, 1);
+  font-size: 18px;
 }
 
 .fontywc {
-  color: #22AC38;
+  color: #22ac38;
 }
 </style>

@@ -78,7 +78,9 @@ export default {
     }
   },
   watch: {},
-  mounted() {}
+  mounted() {
+    console.log(this.$route)
+  }
 };
 </script>
 

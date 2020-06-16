@@ -85,7 +85,7 @@
 
           <el-select v-model="updateForm.departmentValue" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in organizationSelectList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -124,7 +124,7 @@
 
           <el-select v-model="addForm.departmentValue" placeholder="请选择部门">
             <el-option
-              v-for="item in options"
+              v-for="item in organizationSelectList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -160,28 +160,7 @@ export default {
   data() {
     return {
       lebelPosi: "left",
-      options: [
-        {
-          value: "市公安交警局",
-          label: "市公安交警局"
-        },
-        {
-          value: "市消防救援支队",
-          label: "市消防救援支队"
-        },
-        {
-          value: "市委宣传部",
-          label: "市委宣传部"
-        },
-        {
-          value: "市委政法委",
-          label: "市委政法委"
-        },
-        {
-          value: "市教育局",
-          label: "市教育局"
-        }
-      ],
+      
       tabPosition: "top",
       editVisible: false,
       addEditVisible: false,
@@ -206,7 +185,7 @@ export default {
   },
   components: {},
   computed: {
-    ...mapState(["taskList"])
+    ...mapState(["taskList", "organizationSelectList"])
   },
   methods: {
     ...mapMutations([

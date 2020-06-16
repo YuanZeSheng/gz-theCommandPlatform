@@ -35,8 +35,6 @@ export default {
         
         state.taskList[addIndexObj.taskListIndex].content[addIndexObj.contentIndex].tabelDetailList.push(addFromData)
 
-
-        console.log(addFromData)
       },
 
 
@@ -44,5 +42,38 @@ export default {
 
         state.userFlag = !state.userFlag
 
+      },
+
+
+      // 增加组织机构
+      handleAddOrganization(state, data) {
+        state.organization.tabelDetailList.push(data)
+
+        let organizaObj = {
+          value: data.id,
+          label: data.organizationName
+        }
+
+        state.organizationSelectList.push(organizaObj)
+      },
+
+      // 编辑组织机构
+      handleUpdateOrganizationList(state, data) {
+        state.organization.tabelDetailList[data.updateIndex] = data.updateFrom
+
+
+        state.organizationSelectList.map(item => {
+         if( item.id == data.updateFrom.id ) {
+          item.id = data.updateFrom.id
+          item.value = data.updateFrom.organizationName
+          item.label = data.updateFrom.organizationName
+         }
+        })
+      },
+
+      // 删除组织机构
+      handleDeleteOrganizationItem(state, data) {
+        console.log(state.organization.tabelDetailList)
+        state.organization.tabelDetailList.splice(data,1)
       }
 }

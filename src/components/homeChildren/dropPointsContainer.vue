@@ -183,23 +183,23 @@ export default {
             data: [
               {
                 name: "市委改革委",
-                value: 2
+                value: 5
               },
               {
                 name: "市资源局",
-                value: 2
+                value: 4
               },
               {
                 name: "市应急局",
-                value: 2
+                value: 3
               },
               {
                 name: "市应急管理中心",
-                value: 1
+                value: 5
               },
               {
                 name: "市水务局",
-                value: 2
+                value: 3
               }
             ]
           },

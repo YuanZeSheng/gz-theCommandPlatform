@@ -19,6 +19,7 @@
     <!-- 表 -->
     <div class="tableContent">
       <div
+        :data-id="tabelDetailListItem.id"
         v-for="(tabelDetailListItem, tabelDetailListIndex) in organization.tabelDetailList"
         :key="tabelDetailListIndex"
         :class="['tabContent', 'flexCenter', tabelDetailListIndex % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
@@ -35,17 +36,21 @@
           <p>{{tabelDetailListItem.organizationUsername}}</p>
         </div>
         <div class="userInfo textCenter">
-          <p>{{tabelDetailListItem.organizationUsername}}</p>
+          <p>{{tabelDetailListItem.organizationPassword}}</p>
         </div>
         <div class="textCenter flexCenter">
-          <el-button type="primary" class="addItemBtn operationBtn" @click="handleClickEdit()">
+          <el-button
+            type="primary"
+            class="addItemBtn operationBtn"
+            @click="handleClickEdit(tabelDetailListIndex)"
+          >
             <i class="addIcon operationBtnIcon updateBtns"></i>
             <span>编辑</span>
           </el-button>
           <el-button
             type="primary"
             class="addItemBtn operationBtn deleteBtnBox"
-            @click="handleDelete()"
+            @click="handleDelete(tabelDetailListIndex)"
           >
             <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
             <span>删除</span>
@@ -56,30 +61,20 @@
 
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="updateForm" :model="updateForm" label-width="100px" :label-position="lebelPosi">
-        <el-form-item label="序号">
+        <!-- <el-form-item label="序号">
           <el-input v-model="updateForm.sort"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="组织名称">
-          <!-- <el-select v-model="updateForm.name" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              :disabled="item.disabled"
-            ></el-option>
-          </el-select> -->
-
-          <el-input v-model="updateForm.name"></el-input>
+          <el-input v-model="updateForm.organizationName"></el-input>
         </el-form-item>
         <el-form-item label="组织编号">
-          <el-input v-model="updateForm.number"></el-input>
+          <el-input v-model="updateForm.organizationNumber"></el-input>
         </el-form-item>
         <el-form-item label="账号">
-          <el-input v-model="updateForm.passname"></el-input>
+          <el-input v-model="updateForm.organizationUsername"></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="updateForm.password"></el-input>
+          <el-input v-model="updateForm.organizationPassword"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -88,24 +83,24 @@
       </span>
     </el-dialog>
 
-<!-- 新增 -->
+    <!-- 新增 -->
 
     <el-dialog title="新增" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="addForm" :model="addForm" label-width="100px" :label-position="lebelPosi">
-        <el-form-item label="序号">
+        <!-- <el-form-item label="序号">
           <el-input v-model="addForm.sort"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="组织名称">
-          <el-input v-model="updateForm.name"></el-input>
+          <el-input v-model="addForm.organizationName"></el-input>
         </el-form-item>
         <el-form-item label="组织编号">
-          <el-input v-model="addForm.number"></el-input>
+          <el-input v-model="addForm.organizationNumber"></el-input>
         </el-form-item>
         <el-form-item label="账号">
-          <el-input v-model="addForm.passname"></el-input>
+          <el-input v-model="addForm.organizationUsername"></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="addForm.password"></el-input>
+          <el-input v-model="addForm.organizationPassword"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -113,8 +108,6 @@
         <el-button type="primary" @click="saveAddItem">确 定</el-button>
       </span>
     </el-dialog>
-
-
   </div>
 </template>
 
@@ -125,45 +118,24 @@ export default {
   data() {
     return {
       lebelPosi: "left",
-      options: [
-        {
-          value: "市公安交警局",
-          label: "市公安交警局"
-        },
-        {
-          value: "市消防救援支队",
-          label: "市消防救援支队"
-        },
-        {
-          value: "市委宣传部",
-          label: "市委宣传部"
-        },
-        {
-          value: "市委政法委",
-          label: "市委政法委"
-        },
-        {
-          value: "市教育局",
-          label: "市教育局"
-        }
-      ],
       tabPosition: "top",
       editVisible: false,
       addEditVisible: false,
+      updateIndex: "",
       updateForm: {
         sort: "",
-        name: "",
-        number: "",
-        passname: "",
-        password: ""
+        organizationName: "",
+        organizationNumber: "",
+        organizationUsername: "",
+        organizationPassword: ""
       },
 
       addForm: {
         sort: "",
-        name: "",
-        number: "",
-        passname: "",
-        password: ""
+        organizationName: "",
+        organizationNumber: "",
+        organizationUsername: "",
+        organizationPassword: ""
       },
 
       indexObj: {},
@@ -179,109 +151,55 @@ export default {
     ...mapMutations([
       "handleDeleteTaskListTabelDetailList",
       "handleChangeUpdateTaskList",
-      "handleAddFromData"
+      "handleAddFromData",
+      "handleAddOrganization",
+      "handleUpdateOrganizationList",
+      "handleDeleteOrganizationItem"
     ]),
 
-    handleDelete(index, ind, tabelDetailListIndex) {
-      // let indexObj = {
-      //   taskListIndex: index,
-      //   contentIndex: ind,
-      //   tabelDetailListIndex: tabelDetailListIndex
-      // };
-
+    handleDelete(tabelDetailListIndex) {
       // 二次确认删除
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning"
       })
         .then(() => {
+          this.handleDeleteOrganizationItem(tabelDetailListIndex);
           this.$message.success("删除成功");
-          // this.tableData.splice(index, 1);
-
-          // this.handleDeleteTaskListTabelDetailList(indexObj);
         })
         .catch(() => {});
     },
 
-    handleClickEdit() {
-      this.editVisible = true;
+    handleClickEdit(tabelDetailListIndex) {
+      var editObj = this.organization.tabelDetailList[tabelDetailListIndex];
+
       this.updateForm = {
-        sort: "",
-        name: "",
-        number: "",
-        passname: "",
-        password: ""
-      }
-
-      return;
-
-      this.indexObj = {
-        taskListIndex: index,
-        contentIndex: ind,
-        tabelDetailListIndex: tabelDetailListIndex
+        organizationName: editObj.organizationName,
+        organizationNumber: editObj.organizationNumber,
+        organizationUsername: editObj.organizationUsername,
+        organizationPassword: editObj.organizationPassword,
+        id: editObj.id
       };
 
-      console.log(this.indexObj);
+      this.updateIndex = tabelDetailListIndex;
 
-      let indexObj = {
-        taskListIndex: index,
-        contentIndex: ind,
-        tabelDetailListIndex: tabelDetailListIndex
-      };
-
-      let editObj = this.taskList[indexObj.taskListIndex].content[
-        indexObj.contentIndex
-      ].tabelDetailList[tabelDetailListIndex];
-
-      this.updateForm.taskValue = editObj.task;
-
-      this.updateForm.departmentValue = editObj.department;
-
-      let that = this;
-
-      editObj.evaluationList.map((item, index) => {
-        that.updateForm.evaluationListValue.push({ nameValue: item.name });
-      });
+      this.editVisible = true;
+      // this.updateForm = {
+      //   sort: "",
+      //   organizationName: "",
+      //   organizationNumber: "",
+      //   organizationUsername: "",
+      //   organizationPassword: ""
+      // }
     },
     saveEdit() {
-      this.$message.success(`修改成功`);
-      this.editVisible = false;
-      this.updateForm = {
-        sort: "",
-        name: "",
-        number: "",
-        passname: "",
-        password: ""
-      }
-
-      return;
-      let evaluationList = [];
-
-      this.updateForm.evaluationListValue.map((item, index) => {
-        evaluationList.push({ name: item.nameValue });
-      });
-
-      let editFromData = {
-        task: this.updateForm.taskValue,
-        department: this.updateForm.departmentValue,
-        evaluationList
-      };
-
-      this.editVisible = false;
-
       let updateData = {
-        indexObj: this.indexObj,
-        updateObj: editFromData
+        updateIndex: this.updateIndex,
+        updateFrom: this.updateForm
       };
 
-      this.handleChangeUpdateTaskList(updateData);
-
+      this.handleUpdateOrganizationList(updateData);
+      this.editVisible = false;
       this.$message.success(`修改成功`);
-
-      this.updateForm = {
-        taskValue: "",
-        departmentValue: "",
-        evaluationListValue: []
-      };
     },
     handleClickCancle() {
       this.updateForm = {
@@ -302,24 +220,9 @@ export default {
     },
 
     saveAddItem() {
-      // let evaluationList = [];
+      this.addForm.id = this.organization.tabelDetailList.length + 1;
 
-      // this.addForm.evaluationListValue.map((item, index) => {
-      //   evaluationList.push({ name: item.nameValue });
-      // });
-
-      // let addFromData = {
-      //   task: this.addForm.taskValue,
-      //   department: this.addForm.departmentValue,
-      //   evaluationList
-      // };
-
-      // let addData = {
-      //   addIndexObj: this.addIndexObj,
-      //   addFromData: addFromData
-      // };
-
-      // this.handleAddFromData(addData);
+      this.handleAddOrganization(this.addForm);
 
       this.addEditVisible = false;
 
@@ -327,35 +230,14 @@ export default {
 
       this.addForm = {
         sort: "",
-        name: "",
-        number: "",
-        passname: "",
-        password: ""
+        organizationName: "",
+        organizationNumber: "",
+        organizationUsername: "",
+        organizationPassword: ""
       };
-    },
-
-    handleClickAddBtn() {
-      this.updateForm.evaluationListValue.push({ nameValue: "" });
-    },
-
-    handleClickDeleteBtnEditItem(index) {
-      this.updateForm.evaluationListValue.splice(index, 1);
-    },
-
-    handleClickDeleteBtnAddItem(index) {
-      this.addForm.evaluationListValue.splice(index, 1);
-    },
-
-    handleClickAddItemBtn() {
-      this.addForm.evaluationListValue.push({ nameValue: "" });
     },
 
     handleClickItemBtn(index, ind) {
-      this.addIndexObj = {
-        taskListIndex: index,
-        contentIndex: ind
-      };
-
       this.addEditVisible = true;
     }
   },
