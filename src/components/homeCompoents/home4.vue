@@ -139,7 +139,7 @@
             style="overflow: hidden"
           >
             <el-input v-model="item.nameValue" style="width: 80%; margin-top: 10px"></el-input>
-            <i class="deleteBtn deleteClIcon" @click="handleClickDeleteBtnAddItem(index)"></i>
+            <i class="addIcon operationBtnIcon rwDeleteBtn" @click="handleClickDeleteBtnAddItem(index)"></i>
           </p>
 
           <i class="addBtn addClIcon" @click="handleClickAddItemBtn"></i>
@@ -650,7 +650,7 @@ export default {
 }
 
 .rwDeleteBtn {
-  background: url("../../assets/img/rwUpdateBtn.png") no-repeat;
+  background: url("../../assets/img/deleteBtn.png") no-repeat;
 }
 .deleteBtnBox {
   background: linear-gradient(
@@ -688,6 +688,11 @@ export default {
   float: left;
   margin-left: 10px;
   margin-top: 0;
+}
+
+.rwDeleteBtn {
+  background: url("../../assets/img/rwDeleteBtn.png") no-repeat;
+      margin-top: 7px;
 }
 
 // 弹出窗

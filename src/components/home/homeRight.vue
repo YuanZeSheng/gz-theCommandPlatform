@@ -80,6 +80,7 @@ export default {
   box-shadow: 6px 10px 8px 0px rgba(0, 0, 0, 0.16);
   border-radius: 10px;
   padding: 37px;
+  padding-bottom: 0;
   box-sizing: border-box;
 }
 

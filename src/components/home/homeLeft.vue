@@ -10,20 +10,15 @@
       active-text-color="#20a0ff"
       unique-opened
     >
-
-      <el-menu-item :index="'/home/index1'"  @click="handleToHomePage" v-if="userFlag">
+      <el-menu-item :index="'/home/index1'" @click="handleToHomePage" v-if="userFlag">
         <i class="el-icon-menu"></i>
-        <span slot="title">
-          首页
-        </span>
+        <span slot="title">首页</span>
       </el-menu-item>
-      
+
       <el-submenu index="/home/index2">
         <template slot="title">
           <i class="el-icon-location"></i>
-          <span slot="title" class="titleText">
-            评价
-          </span>
+          <span slot="title" class="titleText">评价</span>
         </template>
         <el-menu-item-group>
           <!-- <span slot="title">分组一</span> -->
@@ -39,9 +34,11 @@
           <el-menu-item :index="'/home/index5'" v-if="userFlag">
             <router-link to="/home/index5" class="routeBtn" tag="li">组织结构</router-link>
           </el-menu-item>
+          <el-menu-item :index="'/home/task'" v-if="userFlag">
+            <router-link to="/home/task" class="routeBtn" tag="li">任务列表</router-link>
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-
     </el-menu>
   </div>
 </template>
@@ -74,12 +71,11 @@ export default {
       this.isCollapse = this.isCollapse ? false : true;
     },
     handleToHomePage() {
-      this.$router.push({path:'/home/index1'});
+      this.$router.push({ path: "/home/index1" });
     }
   },
   watch: {},
   mounted() {
-    console.log(this.$route)
   }
 };
 </script>
@@ -87,10 +83,10 @@ export default {
 <style scoped lang="less" >
 .homeLeftContainer {
   display: block;
-    position: absolute;
-    left: 0;
-    top: 70px;
-    bottom: 0;
+  position: absolute;
+  left: 0;
+  top: 70px;
+  bottom: 0;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
@@ -107,4 +103,22 @@ ul {
     font-size: 20px;
   }
 }
+
+.el-menu-item-group {
+  .el-menu-item {
+    padding-left: 0 !important;
+  }
+}
+
+.routeBtn {
+  // text-align: center;
+  padding-left: 40px;
+}
+.menuitem {
+  padding: 0;
+}
+.el-submenu .el-menu-item {
+  padding: 0;
+}
+
 </style>

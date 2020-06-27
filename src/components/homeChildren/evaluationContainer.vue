@@ -5,7 +5,7 @@
       <!-- header -->
       <div class="tableHeaderList">
         <span
-          v-for="(headerItem, headerIndex) in evaluationList.tableHeaderList"
+          v-for="(headerItem, headerIndex) in evaluationLists.tableHeaderList"
           :key="headerIndex"
         >{{headerItem.name}}</span>
       </div>
@@ -13,14 +13,17 @@
       <!-- content -->
       <div class="tableDetailList">
         <p
-          v-for="(tabelDetailListItem,  tabelDetailListIndex) in evaluationList.tabelDetailList"
+          v-for="(tabelDetailListItem,  tabelDetailListIndex) in evaluationList"
           :key="tabelDetailListIndex"
-          :class="[tabelDetailListIndex % 2 == 0 ? 'blue' : 'fffblue']"
+          :class="['flexDom', tabelDetailListIndex % 2 == 0 ? 'blue' : 'fffblue']"
         >
-          <span>{{tabelDetailListItem.name}}</span>
-          <span>{{tabelDetailListItem.data}}</span>
-          <span>{{tabelDetailListItem.materials}}</span>
-          <span>{{tabelDetailListItem.number}}</span>
+          <span
+            @click="handleJumpDepartmentPage(tabelDetailListItem.departmentId)"
+            class="department"
+          >{{tabelDetailListItem.departmentName}}</span>
+          <span>{{tabelDetailListItem.date | toDate}}</span>
+          <span class="textOverflow">{{tabelDetailListItem.materials}}</span>
+          <span>{{tabelDetailListItem.state}}</span>
         </p>
       </div>
     </div>
@@ -32,20 +35,45 @@ import { mapState, mapMutations } from "vuex";
 
 export default {
   data() {
-    return {};
+    return {
+      evaluationList: []
+    };
   },
   components: {},
   computed: {
-    ...mapState(["evaluationList"])
+    ...mapState(["evaluationLists"])
   },
   methods: {
     // ...mapMutations(['']),
+
+    handleGetEvaluationList() {
+      this.api
+        .handleGetEvaluationList()
+        .then(this.handleGetEvaluationListSucc.bind(this));
+    },
+    handleGetEvaluationListSucc(res) {
+      setTimeout(() => {
+        this.$emit("handleChangeLoading", "change");
+      }, 2000);
+      if (res.code == 200) {
+        this.evaluationList = res.data;
+      }
+    },
+
+    handleJumpDepartmentPage(id) {
+      console.log(id);
+      this.$router.push({
+        path: `/home/department/${id}`
+      });
+    }
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.handleGetEvaluationList();
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
@@ -54,6 +82,9 @@ export default {
 </script>
 
 <style scoped lang="less" >
+.flexDom {
+  display: flex;
+}
 .tableHeaderList {
   height: 60px;
   background: rgba(81, 155, 236, 0.15);
@@ -82,9 +113,12 @@ export default {
 }
 
 .tableDetailList {
+  height: 225px;
+  overflow-y: auto;
+  
   p {
     font-size: 18px;
-    padding: 12px 0 ;
+    padding: 12px 0;
     box-sizing: border-box;
     border-bottom: 1px dashed rgba(90, 90, 90, 1);
     span {
@@ -106,10 +140,21 @@ export default {
   }
 }
 .blue {
-    background:rgba(81,155,236, .05);
+  background: rgba(81, 155, 236, 0.05);
 }
 
 .fffblue {
-    background:rgba(81,155,236,.15);
+  background: rgba(81, 155, 236, 0.15);
+}
+
+.department {
+  cursor: pointer;
+}
+
+
+.textOverflow{
+    overflow: hidden;    
+    text-overflow:ellipsis;    
+    white-space: nowrap;
 }
 </style>

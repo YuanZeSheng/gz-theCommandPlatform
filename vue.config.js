@@ -14,7 +14,8 @@ module.exports = {
         },
         proxy: {
             '/api': {
-              target: `${process.env.VUE_APP_URL}`,
+              // target: `${process.env.VUE_APP_URL}`,
+              target: 'http://192.168.31.102:8080/',
             //   ws: true,
               changeOrigin: true,
               pathRewrite: {

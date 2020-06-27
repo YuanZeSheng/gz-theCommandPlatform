@@ -26,7 +26,7 @@ export default {
   }],
 
   // 首页 - 评价日志
-  evaluationList: {
+  evaluationLists: {
     tableHeaderList: [{
       name: '所属部门'
     }, {
@@ -34,29 +34,33 @@ export default {
     }, {
       name: '上传材料'
     }, {
-      name: '评价得分'
+      name: '评价状态'
     }],
 
     tabelDetailList: [{
       name: '市发展改革委',
       data: '2020-05-25 12:05:03',
       materials: '规划年度实施计划',
-      number: '1'
+      number: '0/3',
+      id: 1
     }, {
       name: '市资源局',
       data: '2020-05-26 13:23:33',
       materials: '规划年度实施计划',
-      number: '3'
+      number: '1/2',
+      id: 2
     }, {
       name: '市应急局',
       data: '2020-05-28 08:25:03',
       materials: '规划年度实施计划',
-      number: '2'
+      number: '2/6',
+      id: 3
     }, {
       name: '市应急资源管理中心',
       data: '2020-05-25 12:05:03',
       materials: '规划年度实施计划',
-      number: '1'
+      number: '1/3',
+      id: 4
     }]
   },
 
@@ -80,7 +84,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评分状态',
+        name: '评分',
       }],
 
       tabelDetailList: [{
@@ -89,30 +93,33 @@ export default {
         // 任务 责任单位 提交材料
         list: [{
           task: '1. 城市国土空间总体规划(城市总体规划)未体现综合防灾、公共安全要求的;',
-
           department: '市发展改革委',
           materialsList: [{
             name: '1. 专项规划文本，并体现综合防灾、公共安全要求;',
             status: 2,
+            step: 0.1,
           }, {
             name: '2. 规划年度实施计划;',
             status: 1,
+            step: 0.1,
+            deductMarks: '-0.3'
           }],
           status: 2,
-          deductMarks: '-0.5',
         }, {
           task: '2. 未制定综合防灾减灾规划、安全生产规划、防震减灾规划、地质灾害防治规划、防洪规划、职业病防治规划、消防规划、道路交通安全管理规划、排水防涝规划等专项规划和年度实施计划的',
           department: '市自然资源局',
           materialsList: [{
             name: '1. 专项规划文本，并体现综合防灾、公共安全要求;',
-            status: 2
-
+            status: 2,
+            step: 0.2,
+            deductMarks: '-0.3'
           }, {
             name: '2. 规划年度实施计划;',
-            status: 1
+            status: 1,
+            step: 0.2,
+            deductMarks: '-0.2'
           }],
           status: 2,
-          deductMarks: '-0.5',
         },]
       },],
     }, {
@@ -129,7 +136,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评价状态',
+        name: '评价',
       }],
 
       tabelDetailList: [{
@@ -201,7 +208,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评分状态',
+        name: '评分',
       }],
 
       tabelDetailList: [{
@@ -237,7 +244,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评价状态',
+        name: '评价',
       }],
 
       tabelDetailList: [{
@@ -293,7 +300,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评分状态',
+        name: '评分',
       }],
 
       tabelDetailList: [{
@@ -329,7 +336,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评价状态',
+        name: '评价',
       }],
 
       tabelDetailList: [{
@@ -385,7 +392,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评分状态',
+        name: '评分',
       }],
 
       tabelDetailList: [{
@@ -421,7 +428,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评价状态',
+        name: '评价',
       }],
 
       tabelDetailList: [{
@@ -477,7 +484,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评分状态',
+        name: '评分',
       }],
 
       tabelDetailList: [{
@@ -526,7 +533,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评价状态',
+        name: '评价',
       }],
 
       tabelDetailList: [{
@@ -598,7 +605,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评分状态',
+        name: '评分',
       }],
 
       tabelDetailList: [{
@@ -634,7 +641,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评价状态',
+        name: '评价',
       }],
 
       tabelDetailList: [{
@@ -690,7 +697,7 @@ export default {
       }, {
         name: '材料状态',
       }, {
-        name: '评分状态',
+        name: '评分',
       }],
 
       tabelDetailList: [{
@@ -767,6 +774,8 @@ export default {
       },],
     },],
   },],
+
+
 
 
 
@@ -2057,23 +2066,80 @@ export default {
       id: 6,
       value: "市气象局",
       label: "市气象局"
-    },{
+    }, {
       id: 7,
       value: "杭报集团",
       label: "杭报集团"
-    },{
+    }, {
       id: 8,
       value: "市建委",
       label: "市建委"
-    },{
+    }, {
       id: 9,
       value: "市司法局",
       label: "市司法局"
-    },{
+    }, {
       id: 10,
       value: "市气象局",
       label: "市气象局"
     },
+  ],
+
+
+  // 任务列表
+  taskPageList: [
+    {
+      name: '子任务库',
+      content: [{
+        title: '城市总体规划及防灾减灾等专项规划',
+        allNumber: '2',
+        type: 'taskList',
+        tabelDetailList: [{
+          // 任务内容
+          taskDetail: '未制定综合防灾减灾规划、安全生产规划、防震减灾规划、地质灾害防治规划、防洪规划未制定综合防灾减灾规划、安全生产规划、防震减灾规划、地质灾害防治规划、防洪规划未制定综合防灾减灾规划、安全生产规划、防震减灾规划、地质灾害防治规划、防洪规划, 扣0.1分'
+        },{
+          // 任务内容
+          taskDetail: '未制定实施'
+        },{
+          // 任务内容
+          taskDetail: '制定实施'
+        }]
+      }, {
+        title: '建设项目安全评估论证',
+        allNumber: '5',
+        type: 'taskList',
+        tabelDetailList: [{
+          // 任务内容
+          taskDetail: '针对典型事故暴露的问题，按照有关要求开展隐患排查活动；较大以上事故调查报告向社会公开，落实整改防范措施'
+        }]
+      }]
+    }, {
+      name: '任务分组',
+      content: [{
+        title: '城市安全源头治理',
+        allNumber: '18',
+        type: 'grouping',
+        tabelHeaderList: [{
+          name: '任务',
+        }, {
+          name: '操作',
+        }],
+
+        tabelDetailList: [{
+          // 任务内容
+          taskDetail: '城市总体规城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾划及防灾'
+        }, {
+          // 任务内容
+          taskDetail: '城市总体规划及防'
+        }, {
+          // 任务内容
+          taskDetail: '城市总体规划及'
+        }, {
+          // 任务内容
+          taskDetail: '城市总体规划'
+        },]
+      }]
+    }
   ],
 
 }

@@ -7,8 +7,8 @@
 <style lang="less">
 #app {
   height: 100%;
-  min-width: 1250px;
-  overflow-x: scroll;
+  min-width: 1850px;
+  overflow-x: auto;
 }
 .el-tabs__item {
   font-size: 20px !important;

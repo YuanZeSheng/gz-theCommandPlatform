@@ -1,10 +1,15 @@
 <template>
-  <div class="home1Container">
+  <div
+    class="home1Container"
+    v-loading="loadingFlag"
+     element-loading-text="数据加载中"
+  >
     <!-- 业务平台 -->
     <div
       class="businessPlatform homeItemBox"
       v-for="(homeItem, homeIndex) in homeList"
       :key="homeIndex"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
     >
       <!-- itemHeader -->
       <div class="itemHeader">
@@ -19,7 +24,8 @@
         <!-- 业务平台 -->
         <businessPlatformContainer v-if="homeItem.type == 'businessPlatform'"></businessPlatformContainer>
         <!-- 评价日志 -->
-        <evaluationContainer v-if="homeItem.type == 'evaluation'"></evaluationContainer>
+        <evaluationContainer v-if="homeItem.type == 'evaluation'" 
+          @handleChangeLoading="handleChangeLoading"></evaluationContainer>
         <!-- 系统得分 -->
         <scoringSystemContainer v-if="homeItem.type == 'score'"></scoringSystemContainer>
         <!-- 单位丢分 -->
@@ -43,7 +49,9 @@ import dropPointsContainer from "../homeChildren/dropPointsContainer";
 
 export default {
   data() {
-    return {};
+    return {
+      loadingFlag: true
+    };
   },
   components: {
     businessPlatformContainer,
@@ -59,7 +67,13 @@ export default {
   created() {},
 
   mounted() {},
-  methods: {}
+  methods: {
+    handleChangeLoading(type) {
+      if( type == 'change' ) {
+        this.loadingFlag = false
+      }
+    }
+  }
 };
 </script>
 

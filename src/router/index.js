@@ -34,6 +34,14 @@ Vue.use(VueRouter)
         path: 'home/index5',
         component: () => import(/* webpackChunkName: "home5" */ '../components/homeCompoents/home5.vue'),
       },
+      {
+        path: '/home/department/:id',
+        component: () => import(/* webpackChunkName: "department" */ '../components/department/department.vue'),
+      },
+      {
+        path: '/home/task',
+        component: () => import(/* webpackChunkName: "task" */ '../components/homeCompoents/task.vue'),
+      },
     ]
   }
 ]

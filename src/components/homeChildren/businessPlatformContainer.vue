@@ -22,11 +22,12 @@ export default {
     return {
 			list: [{
 				name: '基础分',
-				number: 80
+				number: 0
 			}, {
 				name: '奖励分',
-				number: 5
-			}]
+				number: 0
+      }],
+      totalPoints: 0
 		};
   },
   components: {},
@@ -35,13 +36,39 @@ export default {
   },
   methods: {
     // ...mapMutations(['']),
+    handleGetHomeBusinessPlatformInfo() {
+      this.api
+        .handleGetHomeBusinessPlatformInfo()
+        .then(this.handleGetHomeBusinessPlatformInfoSucc.bind(this));
+    },
+
+    handleGetHomeBusinessPlatformInfoSucc(res) {
+      if( res.code == 200 ) {
+        this.list.map( item => {
+          if( item.name == '基础分' ) {
+            item.number = res.data.basics
+          }
+
+          if( item.name == '奖励分' ) {
+            item.number = res.data.award
+          }
+        } )
+
+        this.totalPoints = res.data.totalPoints
+        this.handleInitEcharts()
+      } else {
+        this.$message.error(res.message);
+      }
+    },
+
+
     handleInitEcharts() {
       let myChart = this.$echarts.init(
         document.getElementById("echartsContent")
 			);
 			
       let axisTickLength = 0; //刻度线宽度
-      let value = 85;
+      let value = this.totalPoints;
       let colorRegionRate = (value / 100).toFixed(2);
       let index = value >= 80 ? 0 : value > 30 ? 1 : 2;
       let startColor = "#3C7AD9";
@@ -240,6 +267,7 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
+    this.handleGetHomeBusinessPlatformInfo()
     this.handleInitEcharts();
   },
   beforeUpdate() {},

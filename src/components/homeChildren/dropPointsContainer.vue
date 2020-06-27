@@ -25,6 +25,27 @@ export default {
   },
   methods: {
     // ...mapMutations(['']),
+    handleGetLosePointsOfCompanys() {
+      this.api
+        .handleGetLosePointsOfCompanys()
+        .then(this.handleGetLosePointsOfCompanysSucc.bind(this));
+    },
+
+    handleGetLosePointsOfCompanysSucc(res) {
+      if( res.code == 200 ) {
+        let list = []
+        res.data.map( item => {
+          let obj = {}
+          obj.name = item.departmentName 
+          obj.value = item.number
+          list.push(obj)
+        } )
+
+        this.datapie = list
+        this.handleGetCityPieEcharts(this.dataPie)
+      }
+    },
+
     handleGetCityPieEcharts(dataPie) {
       let myChart = this.$echarts.init(
         document.getElementById("dropPointsEchats")
@@ -32,28 +53,9 @@ export default {
       let option = {
         backgroundColor: "#fff",
         animation: true,
-        // title: {
-        //   // text: 24,
-        //   // subtext: "业务域",
-        //   x: "0",
-        //   y: "center",
-        //   textStyle: {
-        //     color: "#333",
-        //     fontSize: 60,
-        //     fontWeight: "normal",
-        //     align: "center",
-        //     width: "200px"
-        //   },
-        //   subtextStyle: {
-        //     color: "#333",
-        //     fontSize: 20,
-        //     fontWeight: "normal",
-        //     align: "center"
-        //   }
-        // },
         legend: {
           width: "70%",
-          align: 'left',
+          align: "left",
           left: "right",
           textStyle: {
             color: "#5b5b5b",
@@ -69,13 +71,7 @@ export default {
           orient: "vertical",
           x: "0",
           y: "30",
-          data: [
-            "市委改革委",
-            "市资源局",
-            "市应急局",
-            "市应急管理中心",
-            "市水务局"
-          ]
+          data: this.dataPie
         },
         series: [
           {
@@ -180,28 +176,7 @@ export default {
                 }
               }
             },
-            data: [
-              {
-                name: "市委改革委",
-                value: 5
-              },
-              {
-                name: "市资源局",
-                value: 4
-              },
-              {
-                name: "市应急局",
-                value: 3
-              },
-              {
-                name: "市应急管理中心",
-                value: 5
-              },
-              {
-                name: "市水务局",
-                value: 3
-              }
-            ]
+            data: this.datapie
           },
           {
             type: "pie",
@@ -213,7 +188,6 @@ export default {
             data: [
               {
                 value: 78,
-                name: "实例1",
                 itemStyle: {
                   normal: {
                     color: "#3C7AD9"
@@ -232,7 +206,6 @@ export default {
             data: [
               {
                 value: 78,
-                name: "实例1",
                 itemStyle: {
                   normal: {
                     color: "#3C7AD9"
@@ -251,7 +224,9 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
-    this.handleGetCityPieEcharts();
+    this.handleGetLosePointsOfCompanys();
+
+    this.handleGetCityPieEcharts(this.datapie);
   },
   beforeUpdate() {},
   updated() {},

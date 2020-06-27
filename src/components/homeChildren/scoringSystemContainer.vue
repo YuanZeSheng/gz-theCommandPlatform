@@ -19,8 +19,8 @@ export default {
         "城市安全状况",
         "鼓励项"
       ],
-      dataInY: [5, 10, 7, 6, 4, 2, 4],
-      dataOutY: [18, 32, 16, 16, 14, 4, 5]
+      dataInY: [0, 0, 0, 0, 0, 0, 0],
+      dataOutY: [0, 0, 0, 0, 0, 0, 0]
     };
   },
   components: {},
@@ -29,7 +29,22 @@ export default {
   },
   methods: {
     // ...mapMutations(['']),
+    handleGetSystemScoreInfo() {
+      this.api
+        .handleGetSystemScoreInfo()
+        .then(this.handleGetSystemScoreInfoSucc.bind(this));
+    },
 
+    handleGetSystemScoreInfoSucc(res) {
+      if( res.code == 200 ) {
+        this.dataX = res.data.dataX
+        this.dataInY = res.data.dataInY
+        this.dataOutY = res.data.dataOutY
+        this.handleGetCityEcharts(this.dataX, this.dataInY, this.dataOutY);
+      } else {
+        this.handleGetCityEcharts(this.dataX, this.dataInY, this.dataOutY);
+      }
+    },
     //柱
     handleGetCityEcharts(datax, dataInY, dataOutY) {
       let myChart = this.$echarts.init(
@@ -164,7 +179,8 @@ export default {
               }
             },
             data: dataInY,
-            zlevel: 11
+            zlevel: 11,
+            
           },
           {
             name: "总分",
@@ -179,12 +195,21 @@ export default {
             data: dataOutY,
             itemStyle: {
               normal: {
-                color: "#E7E531"
+                color: "#E7E531",
                 // barBorderRadius: 30
+                label: {
+                        show: true, //开启显示
+                        position: 'top', //在上方显示
+                        textStyle: { //数值样式
+                            color: 'black',
+                            fontSize: 16
+                        }
+                    }
               }
             },
 
-            zlevel: 9
+            zlevel: 9,
+            
           }
         ]
       };
@@ -196,6 +221,9 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
+
+    this.handleGetSystemScoreInfo()
+
     this.handleGetCityEcharts(this.dataX, this.dataInY, this.dataOutY);
   },
   beforeUpdate() {},

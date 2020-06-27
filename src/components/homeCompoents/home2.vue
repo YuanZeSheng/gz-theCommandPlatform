@@ -45,12 +45,11 @@
                       <div
                         v-for="(materialsListItem, materialsListIndex) in items.materialsList"
                         :class="['fontStyle', materialsListIndex == 1 ? 'red': 'cur', materialsListIndex == items.materialsList.length - 1 ? 'lastMarginBottom' : 'margimBottom']"
-                       
                         :key="materialsListIndex"
                       >
                         <div class="blockFlex">
                           <div
-                           @click="handleShowPdf(materialsListIndex)"
+                            @click="handleShowPdf(materialsListIndex)"
                             style="width: 33.3%;"
                             :class="[materialsListItem.status == 1 ? 'fontywc' : 'fontwwc']"
                           >{{materialsListItem.name}}</div>
@@ -65,7 +64,15 @@
                             class="textCenter flexCenter deductMarks"
                             style="width: 33.3%"
                             v-if="materialsListItem.status == 1"
-                          >{{items.deductMarks}}</div>
+                          >
+                            <el-tooltip placement="top">
+                              <div slot="content">没有完成河流治理</div>
+                              <el-button
+                                class="deductMarksBtn"
+                                @click="handleClickDeductMarks(materialsListItem)"
+                              >{{materialsListItem.deductMarks}}扣分详情</el-button>
+                            </el-tooltip>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -77,6 +84,41 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+
+    <!-- 加减分 -->
+    <el-dialog
+      title="评价材料"
+      :visible.sync="deductMarksFlag"
+      width="30%"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        ref="deductMarksFrom"
+        :model="deductMarksFrom"
+        label-width="100px"
+        :label-position="lebelPosi"
+      >
+
+        <el-form-item label="扣分标准：" prop="deductMarks">
+          <p>
+            每发现一项扣0.1分
+          </p>
+        </el-form-item>
+
+        <el-form-item label="加减分数：" prop="deductMarks">
+          <el-input-number v-model="deductMarksFrom.deductMarksNumber" :precision="2" :step="deductMarksStep"></el-input-number>
+        </el-form-item>
+
+        <el-form-item label="減分原因：" prop="points">
+          <el-input type="textarea" v-model="deductMarksFrom.points"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="deductMarksFlag = false">取 消</el-button>
+        <el-button type="primary" @click="handleSaveDeductMarks">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -86,7 +128,14 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      tabPosition: "top"
+      tabPosition: "top",
+      deductMarksFlag: false,
+      lebelPosi: "left",
+      deductMarksFrom: {
+        deductMarksNumber: '',
+        points: ''
+      },
+      deductMarksStep: ''
     };
   },
   components: {},
@@ -114,6 +163,21 @@ export default {
       // link.setAttribute('download', fname);
       document.body.appendChild(link);
       link.click();
+    },
+
+    handleClickDeductMarks(item) {
+      this.$nextTick(() => {
+        if (this.$refs.deductMarksFrom !== undefined) {
+          this.$refs.deductMarksFrom.resetFields();
+        }
+      });
+      this.deductMarksFlag = true;
+      this.deductMarksStep = item.step;
+      this.deductMarksFrom.deductMarksNumber = item.deductMarks
+    },
+
+    handleSaveDeductMarks() {
+      this.deductMarksFlag = false
     }
   },
   watch: {},
@@ -330,5 +394,11 @@ export default {
 
 .fontywc {
   color: #22ac38;
+}
+
+.deductMarksBtn {
+  background: transparent;
+  color: red;
+  font-size: 20px;
 }
 </style>
