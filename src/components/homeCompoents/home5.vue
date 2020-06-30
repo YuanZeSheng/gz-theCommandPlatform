@@ -28,6 +28,12 @@
         <div class="evaluationList">
           <p class="textCenter">{{tabelDetailListItem.organizstionNumber}}</p>
         </div>
+        <div class="evaluationList">
+          <p class="textCenter">{{tabelDetailListItem.organizstionLinkman}}</p>
+        </div>
+        <div class="evaluationList">
+          <p class="textCenter">{{tabelDetailListItem.organizstionTel}}</p>
+        </div>
 
         <div class="userInfo textCenter">
           <p>{{tabelDetailListItem.organizstionUsername}}</p>
@@ -44,6 +50,7 @@
             <i class="addIcon operationBtnIcon updateBtns"></i>
             <span>编辑</span>
           </el-button>
+          <br/>
           <el-button
             type="primary"
             class="addItemBtn operationBtn deleteBtnBox"
@@ -66,6 +73,12 @@
         </el-form-item>
         <el-form-item label="组织编号" prop="organizstionNumber">
           <el-input v-model="updateForm.organizstionNumber"></el-input>
+        </el-form-item>
+        <el-form-item label="负责人" prop="organizstionLinkman">
+          <el-input v-model="updateForm.organizstionLinkman"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="organizstionTel">
+          <el-input v-model="updateForm.organizstionTel"></el-input>
         </el-form-item>
         <el-form-item label="账号" prop="organizstionUsername">
           <el-input v-model="updateForm.organizstionUsername"></el-input>
@@ -92,6 +105,12 @@
         </el-form-item>
         <el-form-item label="组织编号" prop="organizstionNumber">
           <el-input v-model="addForm.organizstionNumber"></el-input>
+        </el-form-item>
+         <el-form-item label="负责人" prop="organizstionLinkman">
+          <el-input v-model="addForm.organizstionLinkman"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="organizstionTel">
+          <el-input v-model="addForm.organizstionTel"></el-input>
         </el-form-item>
         <el-form-item label="账号" prop="organizstionUsername">
           <el-input v-model="addForm.organizstionUsername"></el-input>
@@ -131,6 +150,12 @@ export default {
           name: "组织编号"
         },
         {
+          name: "负责人"
+        },
+        {
+          name: "联系电话"
+        },
+        {
           name: "账号"
         },
         {
@@ -146,14 +171,18 @@ export default {
         organizstionName: "",
         organizstionNumber: "",
         organizstionUsername: "",
-        organizstionPassword: ""
+        organizstionPassword: "",
+        organizstionLinkman: "",
+        organizstionTel: ""
       },
 
       addForm: {
         organizstionName: "",
         organizstionNumber: "",
         organizstionUsername: "",
-        organizstionPassword: ""
+        organizstionPassword: "",
+        organizstionLinkman: "",
+        organizstionTel: ""
       },
 
       indexObj: {},
@@ -221,6 +250,8 @@ export default {
         organizstionNumber: editObj.organizstionNumber,
         organizstionUsername: editObj.organizstionUsername,
         organizstionPassword: editObj.organizstionPassword,
+        organizstionLinkman: editObj.organizstionLinkman,
+        organizstionTel: editObj.organizstionTel,
         id: editObj.id
       };
       this.editVisible = true;
@@ -326,8 +357,12 @@ export default {
   color: black;
   span {
     display: inline-block;
-    width: 16.6%;
+    width: 13.6%;
     text-align: center;
+  }
+
+  span:nth-child(1) {
+    width: 4%;
   }
 }
 
@@ -397,8 +432,16 @@ export default {
 
   box-sizing: border-box;
 
+
+
+
+
   div {
-    width: 16.6%;
+    width: 14%;
+  }
+
+  div:nth-child(1) {
+    width: 4%;
   }
 }
 

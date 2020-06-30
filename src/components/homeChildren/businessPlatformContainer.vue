@@ -211,7 +211,7 @@ export default {
                 a: {
                   color: "#3C7AD9",
                   fontWeight: 600,
-									fontSize: 46,
+									fontSize: 30,
 									fontWeight: 600
                 },
                 b: {
@@ -222,7 +222,7 @@ export default {
                 c: {
                   color: "#3C7AD9",
                   fontWeight: 600,
-                  fontSize: 26
+                  fontSize: 20
                 }
               }
             },
@@ -301,7 +301,7 @@ export default {
 	}
 
 	.numberBox {
-		width: 350px;
+		width: 270px;
 		height: 74px;
 		background:rgba(81,155,236, .15);
 		line-height: 74px;

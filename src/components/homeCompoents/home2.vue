@@ -2,22 +2,24 @@
   <div class="home3Container">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
-      <el-tab-pane v-for="(item, index) in evaluateList" :key="index" style="font-size: 18px">
+      <el-tab-pane v-for="(item, index) in ciTyList" :key="index" style="font-size: 18px">
         <span slot="label">
-          <span v-html="item.name"></span>
+          <span>
+            {{item.name}}<br>({{item.grade}}分) 
+          </span>
         </span>
         <div v-for="(it, ind) in item.content" :key="ind" style="margin-bottom: 35px">
           <p class="title">
             <span class="titleIcon"></span>
-            {{ind + 1}}. {{it.title}}
-            <span>(总分：{{it.allNumber}})</span>
-            <span class="deductMarksNumber">得分：{{it.deductMarksNumber}}</span>
+            {{ind + 1}}. {{it.taskTitle}}
+            <span>(总分：{{it.taskGrade}})</span>
+            <span class="deductMarksNumber">得分：{{it.taskScore}}</span>
           </p>
 
           <!-- 表头 -->
           <div class="tableHeader">
             <span
-              v-for="(tabelHeaderItem, index3) in it.tabelHeaderList"
+              v-for="(tabelHeaderItem, index3) in tabelHeaderList"
               :key="index3"
             >{{tabelHeaderItem.name}}</span>
           </div>
@@ -26,12 +28,10 @@
           <div class="tableContent">
             <div
               class="scoreContent"
-              v-for="(scoreContentItem, scoreContentIndex) in it.tabelDetailList"
-              :key="scoreContentIndex"
             >
               <div class="rightBox">
                 <div
-                  v-for="(items, index) in scoreContentItem.list"
+                  v-for="(items, index) in it.taskDetailList"
                   :key="index"
                   :class="['rightContent', index % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
                 >
@@ -49,28 +49,28 @@
                       >
                         <div class="blockFlex">
                           <div
-                            @click="handleShowPdf(materialsListIndex)"
+                            @click="handleShowPdf(materialsListItem)"
                             style="width: 33.3%;"
-                            :class="[materialsListItem.status == 1 ? 'fontywc' : 'fontwwc']"
+                            :class="[materialsListItem.status? 'fontywc' : 'fontwwc' , 'textCenter']"
                           >{{materialsListItem.name}}</div>
                           <div style="width: 33.3%" :class="['flexCenter']">
-                            <span :class="[materialsListItem.status == 1 ? 'zpywc': 'zpwwc']"></span>
+                            <span :class="[materialsListItem.status ? 'zpywc': 'zpwwc']"></span>
                             <span
-                              :class="[materialsListItem.status == 1 ? 'zpywcStyle': 'zpwwcStyle']"
-                            >{{materialsListItem.status == 1 ? '已完成' : '未完成'}}</span>
+                              :class="[materialsListItem.status? 'zpywcStyle': 'zpwwcStyle']"
+                            >{{materialsListItem.status? '已完成' : '未完成'}}</span>
                           </div>
 
                           <div
                             class="textCenter flexCenter deductMarks"
                             style="width: 33.3%"
-                            v-if="materialsListItem.status == 1"
+                            v-if="materialsListItem.status"
                           >
                             <el-tooltip placement="top">
-                              <div slot="content">没有完成河流治理</div>
+                              <div slot="content">{{materialsListItem.discussionReason}}</div>
                               <el-button
                                 class="deductMarksBtn"
                                 @click="handleClickDeductMarks(materialsListItem)"
-                              >{{materialsListItem.deductMarks}}扣分详情</el-button>
+                              >{{materialsListItem.grade}}扣分详情</el-button>
                             </el-tooltip>
                           </div>
                         </div>
@@ -101,7 +101,7 @@
 
         <el-form-item label="扣分标准：" prop="deductMarks">
           <p>
-            每发现一项扣0.1分
+            {{discussionRule}}
           </p>
         </el-form-item>
 
@@ -130,23 +130,57 @@ export default {
     return {
       tabPosition: "top",
       deductMarksFlag: false,
+      discussionRule: '',
       lebelPosi: "left",
       deductMarksFrom: {
         deductMarksNumber: '',
         points: ''
       },
-      deductMarksStep: ''
+      deductMarksStep: '',
+      tabelHeaderList: [],
+      ciTyList: [],
+      tabelHeaderList: [{
+        name: '任务',
+      }, {
+        name: '责任单位',
+      }, {
+        name: '提交材料',
+      }, {
+        name: '材料状态',
+      }, {
+        name: '评分',
+      }],
     };
   },
   components: {},
   computed: {
-    ...mapState(["evaluateList", "tabelDetailList"])
+    ...mapState(["evaluateList"])
   },
   methods: {
     // ...mapMutations(['']),
 
-    handleShowPdf(index) {
-      if (index == 0) {
+
+  handleGetCityAssessmentInfo() {
+    this.api
+      .handleGetCityAssessmentInfo()
+      .then(this.handleGetCityAssessmentInfoSucc.bind(this));
+  },
+
+  handleGetCityAssessmentInfoSucc(res) {
+    if( res.code == 200 ) {
+      this.ciTyList = res.data
+    } else {
+      this.$message.error(res.message)
+    }
+  },
+
+
+
+
+// 前端
+
+    handleShowPdf(item) {
+      if (!item.status) {
         this.$message({
           message: "请先上传材料",
           type: "error"
@@ -155,7 +189,8 @@ export default {
         return false;
       }
 
-      const url = "http://210.76.75.221:9181/wkk-report/cszp/showpdf.pdf";
+      // const url = item.pdfUrl;
+      const url = 'http://210.76.75.221:9181/wkk-report/cszp/showpdf.pdf'
       const link = document.createElement("a");
       let fname = "report.pdf";
       link.href = url;
@@ -172,8 +207,9 @@ export default {
         }
       });
       this.deductMarksFlag = true;
-      this.deductMarksStep = item.step;
-      this.deductMarksFrom.deductMarksNumber = item.deductMarks
+      this.deductMarksStep = item.gradeRule * 1;
+      this.deductMarksFrom.deductMarksNumber = item.grade
+      this.discussionRule = item.discussionRule
     },
 
     handleSaveDeductMarks() {
@@ -184,7 +220,9 @@ export default {
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.handleGetCityAssessmentInfo()
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},

@@ -15,51 +15,49 @@
           <p class="title">
             <span class="titleIcon"></span>
             {{ind+1}}.
-            {{it.title}}
-            <span>( {{it.allNumber}} 分 )</span>
+            {{it.taskTitle}}
+            <span>( {{it.taskGrade}} 分 )</span>
             <el-button
               type="primary"
               class="addItemBtn deleteBtnBox"
-              @click="handleClickDelelteChildrenTask(it.type, ind)"
+              @click="handleClickDelelteChildrenTask(it)"
             >
               <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
               <span>删除</span>
             </el-button>
 
             <el-button
-              v-if="tabValue == 0"
               type="primary"
               class="addItemBtn addTskRight"
-              @click="handleClickAddTask('task')"
+              @click="handleClickAddTask(it)"
             >
               <i class="addIcon"></i>
               <span>新增</span>
             </el-button>
           </p>
 
-          <!-- 表头 -->
-          <div class="tableHeader" v-if="it.type == 'grouping'">
+
+          <!-- <div class="tableHeader" v-if="index == 1">
             <span
-              v-for="(tabelHeaderItem, tabelHeaderIndex) in it.tabelHeaderList"
+              v-for="(tabelHeaderItem, tabelHeaderIndex) in tabelHeaderList"
               :key="tabelHeaderIndex"
             >{{tabelHeaderItem.name}}</span>
-          </div>
+          </div> -->
 
-          <!-- 表 -->
           <div class="tableContent">
             <div
               class="scoreContent"
-              v-for="(tabelDetailListItem, tabelDetailListIndex) in it.tabelDetailList"
+              v-for="(tabelDetailListItem, tabelDetailListIndex) in it.taskDetailList"
               :key="tabelDetailListIndex"
             >
-              <template v-if="tabelDetailListItem.taskDetail">
+              <template v-if="tabelDetailListItem.task">
                 <p class="tabelDetailListItem">
-                  <span style="width: 70%" class="spanSyle">{{tabelDetailListItem.taskDetail}}</span>
+                  <span style="width: 70%" class="spanSyle">{{tabelDetailListItem.task}}</span>
                   <span :style="[it.type == 'grouping' ? '20%' : 'width: 8%']" class="flex">
                     <el-button
                       type="primary"
                       class="addItemBtn deleteBtnBox"
-                      @click="handleClickDelelteChildrenTask(it.type, ind, tabelDetailListIndex, 'deleteType' )"
+                      @click="handleClickDelelteChildrenTask(tabelDetailListItem)"
                     >
                       <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
                       <span>删除</span>
@@ -93,20 +91,33 @@
           <el-form-item label="任务分值" prop="allNumber">
             <el-input v-model="addTaskForm.allNumber"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="任务内容" prop="taskContent">
-            <el-input type="textarea" v-model="addTaskForm.taskContent"></el-input>
-          </el-form-item>
-          <el-form-item label="扣分分值" prop="allNumber">
-            <el-input v-model="addTaskForm.step"></el-input>
-          </el-form-item>-->
         </template>
 
         <template v-if="addTitle == '新增一级项'">
           <el-form-item label="一级名称" prop="title">
             <el-input v-model="addTaskForm.oneTitle"></el-input>
           </el-form-item>
-          <el-form-item label="任务选项" prop="allNumber">
-            <!-- <el-input v-model="addTaskForm.allNumber"></el-input> -->
+          <el-form-item label="任务总分值" prop="taskGrade">
+            <el-input v-model="addTaskForm.taskGrade"></el-input>
+            
+          </el-form-item>
+         
+        </template>
+
+        <template v-if="addTitle == '新增二级项任务'">
+          <el-form-item label="任务内容" prop="taskContent">
+            <el-input type="textarea" v-model="addTaskForm.taskContent"></el-input>
+          </el-form-item>
+          <el-form-item label="扣分机制" prop="step">
+            <el-input v-model="addTaskForm.step"></el-input>
+          </el-form-item>
+          <el-form-item label="扣分界值" prop="scoreStop">
+            <el-input v-model="addTaskForm.scoreStop"></el-input>
+          </el-form-item>
+        </template>
+
+      <template v-if="addTitle == '新增一级项任务'">
+          <el-form-item label="子任务合集" prop="taskContent">
             <el-select v-model="addTaskForm.taskCard" multiple placeholder="请选择任务">
               <el-option
                 v-for="item in taskOptions"
@@ -115,16 +126,6 @@
                 :value="item.value"
               ></el-option>
             </el-select>
-          </el-form-item>
-         
-        </template>
-
-        <template v-if="addTitle == '新增任务'">
-          <el-form-item label="任务内容" prop="taskContent">
-            <el-input type="textarea" v-model="addTaskForm.taskContent"></el-input>
-          </el-form-item>
-          <el-form-item label="扣分分值" prop="allNumber">
-            <el-input v-model="addTaskForm.step"></el-input>
           </el-form-item>
         </template>
       </el-form>
@@ -142,130 +143,265 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      addTaskDetailId: '',
+      addGroupId: "",
       tabPosition: "top",
       addTaskFlag: false,
       lebelPosi: "left",
       tabValue: "",
       addTaskForm: {
+        
         title: "",
         allNumber: "",
+
+        // 新增任务
         taskContent: "",
-        step: "",
+        step: "",  //扣分机制
+        scoreStop: "",  //扣分界值
 
         // 任务组
         oneTitle: "",
         taskCard: [],
-        taskValue: ""
+        taskValue: "",
+        taskGrade: ""
       },
       addTitle: "新增子任务",
       taskOptions: [
-        {
-          value: "选项1",
-          label: "城市国土空间总体规划1"
-        },
-        {
-          value: "选项2",
-          label: "城市国土空间总体规划2"
-        },
-        {
-          value: "选项3",
-          label: "城市国土空间总体规划3"
-        },
-        {
-          value: "选项4",
-          label: "城市国土空间总体规划4"
-        },
-        {
-          value: "选项5",
-          label: "城市国土空间总体规划5"
-        }
-      ]
+      ],
+
+
+      taskPageList: [],
+      tabelHeaderList: [{
+          name: '任务',
+        }, {
+          name: '操作',
+        }],
     };
   },
   components: {},
   computed: {
-    ...mapState(["taskPageList"])
+    ...mapState([""])
   },
   methods: {
     ...mapMutations([
-      "handleAddTask",
       "handleDelelteChildrenTask",
       "handleDelelteGroupTask"
     ]),
 
+
+  handleGetTaskList() {
+    this.api
+        .handleGetTaskList()
+        .then(this.handleGetTaskListSucc.bind(this));
+  },
+  handleGetTaskListSucc(res) { 
+    if( res.code == 200 ) {
+      this.taskPageList = res.data
+    } else {
+      this.$message.error(res.message);
+    }
+   },
+
+
+
+// 前端逻辑
+
     // 添加子任务
-    handleClickAddTask(type) {
+    handleClickAddTask(item) {
+
       this.$nextTick(() => {
         if (this.$refs.addTaskForm !== undefined) {
           this.$refs.addTaskForm.resetFields();
           this.addTaskForm.taskCard = [];
         }
       });
-      this.addTitle = this.tabValue == 0 ? "新增二级项" : "新增一级项";
-      type ? (this.addTitle = "新增任务") : "";
+
+      this.addTaskDetailId = item ? item.typeId : ''
+
+      switch (this.tabValue) {
+        case '0':
+          this.addTitle = item ? '新增二级项任务' : '新增二级项'
+        break;
+
+        case '1':
+          this.handleGetCompletedTaskList()
+          this.addGroupId = item ? item.typeId : ''
+          this.addTitle = item ? '新增一级项任务' : '新增一级项'
+        break;
+
+        
+      }
+      
+
+
       this.addTaskFlag = true;
+
+    },
+    handleGetCompletedTaskList() {
+      this.taskOptions = []
+      this.api
+        .handleGetCompletedTaskList()
+        .then(this.handleGetCompletedTaskListSucc.bind(this));
+    },
+    handleGetCompletedTaskListSucc(res) {
+      
+      if( res.code == 200 ) {
+        res.data.map( item => {
+          let obj = {}
+          obj.label = item.typeName
+          obj.value = item.typeId
+          this.taskOptions.push(obj)
+        } )
+
+      } else {
+        // this.$message.error(res.message)
+      }
     },
 
     // 添加保存
     handleSaveTask() {
-      switch (this.tabValue) {
-        case "0":
+      switch (this.addTitle) {
+        case "新增二级项":
           this.handleSaveChildrenTask();
-          break;
-        case "1":
+        break;
+        case "新增二级项任务":
+          this.handleSaveTaskDetail()
+        break;
+        case "新增一级项":
           this.handleSaveGroupTask();
-          break;
+        break;
+        case "新增一级项任务":
+          this.handleSaveGroupTaskDetail();
+        break;
       }
     },
+    handleSaveGroupTaskDetail() {
+
+      let param = {}
+      param.typeId = this.addGroupId
+      param.arrayId = this.addTaskForm.taskCard
+
+      this.api
+        .handleAddGroupTaskDetail(param)
+        .then(this.handleAddGroupTaskDetailSucc.bind(this));
+
+    },
+
+    handleAddGroupTaskDetailSucc(res) {
+      if( res.code == 200 ) {
+        this.addTaskFlag = false;
+        this.$message.success( '新增成功' )
+        this.handleGetTaskList()
+      } else {
+        this.$message.error(res.message)
+      }
+    },
+
+    handleSaveTaskDetail() {
+      let param = {}
+      param.typeId = this.addTaskDetailId
+      param.taskTitle = this.addTaskForm.taskContent
+      param.minusScore = this.addTaskForm.step
+      param.scoreStop = this.addTaskForm.scoreStop
+
+      this.api
+        .handleAddTaskDetail(param)
+        .then(this.handleAddTaskDetailSucc.bind(this));
+    },
+
+    handleAddTaskDetailSucc(res) {
+      if( res.code == 200 ) {
+        this.addTaskFlag = false;
+        this.$message.success("新增子任务详情成功"); 
+        this.handleGetTaskList()
+      } else {
+        this.$message.error(res.message); 
+      }
+    },
+
     // 保存子任务
     handleSaveChildrenTask() {
-      let tabelList = [{ taskDetail: this.addTaskForm.taskContent }];
-
       let addChildrenTask = {
-        title: this.addTaskForm.title,
-        allNumber: this.addTaskForm.allNumber,
-        tabelDetailList: tabelList,
-        type: "taskList"
+        taskTitle: this.addTaskForm.title,
+        taskGrade: this.addTaskForm.allNumber,
       };
 
-      if (this.addTitle != "新增任务") {
-        this.handleAddTask(addChildrenTask);
+      this.api
+        .handleAddTaskType(addChildrenTask)
+        .then(this.handleAddTaskTypeSucc.bind(this));
+        
+    },
 
-      }
+    handleAddTaskTypeSucc(res) {
+      if( res.code == 200 ) {
         this.addTaskFlag = false;
-
+        this.$message.success("新增二级项成功"); 
+        this.handleGetTaskList()
+      } else {
+        this.$message.error(res.message); 
+      }
     },
     // 保存任务组
     handleSaveGroupTask() {
-      console.log("保存任务组");
+
+       let param = {
+        taskTitle: this.addTaskForm.oneTitle,
+        taskGrade: this.addTaskForm.taskGrade,
+      };
+
+      this.api
+        .handleAddTaskGroupType(param)
+        .then(this.handleAddTaskGroupTypeSucc.bind(this));
+
     },
-    handleClickDelelteChildrenTask(type, index, indexs, deleteType) {
+
+    handleAddTaskGroupTypeSucc( res ) {
+      if( res.code == 200 ) {
+        this.addTaskFlag = false;
+        this.$message.success("新增一级项成功"); 
+        this.handleGetTaskList()
+      } else {
+        this.$message.error(res.message); 
+      }
+    },
+    handleClickDelelteChildrenTask( item ) {
+
       this.$confirm("确定删除吗？", "提示", {
         type: "warning"
       })
         .then(() => {
-          this.$message.success("删除成功");
-          if (type == "taskList") {
-            if (deleteType) {
-              return;
-            }
-            this.handleDelelteChildrenTask(index);
-          } else {
-            let indexObj = {
-              index,
-              indexs
-            };
-            this.handleDelelteGroupTask(indexObj);
-          }
+          let param = {}
+          param.id = item.typeId ? item.typeId : item.taskId
+          param.type = item.type
+          this.handleDeleteTaskDetail(param)
+          return
         })
         .catch(() => {});
+    },
+
+    handleDeleteTaskDetail(param) {
+      this.api
+        .handleDeleteTaskDetail(param)
+        .then(this.handleDeleteTaskDetailSucc.bind(this));
+    },
+
+    handleDeleteTaskDetailSucc(res) {
+      if( res.code == 200 ) {
+        this.$message.success("删除成功"); 
+        this.handleGetTaskList()
+      } else {
+        this.$message.error(res.message); 
+      }
     }
+
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.handleGetTaskList()
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
@@ -560,5 +696,8 @@ export default {
 
 .addTskRight {
   right: 133px;
+}
+.el-select{
+  width: 300px;
 }
 </style>

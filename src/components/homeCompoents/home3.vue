@@ -2,21 +2,21 @@
   <div class="home3Container">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
-      <el-tab-pane v-for="(item, index) in dataEvaluateList" :key="index" style="font-size: 18px">
+      <el-tab-pane v-for="(item, index) in materialList" :key="index" style="font-size: 18px">
         <span slot="label">
           <span v-html="item.name"></span>
         </span>
         <div v-for="(it, ind) in item.content" :key="ind" style="marginBottom: 20px">
           <p class="title">
             <span class="titleIcon"></span>
-            {{ind + 1}}. {{it.title}}
-            <span>(总分：{{it.allNumber}})</span>
+            {{ind + 1}}. {{it.taskTitle}}
+            <span>(总分：{{it.taskGrade}})</span>
           </p>
 
           <!-- 表头 -->
           <div class="tableHeader">
             <span
-              v-for="(tabelHeaderItem, index3) in it.tabelHeaderList"
+              v-for="(tabelHeaderItem, index3) in tabelHeaderList"
               :key="index3"
             >{{tabelHeaderItem.name}}</span>
           </div>
@@ -24,7 +24,7 @@
           <!-- 表 -->
           <div class="tableContent">
             <div
-              v-for="(scoreContentItem, scoreContentIndex) in it.tabelDetailList"
+              v-for="(items, scoreContentIndex) in it.taskDetailList"
               :key="scoreContentIndex"
               :class="['scoreContent']"
             >
@@ -33,8 +33,6 @@
               <!-- 任务 -->
               <div class="rightBox">
                 <div
-                  v-for="(items, index) in scoreContentItem.list"
-                  :key="index"
                   class="rightContent"
                   :class="['scoreContent', index % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
                 >
@@ -45,9 +43,9 @@
                     <div
                       v-for="(materialsListItem, materialsListIndex) in items.materialsList"
                       :key="materialsListIndex"
-                      :class="[materialsListIndex == 1 ? 'red': 'cur']"
+                      :class="[materialsListItem.status ? 'red': 'cur', 'textAlign']"
                       style="marginBottom: 20px"
-                      @click="handleShowPdf(materialsListIndex)"
+                      @click="handleShowPdf(materialsListItem)"
                     >{{materialsListItem.name}}</div>
                   </div>
 
@@ -61,11 +59,9 @@
                       :key="materialsListIndex"
                     >
                       <el-button
-                        :type="materialsListIndex == 0 ? 'primary': 'primary'  "
+                        :type="materialsListItem.status ? 'primary': 'primary'  "
                         class="addItemBtn operationBtn"
-                        :disabled="materialsListIndex == 1 ? true: false "
-                        :class="[materialsListIndex !== 2 ? '': 'deleteBtn']"
-                        
+                        :disabled="materialsListItem.status ? true: false "
                         @click="handleClickUploading()"
                       >
                         <i class="addIcon operationBtnIcon updateBtns"></i>
@@ -75,8 +71,8 @@
                         type="danger"
                         class="addItemBtn operationBtn deleteBtnBox"
                         @click="handleClickDeleteFile"
-                        :disabled="materialsListIndex !== 1 ? true: false "
-                        :class="[materialsListIndex !== 0 ? '': 'deleteBtn']"
+                        :disabled="materialsListItem.status ? false: true "
+                        :class="[materialsListItem.status? '': 'deleteBtn']"
                       >
                         <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
                         <span>删除资料</span>
@@ -94,7 +90,7 @@
     </el-tabs>
 
     <el-dialog title="上传材料" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
-      <el-form ref="fileFrom" :model="fileFrom" label-width="70px">
+      <el-form ref="fileFrom" :model="fileFrom" label-width="8%">
         <el-form-item label>
           <el-upload
             class="upload-demo"
@@ -139,7 +135,16 @@ export default {
       fileList: [],
 
       editVisible: false,
-      pdfFlag: false
+      pdfFlag: false,
+
+      materialList:[],
+      tabelHeaderList: [{
+        name: '任务',
+      }, {
+        name: '提交材料',
+      }, {
+        name: '操作'
+      }],
     };
   },
   components: {},
@@ -148,6 +153,24 @@ export default {
   },
   methods: {
     // ...mapMutations(['']),
+
+    handleGetMaterialUploadInfo() {
+      this.api
+        .handleGetMaterialUploadInfo()
+        .then(this.handleGetMaterialUploadInfoSucc.bind(this));
+    },
+
+    handleGetMaterialUploadInfoSucc(res) {
+      if( res.code == 200 ) {
+        this.materialList = res.data
+      } else {
+        this.$message.error(res.message);
+      }
+    },
+
+
+
+// 前端
 
     handleClickUploading() {
       this.editVisible = true;
@@ -219,8 +242,8 @@ export default {
       return extension || extension2;
     },
 
-    handleShowPdf(index) {
-      if (index == 0) {
+    handleShowPdf(materialsListItem) {
+      if (!materialsListItem.status) {
         this.$message({
           message: "请先上传材料",
           type: "error"
@@ -243,7 +266,9 @@ export default {
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.handleGetMaterialUploadInfo()
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},

@@ -2,15 +2,17 @@
   <div class="home3Container">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
-      <el-tab-pane v-for="(item, index) in taskList" :key="index" style="font-size: 18px">
+      <el-tab-pane v-for="(item, index) in dataList" :key="index" style="font-size: 18px">
         <span slot="label">
-          <span v-html="item.name"></span>
+          <span>
+            {{item.name}}<br>({{item.grade}}分) 
+          </span>
         </span>
         <div v-for="(it, ind) in item.content" :key="ind" style="marginBottom: 35px">
           <p class="title">
             <span class="titleIcon"></span>
-            {{ind + 1}}. {{it.title}}
-            <span>(总分：{{it.allNumber}})</span>
+            {{ind + 1}}. {{it.taskTitle}}
+            <span>(总分：{{it.taskGrade}})</span>
             <el-button type="primary" class="addItemBtn" @click="handleClickItemBtn(index, ind)">
               <i class="addIcon"></i>
               <span>新增</span>
@@ -20,15 +22,14 @@
           <!-- 表头 -->
           <div class="tableHeader">
             <span
-              v-for="(tabelHeaderItem, index3) in it.tabelHeaderList"
+              v-for="(tabelHeaderItem, index3) in tabelHeaderList"
               :key="index3"
             >{{tabelHeaderItem.name}}</span>
           </div>
-
           <!-- 表 -->
           <div class="tableContent">
             <div
-              v-for="(tabelDetailListItem, tabelDetailListIndex) in it.tabelDetailList"
+              v-for="(tabelDetailListItem, tabelDetailListIndex) in it.taskDetailList"
               :key="tabelDetailListIndex"
               :class="['tabContent', tabelDetailListIndex % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
             >
@@ -37,11 +38,11 @@
 
               <div class="department textCenter">{{tabelDetailListItem.department}}</div>
 
-              <div class="evaluationList">
+              <div class="evaluationList textCenter">
                 <p
-                  v-for="(tabelDetailListItems, tabelDetailListIndex) in tabelDetailListItem.evaluationList"
+                  v-for="(tabelDetailListItems, tabelDetailListIndex) in tabelDetailListItem.materialsList"
                   :key="tabelDetailListIndex"
-                  :class="tabelDetailListIndex == tabelDetailListItem.evaluationList.length - 1 ? 'lastMarginBottom' : 'margimBottom'"
+                  :class="tabelDetailListIndex == tabelDetailListItem.materialsList.length - 1 ? 'lastMarginBottom' : 'margimBottom'"
                 >{{tabelDetailListIndex + 1}}. {{tabelDetailListItems.name}}</p>
               </div>
 
@@ -96,7 +97,7 @@
         <el-form-item label="提交材料">
           <p v-for="(item, index) in updateForm.evaluationListValue" :key="index" style="overflow: hidden;">
             <el-input v-model="item.nameValue" style="width: 80%; margin-top: 10px"></el-input>
-             <i class="deleteBtn deleteClIcon"
+             <i class="daddIcon operationBtnIcon delBtns"
               @click="handleClickDeleteBtnEditItem(index)"
             ></i>
           </p>
@@ -111,10 +112,18 @@
 
     <!-- 新增弹出框 -->
 
-    <el-dialog title="新增" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog title="分派任务" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="addForm" :model="addForm" label-width="100px" :label-position="lebelPosi">
         <el-form-item label="任务">
-          <el-input v-model="addForm.taskValue"></el-input>
+          <!-- <el-input v-model="addForm.taskValue"></el-input> -->
+          <el-select v-model="addForm.taskValue" multiple placeholder="请选择任务">
+              <el-option
+                v-for="item in taskOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
         </el-form-item>
         <!-- <el-form-item label="考核分值">
           <el-input v-model="addForm.taskNumValue"></el-input>
@@ -139,7 +148,7 @@
             style="overflow: hidden"
           >
             <el-input v-model="item.nameValue" style="width: 80%; margin-top: 10px"></el-input>
-            <i class="addIcon operationBtnIcon rwDeleteBtn" @click="handleClickDeleteBtnAddItem(index)"></i>
+            <i class="addIcon operationBtnIcon delBtns" @click="handleClickDeleteBtnAddItem(index)"></i>
           </p>
 
           <i class="addBtn addClIcon" @click="handleClickAddItemBtn"></i>
@@ -159,8 +168,18 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      tabelHeaderList: [{
+        name: '任务',
+      }, {
+        name: '责任单位',
+      }, {
+        name: '提交材料',
+      }, {
+        name: '操作',
+      }],
       lebelPosi: "left",
-      
+      dataList: [],
+      taskOptions: [],
       tabPosition: "top",
       editVisible: false,
       addEditVisible: false,
@@ -193,6 +212,26 @@ export default {
       "handleChangeUpdateTaskList",
       "handleAddFromData"
     ]),
+
+    handleGetTaskAssignmentInfo() {
+      this.api
+        .handleGetTaskAssignmentInfo()
+        .then(this.handleGetTaskAssignmentInfoSucc.bind(this));
+    },
+
+    handleGetTaskAssignmentInfoSucc(res) {
+
+      if( res.code == 200 ) {
+        this.dataList = res.data
+      } else {
+        this.$message.error(res.message);
+      }
+
+    },
+
+
+
+// 前端
 
     handleDelete(index, ind, tabelDetailListIndex) {
       let indexObj = {
@@ -353,7 +392,9 @@ export default {
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.handleGetTaskAssignmentInfo()
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
@@ -680,7 +721,7 @@ export default {
 }
 
 .deleteClIcon {
-  background: url("../../assets/img/deleteBtn.png") no-repeat;
+  background: url("../../assets/img/rwDeleteBtn.png") no-repeat;
   background-size: 100% 100%;
   display: inline-block;
   width: 42px;
@@ -692,7 +733,14 @@ export default {
 
 .rwDeleteBtn {
   background: url("../../assets/img/rwDeleteBtn.png") no-repeat;
-      margin-top: 7px;
+  margin-top: 7px;
+}
+
+.delBtns {
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+  background: url("../../assets/img/deleteBtn.png") no-repeat;
 }
 
 // 弹出窗

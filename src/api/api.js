@@ -43,10 +43,12 @@ export function Get(url, param) {
 
 // default
 export default {
-    // 示例
+// 示例
     handleGetApiTest(param) {
       return Get('/api/******', param)
     },
+
+// 首页
 
     // 首页-业务平台
     handleGetHomeBusinessPlatformInfo(param) {
@@ -85,7 +87,64 @@ export default {
     // 编辑组织机构
     handleUpdateOrganization(param) {
         return Post('taskUser/updTaskUser', param)
+    },
+
+// 任务列表
+
+    // 获取任务列表
+    handleGetTaskList(param) {
+        return Get('taskMessage/findTaskList', param)
+    },
+    // 新增子任务库分类
+    handleAddTaskType(param) {
+        return Post('taskMessage/addType', param)
+    },
+    // 新增子任务库详情
+     handleAddTaskDetail(param) {
+        return Post('taskMessage/addDetails', param)
+     },
+    //  删除子任务详情
+    handleDeleteTaskDetail(param) {
+        return Post('taskMessage/findDelId', param)
+    },
+
+    // 新增任务分组分类
+    handleAddTaskGroupType(param) {
+        return Post('taskMessage/addTaskMessage', param)
+    },
+    // 获取未被分配的任务列表
+    handleGetCompletedTaskList(param) {
+        return Get('taskMessage/findType', param)
+    },
+    // 新增任务分组的子项
+    handleAddGroupTaskDetail(param) {
+        return Post('taskMessage/updTypeTask', param)
+    },
+
+// 城市自评
+
+    // 获取城市自评列表
+    handleGetCityAssessmentInfo(param) {
+        return Post('cityassessment/findCityAssessmentInfo', param)
+    },
+
+// 任务分派
+    
+    // 获取任务分派列表
+    handleGetTaskAssignmentInfo(param) {
+        return Post('taskallocation/findTaskAssignmentInfo', param)
+    },
+
+// 材料上传
+
+    // 获取材料上传列表
+    handleGetMaterialUploadInfo(param) {
+        return Post('materialupload/findMaterialUploadInfo', param)
     }
+
+    
+
+
 }
 
  

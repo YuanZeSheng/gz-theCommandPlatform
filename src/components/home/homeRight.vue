@@ -68,7 +68,7 @@ export default {
   bottom: 0;
   background: url("../../assets/img/homeRightBackground.jpg") no-repeat;
   background-size: 100% 100%;
-  padding: 30px;
+  padding: 15px;
   -webkit-transition: left 0.3s ease-in-out;
   transition: left 0.3s ease-in-out;
 }

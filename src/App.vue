@@ -7,7 +7,7 @@
 <style lang="less">
 #app {
   height: 100%;
-  min-width: 1850px;
+  min-width: 1600px;
   overflow-x: auto;
 }
 .el-tabs__item {
@@ -57,6 +57,10 @@
 
 .el-form-item__label {
   font-size: 16px !important;
+}
+
+.el-dialog {
+  min-width: 500px;
 }
 
 </style>

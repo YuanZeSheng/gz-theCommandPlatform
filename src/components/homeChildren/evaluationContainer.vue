@@ -21,7 +21,7 @@
             @click="handleJumpDepartmentPage(tabelDetailListItem.departmentId)"
             class="department"
           >{{tabelDetailListItem.departmentName}}</span>
-          <span>{{tabelDetailListItem.date | toDate}}</span>
+          <span>{{tabelDetailListItem.date | toDate | hms}}</span>
           <span class="textOverflow">{{tabelDetailListItem.materials}}</span>
           <span>{{tabelDetailListItem.state}}</span>
         </p>
@@ -54,7 +54,7 @@ export default {
     handleGetEvaluationListSucc(res) {
       setTimeout(() => {
         this.$emit("handleChangeLoading", "change");
-      }, 2000);
+      }, 1000);
       if (res.code == 200) {
         this.evaluationList = res.data;
       }
@@ -90,7 +90,6 @@ export default {
   background: rgba(81, 155, 236, 0.15);
   font-size: 20px;
   line-height: 60px;
-  margin-top: 26px;
   border-bottom: 1px dashed rgba(90, 90, 90, 1);
   span {
     display: inline-block;

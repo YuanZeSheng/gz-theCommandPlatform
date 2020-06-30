@@ -1,7 +1,15 @@
 <template>
   <div class="departmentContainer">
-    <!-- 模版 -->
-    部门详情页
+
+    <el-select v-model="value" placeholder="请选择">
+    <el-option
+      v-for="item in departmentList"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+
   </div>
 </template>
 

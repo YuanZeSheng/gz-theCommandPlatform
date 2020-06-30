@@ -2039,107 +2039,49 @@ export default {
   organizationSelectList: [
     {
       id: 1,
-      value: '市发展改革委',
+      value: '1',
       label: "市发展改革委"
     },
     {
       id: 2,
-      value: "市委组织部",
+      value: "2",
       label: "市委组织部"
     },
     {
       id: 3,
-      value: "市委政法委",
+      value: "3",
       label: "市委政法委"
     },
     {
       id: 4,
-      value: "市供电公司",
+      value: "4",
       label: "市供电公司"
     },
     {
       id: 5,
-      value: "市人防办",
+      value: "5",
       label: "市人防办"
     },
     {
       id: 6,
-      value: "市气象局",
+      value: "6",
       label: "市气象局"
     }, {
       id: 7,
-      value: "杭报集团",
+      value: "7",
       label: "杭报集团"
     }, {
       id: 8,
-      value: "市建委",
+      value: "8",
       label: "市建委"
     }, {
       id: 9,
-      value: "市司法局",
+      value: "9",
       label: "市司法局"
     }, {
       id: 10,
-      value: "市气象局",
+      value: "10",
       label: "市气象局"
     },
   ],
-
-
-  // 任务列表
-  taskPageList: [
-    {
-      name: '子任务库',
-      content: [{
-        title: '城市总体规划及防灾减灾等专项规划',
-        allNumber: '2',
-        type: 'taskList',
-        tabelDetailList: [{
-          // 任务内容
-          taskDetail: '未制定综合防灾减灾规划、安全生产规划、防震减灾规划、地质灾害防治规划、防洪规划未制定综合防灾减灾规划、安全生产规划、防震减灾规划、地质灾害防治规划、防洪规划未制定综合防灾减灾规划、安全生产规划、防震减灾规划、地质灾害防治规划、防洪规划, 扣0.1分'
-        },{
-          // 任务内容
-          taskDetail: '未制定实施'
-        },{
-          // 任务内容
-          taskDetail: '制定实施'
-        }]
-      }, {
-        title: '建设项目安全评估论证',
-        allNumber: '5',
-        type: 'taskList',
-        tabelDetailList: [{
-          // 任务内容
-          taskDetail: '针对典型事故暴露的问题，按照有关要求开展隐患排查活动；较大以上事故调查报告向社会公开，落实整改防范措施'
-        }]
-      }]
-    }, {
-      name: '任务分组',
-      content: [{
-        title: '城市安全源头治理',
-        allNumber: '18',
-        type: 'grouping',
-        tabelHeaderList: [{
-          name: '任务',
-        }, {
-          name: '操作',
-        }],
-
-        tabelDetailList: [{
-          // 任务内容
-          taskDetail: '城市总体规城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾城市总体规划及防灾划及防灾'
-        }, {
-          // 任务内容
-          taskDetail: '城市总体规划及防'
-        }, {
-          // 任务内容
-          taskDetail: '城市总体规划及'
-        }, {
-          // 任务内容
-          taskDetail: '城市总体规划'
-        },]
-      }]
-    }
-  ],
-
 }

@@ -86,8 +86,8 @@ export default {
   align-items: center;
   height: 100%;
   .homeItemBox {
-    width: 776px;
-    height: 390px;
+    width: 45%;
+    height: 45%;
     background: linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.15),
@@ -116,14 +116,14 @@ export default {
 }
 
 .itemHeader {
-  height: 77px;
-  line-height: 77px;
+  height: 70px;
+  line-height: 70px;
   font-size: 24px;
   color: #3780f8;
   border-bottom: 1px solid rgba(90, 90, 90, 0.5);
 }
 
 .itemContent {
-  height: 300px;
+  height: calc(100% - 100px);
 }
 </style>

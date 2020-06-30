@@ -17,7 +17,7 @@
 
     <span class="log">
       <img
-        src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591040221730&di=6c9b20cea1ecfd01cfa5423e024b4193&imgtype=0&src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180508%2F11%2F1525751854-AiZaDNfSOp.jpg"
+        src="http://img3.imgtn.bdimg.com/it/u=1052952306,3686393563&fm=26&gp=0.jpg"
         alt
       />
 
