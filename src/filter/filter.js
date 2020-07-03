@@ -55,3 +55,14 @@ Vue.filter('hms', function (value) {
   s = s < 10 ? ('0' + s) : s;
   return y + '-' + MM + '-' + d;
 });
+
+
+Vue.filter('filterNull', function (value) {
+
+  if( value ) {
+    return value
+  } else {
+    return ''
+  }
+
+});

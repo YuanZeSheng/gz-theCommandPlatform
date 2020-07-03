@@ -140,6 +140,14 @@ export default {
     // 获取材料上传列表
     handleGetMaterialUploadInfo(param) {
         return Post('materialupload/findMaterialUploadInfo', param)
+    },
+
+
+// 部门详情页
+
+    // 获取部门详情页
+    handleGetDepartmentDetail(param) {
+        return Post('organization/findOrganizationDetail', param)
     }
 
     

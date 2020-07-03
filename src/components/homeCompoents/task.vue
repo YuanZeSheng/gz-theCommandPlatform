@@ -94,7 +94,7 @@
         </template>
 
         <template v-if="addTitle == '新增一级项'">
-          <el-form-item label="一级名称" prop="title">
+          <el-form-item label="一级名称" prop="oneTitle">
             <el-input v-model="addTaskForm.oneTitle"></el-input>
           </el-form-item>
           <el-form-item label="任务总分值" prop="taskGrade">
@@ -113,6 +113,9 @@
           </el-form-item>
           <el-form-item label="扣分界值" prop="scoreStop">
             <el-input v-model="addTaskForm.scoreStop"></el-input>
+          </el-form-item>
+          <el-form-item label="扣分标准" prop="marksStandard">
+            <el-input v-model="addTaskForm.marksStandard"></el-input>
           </el-form-item>
         </template>
 
@@ -163,7 +166,8 @@ export default {
         oneTitle: "",
         taskCard: [],
         taskValue: "",
-        taskGrade: ""
+        taskGrade: "",
+        marksStandard: ''
       },
       addTitle: "新增子任务",
       taskOptions: [
@@ -303,6 +307,7 @@ export default {
       param.taskTitle = this.addTaskForm.taskContent
       param.minusScore = this.addTaskForm.step
       param.scoreStop = this.addTaskForm.scoreStop
+      param.marksStandard = this.addTaskForm.marksStandard
 
       this.api
         .handleAddTaskDetail(param)
