@@ -10,7 +10,7 @@
         <i class="el-icon-caret-bottom"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>个人页面</el-dropdown-item>
+        <!-- <el-dropdown-item>个人页面</el-dropdown-item> -->
         <el-dropdown-item divided command="loginout" @click.native="Logout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -23,7 +23,7 @@
 
       
     </span>
-    <span class="changeUserName" @click="handleChangeUser">切换账号</span>
+    <!-- <span class="changeUserName" @click="handleChangeUser">切换账号</span> -->
 
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       collapse: false,
-      userName: '管理员'
+      userName: window.localStorage.getItem('ms_username')
     };
   },
   components: {},
@@ -54,9 +54,9 @@ export default {
 
     handleChangeUser() {
 
-      this.userName =  this.userFlag ? '市发改委' :  '管理员'
+      // this.userName =  this.userFlag ? '市发改委' :  '管理员'
       
-      this.handleChangeUsers()
+      // this.handleChangeUsers()
 
 
       if( this.userFlag ) {

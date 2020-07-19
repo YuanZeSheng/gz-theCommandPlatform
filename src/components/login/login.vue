@@ -32,8 +32,8 @@ export default {
   data: function() {
     return {
       param: {
-        userName: "kdb",
-        passWord: "123"
+        userName: "",
+        passWord: ""
       },
       rules: {
         userName: [
@@ -56,7 +56,7 @@ export default {
             .relogin(param)
             .then(function(res){   
                 if(res.code==200){
-                    localStorage.setItem("ms_username", that.param.userName);
+                    localStorage.setItem("ms_username", res.data.userName);
                     localStorage.setItem("ms_usernameid", res.data.userId);
                     that.$message.success('登录成功');
                     that.$router.push("/");
@@ -88,7 +88,7 @@ export default {
   line-height: 50px;
   text-align: center;
   font-size: 20px;
-  color: #fff;
+  color: black;
   border-bottom: 1px solid #ddd;
 }
 .ms-login {

@@ -50,7 +50,7 @@
                 <el-button
                   type="primary"
                   class="addItemBtn operationBtn"
-                  @click="handleClickEdit(index, ind, tabelDetailListIndex)"
+                  @click="handleClickEdit(tabelDetailListItem, it)"
                 >
                   <i class="addIcon operationBtnIcon updateBtns"></i>
                   <span>编辑</span>
@@ -58,7 +58,7 @@
                 <el-button
                   type="primary"
                   class="addItemBtn operationBtn deleteBtnBox"
-                  @click="handleDelete(index, ind, tabelDetailListIndex)"
+                  @click="handleDelete(tabelDetailListItem)"
                 >
                   <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
                   <span>删除</span>
@@ -76,14 +76,15 @@
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="updateForm" :model="updateForm" label-width="100px" :label-position="lebelPosi">
         <el-form-item label="任务">
-          <el-select v-model="addForm.taskValue"  placeholder="请选择任务">
+          <!-- <el-select v-model="updateForm.taskValue"  placeholder="请选择任务">
               <el-option
-                v-for="item in updateForm"
-                :key="item.taskTitle"
-                :label="item.taskTitle"
-                :value="item.taskTitle"
+                v-for="item in taskOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
-            </el-select>
+            </el-select> -->
+            <p>{{updateData.value}}</p>
         </el-form-item>
         <!-- <el-form-item label="考核分值">
           <el-input v-model="updateForm.taskNumValue"></el-input>
@@ -95,8 +96,8 @@
             <el-option
               v-for="item in organizationSelectList"
               :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :label="item.organizstionName"
+              :value="item.id"
               :disabled="item.disabled"
             ></el-option>
           </el-select>
@@ -176,6 +177,10 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      updateData: {
+        value: '',
+        id: ''
+      },
       addChildrenTaskId: '',
       loadingFlag: true,
       tabelHeaderList: [{
@@ -214,16 +219,8 @@ export default {
     };
   },
   components: {},
-  computed: {
-    ...mapState(["taskList"])
-  },
+  computed: {},
   methods: {
-    ...mapMutations([
-      "handleDeleteTaskListTabelDetailList",
-      "handleChangeUpdateTaskList",
-      "handleAddFromData"
-    ]),
-
     handleGetTaskAssignmentInfo() {
       this.loadingFlag = true
       this.api
@@ -248,57 +245,50 @@ export default {
 
 // 前端
 
-    handleDelete() {
+    handleDelete(item) {
+
 
       // 二次确认删除
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning"
       })
         .then(() => {
-          this.$message.success("删除成功");
           // this.api.handleDeleteSubtask()
           // .then(this.handleDeleteSubtaskSucc.bind(this));
           // this.handleDeleteTaskListTabelDetailList(indexObj);
           let param = {}
+          param.taskId = item.id
           
            this.api
-          .handleDeleteSubtask(addFromData)
+          .handleDeleteSubtask(param)
           .then(this.handleDeleteSubtaskSucc.bind(this));
         })
         .catch(() => {});
     },
-    handleDeleteSubtaskSucc(res) {},
+    handleDeleteSubtaskSucc(res) {
+      if( res.code == 200 ) {
+          this.$message.success("删除成功");
 
-    handleClickEdit(index, ind, tabelDetailListIndex) {
-      this.indexObj = {
-        taskListIndex: index,
-        contentIndex: ind,
-        tabelDetailListIndex: tabelDetailListIndex
-      };
+      } else {
+          this.$message.error("删除失败");
 
-      console.log(this.indexObj);
+      }
+    },
 
-      let indexObj = {
-        taskListIndex: index,
-        contentIndex: ind,
-        tabelDetailListIndex: tabelDetailListIndex
-      };
+    handleClickEdit(item, it) {
 
-      let editObj = this.taskList[indexObj.taskListIndex].content[
-        indexObj.contentIndex
-      ].tabelDetailList[tabelDetailListIndex];
 
-      this.updateForm.taskValue = editObj.task;
-
-      this.updateForm.departmentValue = editObj.department;
-
-      let that = this;
-
-      editObj.evaluationList.map((item, index) => {
-        that.updateForm.evaluationListValue.push({ nameValue: item.name });
-      });
+      this.updateData.value = item.task
+      this.updateData.id = item.taskId
 
       this.editVisible = true;
+
+      this.updateForm.departmentValue = item.departmentId
+
+      item.materialsList.map((item, index) => {
+        this.updateForm.evaluationListValue.push({ nameValue: item.name });
+      });
+
     },
     saveEdit() {
       let evaluationList = [];
@@ -308,19 +298,29 @@ export default {
       });
 
       let editFromData = {
-        task: this.updateForm.taskValue,
-        department: this.updateForm.departmentValue,
+        detailsId: this.updateData.taskId,
+        departmentId: this.updateForm.departmentValue,
         evaluationList
       };
 
-      this.editVisible = false;
+      console.log(editFromData)
 
-      let updateData = {
-        indexObj: this.indexObj,
-        updateObj: editFromData
-      };
+      this.api
+        .handleUpdateTask(editFromData)
+        .then(this.handleUpdateTaskSucc.bind(this));
 
-      this.handleChangeUpdateTaskList(updateData);
+     
+    },
+
+    handleUpdateTaskSucc(res) {
+      if( res.code == 200 ) {
+         this.editVisible = false;
+
+
+        this.handleGetTaskAssignmentInfo()
+
+
+
 
       this.$message.success(`修改成功`);
 
@@ -329,6 +329,9 @@ export default {
         departmentValue: "",
         evaluationListValue: []
       };
+      } else {
+        this.$message.error(res.message);
+      }
     },
     handleClickCancle() {
       this.updateForm = {
@@ -355,8 +358,7 @@ export default {
         evaluationList.push({ name: item.nameValue });
       });
       let addFromData = {
-        taskId: this.addChildrenTaskId,
-        taskDetailId: this.addForm.taskValue,
+        detailsId: this.addForm.taskValue,
         departmentId: this.addForm.departmentValue,
         evaluationList
       };
@@ -366,7 +368,14 @@ export default {
       .then(this.handleSubmitTaskSucc.bind(this));
     },
     handleSubmitTaskSucc(res) {
-      console.log(res, 'fenpaiufen')
+
+      if( res.code == 200 ) {
+        this.addEditVisible = false;
+        this.handleGetTaskAssignmentInfo()
+        this.$message.success(`新增成功`);
+      } else {
+        this.$message.error(res.message);
+      }
     },
 
     handleClickAddBtn() {
@@ -387,7 +396,7 @@ export default {
 
     handleClickItemBtn(index, ind,it) {
       this.handAddTask(it.typeId)
-      this.handunit()
+      
       this.addEditVisible = true;
     },
     // 新增-------任务的下拉列表
@@ -424,8 +433,7 @@ export default {
   beforeMount() {},
   mounted() {
     this.handleGetTaskAssignmentInfo()
-    
-
+    this.handunit()
   },
   beforeUpdate() {},
   updated() {},

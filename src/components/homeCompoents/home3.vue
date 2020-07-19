@@ -61,7 +61,7 @@
                       <el-button
                         :type="materialsListItem.status ? 'primary': 'primary'  "
                         class="addItemBtn operationBtn"
-                        :disabled="materialsListItem.status ? true: false "
+                        :disabled="materialsListItem.status ? true : false "
                         @click="handleClickUploading(materialsListItem)"
                       >
                         <i class="addIcon operationBtnIcon updateBtns"></i>
@@ -70,8 +70,8 @@
                       <el-button
                         type="danger"
                         class="addItemBtn operationBtn deleteBtnBox"
-                        @click="handleClickDeleteFile"
-                        :disabled="materialsListItem.status ? false: true "
+                        @click="handleClickDeleteFile(materialsListItem, items)"
+                        :disabled="materialsListItem.status ? true: false "
                         :class="[materialsListItem.status? '': 'deleteBtn']"
                       >
                         <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
@@ -94,13 +94,10 @@
         <el-form-item label>
           <el-upload
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            multiple
-            :on-exceed="handleExceed"
-            :before-upload="handleBeforeUpload"
-            :file-list="fileList"
+            action="#"
+            :http-request="httpRequest"
+            :show-file-list="true"
+            :before-upload="beforeAvatarUpload"
           >
             <div class="pdfBox">
               <i class="pdfUpdate"></i>
@@ -132,6 +129,11 @@ export default {
       fileFrom: {
         fileName: ""
       },
+      file: undefined,
+      fileData: {
+        taskId: ''
+      },
+      materialsId: '',
 
       fileList: [],
 
@@ -155,9 +157,36 @@ export default {
   methods: {
     // ...mapMutations(['']),
 
+     beforeAvatarUpload (file) {
+       console.log(file.type)
+      const isJPG = file.type === 'application/pdf'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    httpRequest (data) {
+      // let _this = this
+      // let rd = new FileReader() // 创建文件读取对象
+
+      let file = data.file
+
+      this.file = data.file
+
+      // rd.readAsDataURL(file) // 文件读取装换为base64类型
+      // rd.onloadend = function (e) {
+      //   _this.data.imageUrl = this.result // this指向当前方法onloadend的作用域
+      // }
+    },
+
     handleGetMaterialUploadInfo() {
 
       let param = {}
+      // param.userId = localStorage.getItem('ms_usernameid')
       param.userId = '104'
       this.loadingFlag = true
       this.api
@@ -177,11 +206,12 @@ export default {
     },
 
 
-
 // 前端
 
     handleClickUploading(item) {
       console.log(item, 'item')
+      this.file = undefined
+      this.materialsId = item.materialsId
       this.editVisible = true;
 
       this.fileList = [];
@@ -189,24 +219,62 @@ export default {
 
     // 确定上传
     handleUploadingFile() {
-      this.$message({
-        message: "上传成功!",
-        type: "success"
-      });
+      console.log(this.file)
 
-      this.editVisible = false;
+      let formData = new FormData();
+          formData.append('file', this.file);
+          formData.append('materialsId',this.materialsId);
+
+      this.api
+      .handleUploadingMateriaList(formData)
+      .then(this.handleUploadingMateriaListSucc.bind(this));
+      
     },
+
+    handleUploadingMateriaListSucc(res) {
+      if( res.code == 200 ) {
+        this.handleGetMaterialUploadInfo()
+        this.$message({
+          message: "上传成功!",
+          type: "success"
+        });
+      this.editVisible = false;
+      } else {
+        this.$message({
+          message: res.message,
+          type: "error"
+        });
+      }
+
+    }, 
     // 删除文件
-    handleClickDeleteFile() {
+    handleClickDeleteFile(materialsListItem, items) {
+      
+
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning"
       })
         .then(() => {
-          this.$message.success("删除成功");
+          this.materialsId = materialsListItem.materialsId
+      let param = {}
+      param.pdfId = this.materialsId
+      this.api
+      .handleDeleteMaterial(param)
+      .then(this.handleDeleteMaterialSucc.bind(this));
         })
         .catch(() => {});
     },
-
+    handleDeleteMaterialSucc(res) {
+      if( res.code == 200 ) {
+          this.$message.success("删除成功");
+          this.handleGetMaterialUploadInfo()
+      } else {
+        this.$message({
+          message: res.message,
+          type: "error"
+        });
+      }
+    },
     // 取消上传
     handleClickCancle() {
       this.editVisible = false;

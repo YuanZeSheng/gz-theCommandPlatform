@@ -151,6 +151,11 @@ export default {
         return Post('taskallocation/addNewSubtaskInfo', param)
     },
 
+    // 编辑任务
+    handleUpdateTask(param) {
+        return Post('taskallocation/updateSubtaskMaterials', param)
+    },
+
     // 删除任务
     handleDeleteSubtask(param) {
         return Post('taskallocation/deleteSubtask', param)
@@ -162,6 +167,16 @@ export default {
     // 获取材料上传列表
     handleGetMaterialUploadInfo(param) {
         return Post('materialupload/findMaterialUploadInfo', param)
+    },
+
+    // 上传材料
+    handleUploadingMateriaList(param) {
+        return Post('materialupload/insertUploadMaterial', param)
+    },
+
+    // 删除材料
+    handleDeleteMaterial( param ){
+        return Post('materialupload/deleteMaterial', param)
     },
 
 
