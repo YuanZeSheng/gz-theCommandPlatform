@@ -41,7 +41,6 @@ export function Get(url, param) {
     })
 }
 
-// default
 export default {
 // 示例
     handleGetApiTest(param) {

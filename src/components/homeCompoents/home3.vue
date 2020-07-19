@@ -1,5 +1,5 @@
 <template>
-  <div class="home3Container">
+  <div class="home3Container" v-loading="loadingFlag"  element-loading-text="数据加载中">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
       <el-tab-pane v-for="(item, index) in materialList" :key="index" style="font-size: 18px">
@@ -62,7 +62,7 @@
                         :type="materialsListItem.status ? 'primary': 'primary'  "
                         class="addItemBtn operationBtn"
                         :disabled="materialsListItem.status ? true: false "
-                        @click="handleClickUploading()"
+                        @click="handleClickUploading(materialsListItem)"
                       >
                         <i class="addIcon operationBtnIcon updateBtns"></i>
                         <span>上传资料</span>
@@ -127,6 +127,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      loadingFlag: true,
       tabPosition: "top",
       fileFrom: {
         fileName: ""
@@ -155,12 +156,16 @@ export default {
     // ...mapMutations(['']),
 
     handleGetMaterialUploadInfo() {
+      this.loadingFlag = true
       this.api
         .handleGetMaterialUploadInfo()
         .then(this.handleGetMaterialUploadInfoSucc.bind(this));
     },
 
     handleGetMaterialUploadInfoSucc(res) {
+      setTimeout(() => {
+        this.loadingFlag = false;
+      }, 1000);
       if( res.code == 200 ) {
         this.materialList = res.data
       } else {
@@ -172,7 +177,8 @@ export default {
 
 // 前端
 
-    handleClickUploading() {
+    handleClickUploading(item) {
+      console.log(item, 'item')
       this.editVisible = true;
 
       this.fileList = [];

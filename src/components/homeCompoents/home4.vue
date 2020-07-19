@@ -1,5 +1,5 @@
 <template>
-  <div class="home3Container">
+  <div class="home3Container" v-loading="loadingFlag"  element-loading-text="数据加载中">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
       <el-tab-pane v-for="(item, index) in dataList" :key="index" style="font-size: 18px">
@@ -168,6 +168,7 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      loadingFlag: true,
       tabelHeaderList: [{
         name: '任务',
       }, {
@@ -214,12 +215,16 @@ export default {
     ]),
 
     handleGetTaskAssignmentInfo() {
+      this.loadingFlag = true
       this.api
         .handleGetTaskAssignmentInfo()
         .then(this.handleGetTaskAssignmentInfoSucc.bind(this));
     },
 
     handleGetTaskAssignmentInfoSucc(res) {
+       setTimeout(() => {
+        this.loadingFlag = false;
+      }, 1000);
 
       if( res.code == 200 ) {
         this.dataList = res.data

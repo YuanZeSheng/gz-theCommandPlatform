@@ -1,5 +1,5 @@
 <template>
-  <div class="home3Container">
+  <div class="home3Container" v-loading="loadingFlag"  element-loading-text="数据加载中">
     <el-button type="primary" class="addItemBtn" @click="handleClickAddTask()">
       <i class="addIcon"></i>
       <span>新增</span>
@@ -146,6 +146,7 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      loadingFlag: true,
       addTaskDetailId: '',
       addGroupId: "",
       tabPosition: "top",
@@ -194,11 +195,15 @@ export default {
 
 
   handleGetTaskList() {
+    this.loadingFlag = true
     this.api
         .handleGetTaskList()
         .then(this.handleGetTaskListSucc.bind(this));
   },
   handleGetTaskListSucc(res) { 
+     setTimeout(() => {
+        this.loadingFlag = false;
+      }, 1000);
     if( res.code == 200 ) {
       this.taskPageList = res.data
     } else {

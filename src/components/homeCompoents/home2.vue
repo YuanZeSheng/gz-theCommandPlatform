@@ -1,5 +1,5 @@
 <template>
-  <div class="home3Container">
+  <div class="home3Container" v-loading="loadingFlag"  element-loading-text="数据加载中">
     <!-- 模版 -->
     <el-tabs :tab-position="tabPosition" class="el-table">
       <el-tab-pane v-for="(item, index) in ciTyList" :key="index" style="font-size: 18px">
@@ -128,6 +128,7 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      loadingFlag: true,
       tabPosition: "top",
       deductMarksFlag: false,
       discussionRule: '',
@@ -161,12 +162,16 @@ export default {
 
 
   handleGetCityAssessmentInfo() {
+    this.loadingFlag = true
     this.api
       .handleGetCityAssessmentInfo()
       .then(this.handleGetCityAssessmentInfoSucc.bind(this));
   },
 
   handleGetCityAssessmentInfoSucc(res) {
+    setTimeout(() => {
+        this.loadingFlag = false;
+      }, 1000);
     if( res.code == 200 ) {
       this.ciTyList = res.data
     } else {

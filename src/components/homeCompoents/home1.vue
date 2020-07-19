@@ -2,7 +2,7 @@
   <div
     class="home1Container"
     v-loading="loadingFlag"
-     element-loading-text="数据加载中"
+    element-loading-text="数据加载中"
   >
     <!-- 业务平台 -->
     <div
@@ -18,14 +18,13 @@
           <span>{{homeItem.name}}</span>
         </p>
       </div>
-
       <!-- itemContent -->
       <div class="itemContent">
         <!-- 业务平台 -->
         <businessPlatformContainer v-if="homeItem.type == 'businessPlatform'"></businessPlatformContainer>
         <!-- 评价日志 -->
         <evaluationContainer v-if="homeItem.type == 'evaluation'" 
-          @handleChangeLoading="handleChangeLoading"></evaluationContainer>
+                             @handleChangeLoading="handleChangeLoading"></evaluationContainer>
         <!-- 系统得分 -->
         <scoringSystemContainer v-if="homeItem.type == 'score'"></scoringSystemContainer>
         <!-- 单位丢分 -->
