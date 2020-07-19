@@ -132,6 +132,7 @@
               ></el-option>
             </el-select>
         </el-form-item>
+        
         <!-- <el-form-item label="考核分值">
           <el-input v-model="addForm.taskNumValue"></el-input>
         </el-form-item>-->
