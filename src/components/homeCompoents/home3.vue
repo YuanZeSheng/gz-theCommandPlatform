@@ -156,9 +156,12 @@ export default {
     // ...mapMutations(['']),
 
     handleGetMaterialUploadInfo() {
+
+      let param = {}
+      param.userId = '103'
       this.loadingFlag = true
       this.api
-        .handleGetMaterialUploadInfo()
+        .handleGetMaterialUploadInfo(param)
         .then(this.handleGetMaterialUploadInfoSucc.bind(this));
     },
 

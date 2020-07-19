@@ -194,14 +194,14 @@ export default {
       updateForm: {
         taskValue: "",
         departmentValue: "",
-        evaluationListValue: "",
+        evaluationListValue: [],
         taskNumValue: ""
       },
 
       addForm: {
         taskValue: "",
         departmentValue: "",
-        evaluationListValue: "",
+        evaluationListValue: [],
         taskNumValue: ""
       },
 

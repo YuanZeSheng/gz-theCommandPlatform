@@ -5,6 +5,12 @@ Vue.use(VueRouter)
 
   const routes = [
 
+    {
+      path: '/Login',
+      name: 'Login',
+      component: () => import(/* webpackChunkName: "Login" */ '../components/login/login.vue')
+    },
+
   {
     path: '/',
     name: 'Home',
