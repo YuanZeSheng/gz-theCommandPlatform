@@ -11,7 +11,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>个人页面</el-dropdown-item>
-        <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+        <el-dropdown-item divided command="loginout" @click.native="Logout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
 
@@ -65,6 +65,28 @@ export default {
         this.$router.push({path:'/home/index3'});
       }
 
+    },
+    // 退出登录
+    Logout(){
+      // console.log('退出登录')
+      let parmas={}
+      parmas.userId=localStorage.getItem('ms_usernameid')
+      let that=this
+      this.api
+        .loginout(parmas)
+        .then(function(res){
+          if(res.code==200){
+            that.$message.success("退出成功，即将跳回登陆页面");
+            setTimeout(()=>{
+               window.localStorage.removeItem('ms_usernameid')
+               window.localStorage.removeItem('ms_username')
+               that.$router.push({ path: '/Login'} );
+            },1000)
+          }else{
+
+          }
+          // console.log(res)
+        });
     }
   },
   watch: {},

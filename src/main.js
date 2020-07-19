@@ -22,6 +22,27 @@ import './assets/common.less'
 Vue.use(ElementUI);
 
 Vue.prototype.api = api
+//  路由判断登录 根据路由配置文件的参数
+router.beforeEach((to, from, next) => {
+  if(to.name=='Login'){
+    next();
+  }else{
+    if(window.localStorage.getItem('ms_username')!=null){
+      next();
+    }else{
+      ElementUI.Message({
+        message: '您尚未登录，即将跳回登录页',
+        type: 'error'
+    });
+      setTimeout(()=>{
+        router.push({ path: '/Login'});
+      },2000)
+      
+    }
+  }
+  
+});
+
 
 new Vue({
   router,

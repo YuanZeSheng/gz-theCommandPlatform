@@ -46,7 +46,14 @@ export default {
     handleGetApiTest(param) {
       return Get('/api/******', param)
     },
-
+// 登录
+    relogin(param){
+        return Post('sys/login', param)
+    },
+// 退出登录
+    loginout(param){
+        return Post('/sys/loginOut', param)
+    },
 // 首页
 
     // 首页-业务平台
