@@ -140,6 +140,21 @@ export default {
     handleGetTaskAssignmentInfo(param) {
         return Post('taskallocation/findTaskAssignmentInfo', param)
     },
+
+    // 获取未分配的任务列表
+    handleGetFindNotAllocation( param ) {
+        return Post('taskallocation/findNotAllocation', param)
+    },
+
+    // 分配任务
+    handleSubmitTask(param) {
+        return Post('taskallocation/addNewSubtaskInfo', param)
+    },
+
+    // 删除任务
+    handleDeleteSubtask(param) {
+        return Post('taskallocation/deleteSubtask', param)
+    },
    
 
 // 材料上传

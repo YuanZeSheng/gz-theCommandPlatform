@@ -78,7 +78,7 @@
         <el-form-item label="任务">
           <el-select v-model="addForm.taskValue"  placeholder="请选择任务">
               <el-option
-                v-for="item in taskOptions"
+                v-for="item in updateForm"
                 :key="item.taskTitle"
                 :label="item.taskTitle"
                 :value="item.taskTitle"
@@ -126,9 +126,9 @@
           <el-select v-model="addForm.taskValue"  placeholder="请选择任务">
               <el-option
                 v-for="item in taskOptions"
-                :key="item.typeId"
-                :label="item.taskTitle"
-                :value="item.typeId"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
         </el-form-item>
@@ -176,6 +176,7 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      addChildrenTaskId: '',
       loadingFlag: true,
       tabelHeaderList: [{
         name: '任务',
@@ -203,7 +204,6 @@ export default {
         taskValue: "",
         departmentValue: "",
         evaluationListValue: [],
-        taskNumValue: ""
       },
 
       indexObj: {},
@@ -248,12 +248,7 @@ export default {
 
 // 前端
 
-    handleDelete(index, ind, tabelDetailListIndex) {
-      let indexObj = {
-        taskListIndex: index,
-        contentIndex: ind,
-        tabelDetailListIndex: tabelDetailListIndex
-      };
+    handleDelete() {
 
       // 二次确认删除
       this.$confirm("确定要删除吗？", "提示", {
@@ -261,12 +256,18 @@ export default {
       })
         .then(() => {
           this.$message.success("删除成功");
-          // this.tableData.splice(index, 1);
-
-          this.handleDeleteTaskListTabelDetailList(indexObj);
+          // this.api.handleDeleteSubtask()
+          // .then(this.handleDeleteSubtaskSucc.bind(this));
+          // this.handleDeleteTaskListTabelDetailList(indexObj);
+          let param = {}
+          
+           this.api
+          .handleDeleteSubtask(addFromData)
+          .then(this.handleDeleteSubtaskSucc.bind(this));
         })
         .catch(() => {});
     },
+    handleDeleteSubtaskSucc(res) {},
 
     handleClickEdit(index, ind, tabelDetailListIndex) {
       this.indexObj = {
@@ -354,26 +355,18 @@ export default {
         evaluationList.push({ name: item.nameValue });
       });
       let addFromData = {
-        task: this.addForm.taskValue,
-        department: this.addForm.departmentValue,
+        taskId: this.addChildrenTaskId,
+        taskDetailId: this.addForm.taskValue,
+        departmentId: this.addForm.departmentValue,
         evaluationList
       };
-      let addData = {
-        addIndexObj: this.addIndexObj,
-        addFromData: addFromData
-      };
 
-      this.handleAddFromData(addData);
-
-      this.addEditVisible = false;
-
-      this.$message.success(`新增成功`);
-
-      this.addForm = {
-        taskValue: "",
-        departmentValue: "",
-        evaluationListValue: []
-      };
+      this.api
+      .handleSubmitTask(addFromData)
+      .then(this.handleSubmitTaskSucc.bind(this));
+    },
+    handleSubmitTaskSucc(res) {
+      console.log(res, 'fenpaiufen')
     },
 
     handleClickAddBtn() {
@@ -393,24 +386,24 @@ export default {
     },
 
     handleClickItemBtn(index, ind,it) {
-      console.log(it.typeId)
       this.handAddTask(it.typeId)
       this.handunit()
       this.addEditVisible = true;
     },
     // 新增-------任务的下拉列表
     handAddTask(id){
+      let param = {}
+      param.id = id
+      this.addChildrenTaskId = id
       this.api
-        .handleGetTaskList(id)
+        .handleGetFindNotAllocation(param)
         .then(this.handAddTaskrender.bind(this));
     },
     handAddTaskrender(res){
       if( res.code == 200 ) {
-        for(let i=0;i<res.data.length;i++){
-          if(res.data[i].name=='任务分组'){
-           this.taskOptions=res.data[i].content
-          }
-        }
+        res.data.map( item => {
+         this.taskOptions=res.data
+        } )
       } else {
         this.$message.error(res.message);
       }
@@ -422,7 +415,6 @@ export default {
         .then(this.handunitrender.bind(this));
     },
     handunitrender(res){
-      console.log(res)
       this.organizationSelectList=res.data
     }
   },

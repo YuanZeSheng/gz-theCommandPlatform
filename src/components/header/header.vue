@@ -2,7 +2,7 @@
   <div class="headerContainer">
     <i v-if="!collapse" class="el-icon-s-fold leftIcon" @click="handleCollapseChage"></i>
     <i v-else class="el-icon-s-unfold leftIcon" @click="handleCollapseChage"></i>
-    <span>杭州示范城市评价系统</span>
+    <span>大连市示范城市评价系统</span>
     
     <el-dropdown class="loginName" trigger="click">
       <span class="el-dropdown-link">

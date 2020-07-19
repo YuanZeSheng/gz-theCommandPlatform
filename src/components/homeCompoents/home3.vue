@@ -158,7 +158,7 @@ export default {
     handleGetMaterialUploadInfo() {
 
       let param = {}
-      param.userId = '103'
+      param.userId = '104'
       this.loadingFlag = true
       this.api
         .handleGetMaterialUploadInfo(param)
