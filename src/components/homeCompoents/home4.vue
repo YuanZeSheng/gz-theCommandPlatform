@@ -13,7 +13,7 @@
             <span class="titleIcon"></span>
             {{ind + 1}}. {{it.taskTitle}}
             <span>(总分：{{it.taskGrade}})</span>
-            <el-button type="primary" class="addItemBtn" @click="handleClickItemBtn(index, ind)">
+            <el-button type="primary" class="addItemBtn" @click="handleClickItemBtn(index, ind,it)">
               <i class="addIcon"></i>
               <span>新增</span>
             </el-button>
@@ -76,7 +76,14 @@
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="updateForm" :model="updateForm" label-width="100px" :label-position="lebelPosi">
         <el-form-item label="任务">
-          <el-input v-model="updateForm.taskValue"></el-input>
+          <el-select v-model="addForm.taskValue"  placeholder="请选择任务">
+              <el-option
+                v-for="item in taskOptions"
+                :key="item.taskTitle"
+                :label="item.taskTitle"
+                :value="item.taskTitle"
+              ></el-option>
+            </el-select>
         </el-form-item>
         <!-- <el-form-item label="考核分值">
           <el-input v-model="updateForm.taskNumValue"></el-input>
@@ -116,12 +123,12 @@
       <el-form ref="addForm" :model="addForm" label-width="100px" :label-position="lebelPosi">
         <el-form-item label="任务">
           <!-- <el-input v-model="addForm.taskValue"></el-input> -->
-          <el-select v-model="addForm.taskValue" multiple placeholder="请选择任务">
+          <el-select v-model="addForm.taskValue"  placeholder="请选择任务">
               <el-option
                 v-for="item in taskOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.typeId"
+                :label="item.taskTitle"
+                :value="item.typeId"
               ></el-option>
             </el-select>
         </el-form-item>
@@ -135,8 +142,8 @@
             <el-option
               v-for="item in organizationSelectList"
               :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :label="item.organizstionName"
+              :value="item.id"
               :disabled="item.disabled"
             ></el-option>
           </el-select>
@@ -187,25 +194,27 @@ export default {
       updateForm: {
         taskValue: "",
         departmentValue: "",
-        evaluationListValue: [],
+        evaluationListValue: "",
         taskNumValue: ""
       },
 
       addForm: {
         taskValue: "",
         departmentValue: "",
-        evaluationListValue: [],
+        evaluationListValue: "",
         taskNumValue: ""
       },
 
       indexObj: {},
 
-      addIndexObj: {}
+      addIndexObj: {},
+      // 责任单位的下拉列表
+      organizationSelectList:[]
     };
   },
   components: {},
   computed: {
-    ...mapState(["taskList", "organizationSelectList"])
+    ...mapState(["taskList"])
   },
   methods: {
     ...mapMutations([
@@ -343,13 +352,11 @@ export default {
       this.addForm.evaluationListValue.map((item, index) => {
         evaluationList.push({ name: item.nameValue });
       });
-
       let addFromData = {
         task: this.addForm.taskValue,
         department: this.addForm.departmentValue,
         evaluationList
       };
-
       let addData = {
         addIndexObj: this.addIndexObj,
         addFromData: addFromData
@@ -384,13 +391,38 @@ export default {
       this.addForm.evaluationListValue.push({ nameValue: "" });
     },
 
-    handleClickItemBtn(index, ind) {
-      this.addIndexObj = {
-        taskListIndex: index,
-        contentIndex: ind
-      };
-
+    handleClickItemBtn(index, ind,it) {
+      console.log(it.typeId)
+      this.handAddTask(it.typeId)
+      this.handunit()
       this.addEditVisible = true;
+    },
+    // 新增-------任务的下拉列表
+    handAddTask(id){
+      this.api
+        .handleGetTaskList(id)
+        .then(this.handAddTaskrender.bind(this));
+    },
+    handAddTaskrender(res){
+      if( res.code == 200 ) {
+        for(let i=0;i<res.data.length;i++){
+          if(res.data[i].name=='任务分组'){
+           this.taskOptions=res.data[i].content
+          }
+        }
+      } else {
+        this.$message.error(res.message);
+      }
+    },
+    // 新增---------责任单位的下拉列表
+    handunit(){
+       this.api
+        .handleGetOrganization()
+        .then(this.handunitrender.bind(this));
+    },
+    handunitrender(res){
+      console.log(res)
+      this.organizationSelectList=res.data
     }
   },
   watch: {},
@@ -399,6 +431,8 @@ export default {
   beforeMount() {},
   mounted() {
     this.handleGetTaskAssignmentInfo()
+    
+
   },
   beforeUpdate() {},
   updated() {},
