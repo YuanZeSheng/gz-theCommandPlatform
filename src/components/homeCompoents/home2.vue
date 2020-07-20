@@ -70,7 +70,7 @@
                               <el-button
                                 class="deductMarksBtn"
                                 @click="handleClickDeductMarks(materialsListItem)"
-                              >{{materialsListItem.grade}}扣分详情</el-button>
+                              >{{materialsListItem.grade}}评分</el-button>
                             </el-tooltip>
                           </div>
                         </div>
@@ -101,7 +101,7 @@
 
         <el-form-item label="扣分标准：" prop="deductMarks">
           <p>
-            {{discussionRule}}
+            {{deductMarksFrom.discussionReason}}
           </p>
         </el-form-item>
 
@@ -206,6 +206,7 @@ export default {
     },
 
     handleClickDeductMarks(item) {
+      console.log(item, 'ss')
       this.$nextTick(() => {
         if (this.$refs.deductMarksFrom !== undefined) {
           this.$refs.deductMarksFrom.resetFields();
@@ -213,11 +214,16 @@ export default {
       });
       this.deductMarksFlag = true;
       this.deductMarksStep = item.gradeRule * 1;
-      this.deductMarksFrom.deductMarksNumber = item.grade
-      this.discussionRule = item.discussionRule
+      this.deductMarksFrom.deductMarksNumber = item.materialsGrade
+      this.discussionReason = item.discussionReason ? item.discussionReason : '暂无'
     },
 
     handleSaveDeductMarks() {
+
+      let param = {}
+
+
+
       this.deductMarksFlag = false
     }
   },
