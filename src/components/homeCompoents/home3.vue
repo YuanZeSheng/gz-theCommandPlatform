@@ -250,6 +250,7 @@ export default {
     // 删除文件
     handleClickDeleteFile(materialsListItem, items) {
       
+      console.log(materialsListItem)
 
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning"
@@ -257,7 +258,7 @@ export default {
         .then(() => {
           this.materialsId = materialsListItem.materialsId
       let param = {}
-      param.pdfId = this.materialsId
+      param.materialsId = this.materialsId
       this.api
       .handleDeleteMaterial(param)
       .then(this.handleDeleteMaterialSucc.bind(this));
@@ -329,7 +330,7 @@ export default {
         return false;
       }
 
-      const url = "/showpdf.pdf";
+      const url = materialsListItem.pdfUrl;
       const link = document.createElement("a");
       let fname = "report.pdf";
       link.href = url;

@@ -58,7 +58,7 @@
                 <el-button
                   type="primary"
                   class="addItemBtn operationBtn deleteBtnBox"
-                  @click="handleDelete(tabelDetailListItem)"
+                  @click="handleDelete(tabelDetailListItem, item)"
                 >
                   <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
                   <span>删除</span>
@@ -245,9 +245,9 @@ export default {
 
 // 前端
 
-    handleDelete(item) {
+    handleDelete(tabelDetailListItem, it) {
 
-
+      console.log(tabelDetailListItem)
       // 二次确认删除
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning"
@@ -257,7 +257,7 @@ export default {
           // .then(this.handleDeleteSubtaskSucc.bind(this));
           // this.handleDeleteTaskListTabelDetailList(indexObj);
           let param = {}
-          param.taskId = item.id
+          param.id = tabelDetailListItem.detailId
           
            this.api
           .handleDeleteSubtask(param)
@@ -270,7 +270,7 @@ export default {
           this.$message.success("删除成功");
 
       } else {
-          this.$message.error("删除失败");
+          this.$message.error(res.message);
 
       }
     },
