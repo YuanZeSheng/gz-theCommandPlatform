@@ -277,16 +277,15 @@ export default {
 
     handleClickEdit(item, it) {
 
-
       this.updateData.value = item.task
-      this.updateData.id = item.taskId
+      this.updateData.id = item.detailId
 
       this.editVisible = true;
 
       this.updateForm.departmentValue = item.departmentId
 
       item.materialsList.map((item, index) => {
-        this.updateForm.evaluationListValue.push({ nameValue: item.name });
+        this.updateForm.evaluationListValue.push({ nameValue: item.name, materialsId: item.materialsId });
       });
 
     },
@@ -294,11 +293,13 @@ export default {
       let evaluationList = [];
 
       this.updateForm.evaluationListValue.map((item, index) => {
-        evaluationList.push({ name: item.nameValue });
+        evaluationList.push({ name: item.nameValue,  materialsId: item.materialsId});
       });
 
+
+
       let editFromData = {
-        detailsId: this.updateData.taskId,
+        detailId: this.updateData.id,
         departmentId: this.updateForm.departmentValue,
         evaluationList
       };

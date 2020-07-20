@@ -134,6 +134,11 @@ export default {
         return Post('cityassessment/findCityAssessmentInfo', param)
     },
 
+    // 评分
+    handleUpdateMaterialsInfo(param) {
+        return Post('cityassessment/updateMaterialsInfo', param)
+    },
+
 // 任务分派
     
     // 获取任务分派列表

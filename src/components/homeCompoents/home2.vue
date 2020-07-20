@@ -70,7 +70,7 @@
                               <el-button
                                 class="deductMarksBtn"
                                 @click="handleClickDeductMarks(materialsListItem)"
-                              >{{materialsListItem.grade}}评分</el-button>
+                              >{{materialsListItem.materialsGrade}}评分</el-button>
                             </el-tooltip>
                           </div>
                         </div>
@@ -101,7 +101,7 @@
 
         <el-form-item label="扣分标准：" prop="deductMarks">
           <p>
-            {{deductMarksFrom.discussionReason}}
+            {{discussionRule}}
           </p>
         </el-form-item>
 
@@ -135,7 +135,8 @@ export default {
       lebelPosi: "left",
       deductMarksFrom: {
         deductMarksNumber: '',
-        points: ''
+        points: '',
+        taskId : ''
       },
       deductMarksStep: '',
       tabelHeaderList: [],
@@ -215,12 +216,25 @@ export default {
       this.deductMarksFlag = true;
       this.deductMarksStep = item.gradeRule * 1;
       this.deductMarksFrom.deductMarksNumber = item.materialsGrade
-      this.discussionReason = item.discussionReason ? item.discussionReason : '暂无'
+      this.discussionRule = item.discussionRule ? item.discussionRule : '暂无'
+      this.deductMarksFrom.taskId = item.materialsId
+      this.deductMarksFrom.points = item.discussionReason
     },
 
     handleSaveDeductMarks() {
 
       let param = {}
+
+      param.taskId = this.deductMarksFrom.taskId
+      param.grade = this.deductMarksFrom.deductMarksNumber
+      param.discussionReason = this.deductMarksFrom.points
+
+
+      
+
+
+      return
+
 
 
 
