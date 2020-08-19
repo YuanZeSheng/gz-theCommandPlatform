@@ -190,7 +190,14 @@ export default {
     // 获取部门详情页
     handleGetDepartmentDetail(param) {
         return Post('organization/findOrganizationDetail', param)
+    },
+
+// 任务详情页
+
+    handleGetTaskDetail(param) {
+        return Post('organization/findHistoryData', param)
     }
+
 
     
 

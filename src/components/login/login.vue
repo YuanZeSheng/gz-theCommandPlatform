@@ -58,8 +58,13 @@ export default {
                 if(res.code==200){
                     localStorage.setItem("ms_username", res.data.userName);
                     localStorage.setItem("ms_usernameid", res.data.userId);
+                    localStorage.setItem("name", res.data.name);
+
+
+                    localStorage.setItem("accessRole", res.data.accessRole);
+                    
                     that.$message.success('登录成功');
-                    that.$router.push("/");
+                    that.$router.push("/home/index1");
                 }else{
                     that.$message.error(res.message);
                 }

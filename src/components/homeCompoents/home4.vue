@@ -188,7 +188,7 @@ export default {
       }, {
         name: '责任单位',
       }, {
-        name: '提交材料',
+        name: '材料清单',
       }, {
         name: '操作',
       }],

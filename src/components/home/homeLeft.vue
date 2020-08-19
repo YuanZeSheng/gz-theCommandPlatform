@@ -10,7 +10,7 @@
       active-text-color="#20a0ff"
       unique-opened
     >
-      <el-menu-item :index="'/home/index1'" @click="handleToHomePage" v-if="userFlag">
+      <el-menu-item :index="'/home/index1'" @click="handleToHomePage" v-if="accessRole == 'admin' || accessRole == 'specialist'">
         <i class="el-icon-menu"></i>
         <span slot="title">首页</span>
       </el-menu-item>
@@ -22,19 +22,19 @@
         </template>
         <el-menu-item-group>
           <!-- <span slot="title">分组一</span> -->
-          <el-menu-item :index="'/home/index2'" v-if="userFlag">
-            <router-link to="/home/index2" class="routeBtn" tag="li">城市自评</router-link>
+          <el-menu-item :index="'/home/index2'" v-if="accessRole == 'admin' || accessRole == 'specialist'">
+            <router-link to="/home/index2" class="routeBtn" tag="li">材料审核</router-link>
           </el-menu-item>
-          <el-menu-item :index="'/home/index3'" v-if="!userFlag">
+          <el-menu-item :index="'/home/index3'" v-if="accessRole == 'general'">
             <router-link to="/home/index3" class="routeBtn" tag="li">材料上传</router-link>
           </el-menu-item>
-          <el-menu-item :index="'/home/index4'" v-if="userFlag">
+          <el-menu-item :index="'/home/index4'" v-if="accessRole == 'admin'">
             <router-link to="/home/index4" class="routeBtn" tag="li">任务分派</router-link>
           </el-menu-item>
-          <el-menu-item :index="'/home/index5'" v-if="userFlag">
+          <el-menu-item :index="'/home/index5'" v-if="accessRole == 'admin'">
             <router-link to="/home/index5" class="routeBtn" tag="li">组织结构</router-link>
           </el-menu-item>
-          <el-menu-item :index="'/home/task'" v-if="userFlag">
+          <el-menu-item :index="'/home/task'" v-if="accessRole == 'admin'">
             <router-link to="/home/task" class="routeBtn" tag="li">任务列表</router-link>
           </el-menu-item>
         </el-menu-item-group>
@@ -50,11 +50,12 @@ export default {
   data() {
     return {
       // isCollapse: false,
+      accessRole: 'admin',
     };
   },
   components: {},
   computed: {
-    ...mapState(["collapse", "userFlag"]),
+    ...mapState(["collapse", ]),
     onRoutes() {
       return this.$route.path.replace("/", "");
     }
@@ -75,7 +76,29 @@ export default {
     }
   },
   watch: {},
-  mounted() {
+  created() {
+    // if( !this.userFlag ) {
+    //   this.$router.push({ path: "/home/index3" });
+    // }
+
+    let accessRole = localStorage.getItem('accessRole')
+
+    switch ( accessRole ) {
+      case '1' :
+        this.accessRole = 'admin'
+      break;
+
+      case '2' :
+        this.accessRole = 'specialist' // 专家
+      break;
+
+      case '3' :
+        this.accessRole = 'general' // 普通
+        this.$router.push({ path: "/home/index3" });
+      break;
+
+    }
+
   }
 };
 </script>

@@ -2,31 +2,16 @@
   <div class="departmentContainer"
        v-loading="loadingFlag">
     <div class="header flex" style="fontSize: 25px">
+  
+     <div class="header flex" style="fontSize: 25px">
       <div class="flex">
-        <span>部门名称：</span>
-        <el-select v-model="departmentValue" @change="handleChangeDepartment" placeholder="请选择">
-          <el-option
-            v-for="item in departmentList"
-            :key="item.id"
-            :label="item.organizstionName"
-            :value="item.id">
-          </el-option>
-        </el-select>
+        <span>任务详情页：</span>
+       
       </div>
 
-      <div class="flex">
-        <span>评价状态：</span>
-        {{departmentDetail.state | filterNull}}
-      </div>
+    </div>
 
-      <div class="flex">
-        <span>负责人：</span>
-        {{departmentDetail.principal | filterNull}}
-      </div>
-      <div class="flex">
-        <span>联系电话：</span>
-        {{departmentDetail.tel | filterNull}}
-      </div>
+     
     </div>
 
     <div class="tableDetail">
@@ -39,24 +24,24 @@
       <div class="tableContent">
         <div class="tebleItem" 
              :key="index"
-             v-for="(item, index) in departmentDetail.tabelDetail">
-             <p class="itemtask textCenter" @click="handleClickToTaskDetail(item)">{{item.taskName}}</p>
-             <div class="contentRight">
-               <div class="itemMaterialsList" v-for="(materialsListItem, index) in item.materialsList" :key="index">
-                <p>
-                  {{materialsListItem.name}}
-                </p>
-                <p>
-                  {{materialsListItem.updateTime | toDate}}
-                </p>
-                <p>
-                  {{materialsListItem.grade}}
-                </p>
-                <p>
-                  {{materialsListItem.cause}}
-                </p>
-              </div>
-             </div>
+             v-for="(item, index) in departmentDetail">
+             <p class="itemtask textCenter">{{item.detaName}}</p>
+             <!-- <div class="contentRight"> -->
+               <!-- <div class="itemMaterialsList" v-for="(materialsListItem, index) in item.materialsList" :key="index"> -->
+            <p class="textAlign">
+                {{item.hisName}}
+            </p>
+            <p class="textAlign">
+                {{item.createTime | toDate}}
+            </p>
+            <p class="textAlign">
+                {{item.score}}
+            </p>
+            <p class="textAlign">
+                {{item.cause}}
+            </p>
+              <!-- </div> -->
+             <!-- </div> -->
         </div>
       </div>
       
@@ -97,27 +82,19 @@ export default {
   },
   methods: {
     // ...mapMutations(['']),
-
-
-    handleClickToTaskDetail(item) {
-      
-       this.$router.push({
-        path: `/home/taskDetail/${item.detaId}`
-      });
-    },
-
     handleGetDepartmentDetail(id) {
       this.departmentValue = id
       console.log(this.departmentValue, id)
       let param = {
         id
       }
-    this.api.handleGetDepartmentDetail(param).then(this.handleGetDepartmentDetailSucc.bind(this));
+    this.api.handleGetTaskDetail(param).then(this.handleGetTaskDetailSucc.bind(this));
     },
 
-    handleGetDepartmentDetailSucc( res ) {
+    handleGetTaskDetailSucc( res ) {
       this.loadingFlag = false
       if( res.code == 200 ) {
+          console.log(this.departmentDetail , 'sthis.departmentDetail')
         this.departmentDetail = res.data
       } else {
         this.departmentDetail = []
@@ -125,33 +102,12 @@ export default {
       }
     },
 
-    // 获取部门列表
-    handleGetUserList() {
-      this.api.handleGetOrganization().then(this.handleGetUserListSucc.bind(this));
-    },
-    handleGetUserListSucc(res) {
-      if(res.code == 200) {
-        this.departmentList = res.data
-      } else {
-        this.$message.error(res.message);
-      }
-    },
-    handleChangeDepartment(value) {
-      
-      this.$router.push({
-        path: `/home/department/${value}`
-      });
-
-      this.handleGetDepartmentDetail(value)
-    }
-
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    this.handleGetUserList()
 
     this.handleGetDepartmentDetail(this.$route.params.id)
 
@@ -193,17 +149,24 @@ export default {
   margin-top: 30px;
 }
 
+.textAlign {
+    text-align: center;
+}
+
 .tebleItem {
   font-size: 18px;
   background: rgba(81, 155, 236, 0.05);
       border-bottom: 1px dashed rgba(90, 90, 90, 0.53);
   padding: 23px 0px;
   display: flex;
+   p {
+        width: 20%;
+    }
   .itemtask {
-    cursor: pointer;
     width: 20%;
     padding-left: 40px;
     box-sizing: border-box;
+   
   }
   .itemMaterialsList {
     display: flex;

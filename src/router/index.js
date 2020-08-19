@@ -45,6 +45,10 @@ Vue.use(VueRouter)
         component: () => import(/* webpackChunkName: "department" */ '../components/department/department.vue'),
       },
       {
+        path: '/home/taskDetail/:id',
+        component: () => import(/* webpackChunkName: "taskDetail" */ '../components/department/taskDetail.vue'),
+      },
+      {
         path: '/home/task',
         component: () => import(/* webpackChunkName: "task" */ '../components/homeCompoents/task.vue'),
       },

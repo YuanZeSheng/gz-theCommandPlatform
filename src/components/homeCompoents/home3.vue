@@ -71,7 +71,7 @@
                         type="danger"
                         class="addItemBtn operationBtn deleteBtnBox"
                         @click="handleClickDeleteFile(materialsListItem, items)"
-                        :disabled="materialsListItem.status ? true: false "
+                        :disabled="materialsListItem.status ? false : true  "
                         :class="[materialsListItem.status? '': 'deleteBtn']"
                       >
                         <i class="addIcon operationBtnIcon rwDeleteBtn"></i>
@@ -101,7 +101,7 @@
           >
             <div class="pdfBox">
               <i class="pdfUpdate"></i>
-              <div slot="tip" class="el-upload__tip">只能上传pdf文件</div>
+              <div slot="tip" class="el-upload__tip">上传材料</div>
             </div>
 
             <!-- <el-button size="small" type="primary">点击上传</el-button> -->
@@ -159,14 +159,15 @@ export default {
 
      beforeAvatarUpload (file) {
        console.log(file.type)
+       return
       const isJPG = file.type === 'application/pdf'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!')
       }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
+      // if (!isLt2M) {
+      //   this.$message.error('上传头像图片大小不能超过 2MB!')
+      // }
       return isJPG && isLt2M
     },
     httpRequest (data) {
@@ -186,8 +187,8 @@ export default {
     handleGetMaterialUploadInfo() {
 
       let param = {}
-      // param.userId = localStorage.getItem('ms_usernameid')
-      param.userId = '104'
+      param.userId = localStorage.getItem('ms_usernameid')
+      // param.userId = '104'
       this.loadingFlag = true
       this.api
         .handleGetMaterialUploadInfo(param)

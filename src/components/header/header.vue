@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       collapse: false,
-      userName: window.localStorage.getItem('ms_username')
+      userName: window.localStorage.getItem('name')
     };
   },
   components: {},
@@ -56,14 +56,13 @@ export default {
 
       // this.userName =  this.userFlag ? '市发改委' :  '管理员'
       
-      // this.handleChangeUsers()
 
 
-      if( this.userFlag ) {
-        this.$router.push({path:'/'});
-      } else {
-        this.$router.push({path:'/home/index3'});
-      }
+      // if( this.userFlag ) {
+      //   this.$router.push({path:'/'});
+      // } else {
+      //   this.$router.push({path:'/home/index3'});
+      // }
 
     },
     // 退出登录
