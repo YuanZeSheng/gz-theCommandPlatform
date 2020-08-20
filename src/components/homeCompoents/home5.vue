@@ -2,6 +2,11 @@
   <div class="home3Container" v-loading="loadingFlag" element-loading-text="数据加载中">
     <!-- 模版 -->
     <div style="overflow: hidden; margin-bottom: 20px;">
+      
+      <el-button type="primary" @click="handleClickChangeListType()">组织机构</el-button>
+      
+      <el-button type="primary" @click="handleClickChangeListType('specialist')">专家列表</el-button>
+
       <el-button type="primary" class="addItemBtn" @click="handleClickItemBtn()">
         <i class="addIcon"></i>
         <span>新增</span>
@@ -9,8 +14,13 @@
     </div>
 
     <!-- 表头 -->
-    <div class="tableHeader">
-      <span v-for="(tabelHeaderItem, index3) in tableHeader" :key="index3">{{tabelHeaderItem.name}}</span>
+    <div class="tableHeader" v-if="organizstionFlag">
+      <span v-for="(tabelHeaderItem, index3) in tableHeader" 
+            :key="index3">{{tabelHeaderItem.name}}</span>
+    </div>
+    <div class="tableHeader" v-if="!organizstionFlag">
+      <span v-for="(tabelHeaderItem, index3) in specialistHeader" 
+            :key="index3">{{tabelHeaderItem.name}}</span>
     </div>
 
     <!-- 表 -->
@@ -63,18 +73,15 @@
       </div>
     </div>
 
-    <el-dialog title="编辑" :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog :title="organizstionFlag ? '编辑组织结构' : '编辑专家信息' " :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="updateForm" :model="updateForm" label-width="100px" :label-position="lebelPosi">
-        <!-- <el-form-item label="序号">
-          <el-input v-model="updateForm.sort"></el-input>
-        </el-form-item>-->
-        <el-form-item label="组织名称" prop="organizstionName">
+        <el-form-item :label="organizstionFlag ? '组织名称' : '专家姓名'" prop="organizstionName">
           <el-input v-model="updateForm.organizstionName"></el-input>
         </el-form-item>
-        <el-form-item label="组织编号" prop="organizstionNumber">
+        <el-form-item :label="organizstionFlag ? '组织编号' : '专家编号'" prop="organizstionNumber">
           <el-input v-model="updateForm.organizstionNumber"></el-input>
         </el-form-item>
-        <el-form-item label="负责人" prop="organizstionLinkman">
+        <el-form-item :label="organizstionFlag ? '负责人' : '负责人'" prop="organizstionLinkman">
           <el-input v-model="updateForm.organizstionLinkman"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="organizstionTel">
@@ -94,19 +101,15 @@
     </el-dialog>
 
     <!-- 新增 -->
-
-    <el-dialog title="新增" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog :title="organizstionFlag ? '新增组织结构' : '新增专家人员'" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
       <el-form ref="addForm" :model="addForm" label-width="100px" :label-position="lebelPosi">
-        <!-- <el-form-item label="序号">
-          <el-input v-model="addForm.sort"></el-input>
-        </el-form-item>-->
-        <el-form-item label="组织名称" prop="organizstionName">
+        <el-form-item :label="organizstionFlag ? '组织名称' : '专家姓名'" prop="organizstionName">
           <el-input v-model="addForm.organizstionName"></el-input>
         </el-form-item>
-        <el-form-item label="组织编号" prop="organizstionNumber">
+        <el-form-item :label="organizstionFlag ? '组织编号' : '专家编号'" prop="organizstionNumber">
           <el-input v-model="addForm.organizstionNumber"></el-input>
         </el-form-item>
-         <el-form-item label="负责人" prop="organizstionLinkman">
+         <el-form-item :label="organizstionFlag ? '负责人' : '负责人'" prop="organizstionLinkman">
           <el-input v-model="addForm.organizstionLinkman"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="organizstionTel">
@@ -138,7 +141,7 @@ export default {
       editVisible: false,
       addEditVisible: false,
       loadingFlag: true,
-
+      organizstionFlag: true,
       tableHeader: [
         {
           name: "序号"
@@ -148,6 +151,32 @@ export default {
         },
         {
           name: "组织编号"
+        },
+        {
+          name: "负责人"
+        },
+        {
+          name: "联系电话"
+        },
+        {
+          name: "账号"
+        },
+        {
+          name: "密码"
+        },
+        {
+          name: "操作"
+        }
+      ],
+      specialistHeader: [
+        {
+          name: "序号"
+        },
+        {
+          name: "专家姓名"
+        },
+        {
+          name: "专家编号"
         },
         {
           name: "负责人"
@@ -195,6 +224,14 @@ export default {
     ...mapState([""])
   },
   methods: {
+
+    handleClickChangeListType(type) {
+      if( type == 'specialist' ) {
+        this.organizstionFlag = false
+      } else {
+        this.organizstionFlag = true
+      }
+    },
     handleGetUserList() {
       this.loadingFlag = true
       this.api.handleGetOrganization().then(this.handleGetUserListSucc.bind(this));
@@ -204,14 +241,26 @@ export default {
         this.loadingFlag = false;
       }, 1000);
       if (res.code == 200) {
-        this.tableDeatil = res.data;
+        // 专家
+        let expertList = res.data.filter( item => {
+          return item.type == 'expert'  
+        } )
+        // 组织结构
+        let organizationList = res.data.filter( item => {
+          return item.type == 'common'  
+        } )
+
+        if( this.organizstionFlag ) {
+          this.tableDeatil = organizationList
+        } else {
+          this.tableDeatil = expertList
+        }
+
       } else {
         this.$message.error(res.message);
       }
     },
-
     // 前端删除
-
     handleDelete(tabelDetailListItem) {
       // 二次确认删除
       this.$confirm("确定要删除吗？", "提示", {
@@ -257,6 +306,11 @@ export default {
       this.editVisible = true;
     },
     saveEdit() {
+      if( this.organizstionFlag ) {
+        this.updateForm.accessRole = 3
+      } else {
+        this.updateForm.accessRole = 2
+      }
       this.api.handleUpdateOrganization(this.updateForm).then(this.handleUpdateOrganizationSucc.bind(this));
 
     },
@@ -286,8 +340,12 @@ export default {
       });
       this.addEditVisible = false;
     },
-
     saveAddItem() {
+      if( this.organizstionFlag ) {
+        this.addForm.accessRole = 3
+      } else {
+        this.addForm.accessRole = 2
+      }
       this.api
         .handleAddOrganization(this.addForm)
         .then(this.handleAddOrganizationSucc.bind(this));
@@ -301,7 +359,6 @@ export default {
         this.$message.error(res.message);
       }
     },
-
     handleClickItemBtn() {
       this.$nextTick(() => {
         if (this.$refs.addForm !== undefined) {
@@ -311,7 +368,11 @@ export default {
       this.addEditVisible = true;
     }
   },
-  watch: {},
+  watch: {
+    organizstionFlag() {
+      this.handleGetUserList()
+    }
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
