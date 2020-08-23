@@ -67,7 +67,6 @@ export default {
           right: "20",
           bottom: "10",
           padding: [10, 10],
-          itemGap: 20,
           orient: "vertical",
           x: "0",
           y: "30",
