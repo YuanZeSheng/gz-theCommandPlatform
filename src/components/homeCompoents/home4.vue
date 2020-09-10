@@ -425,7 +425,9 @@ export default {
         .then(this.handunitrender.bind(this));
     },
     handunitrender(res){
-      this.organizationSelectList=res.data
+      this.organizationSelectList=res.data.filter( item => {
+        return item.type == 'common'
+      } )
     }
   },
   watch: {},

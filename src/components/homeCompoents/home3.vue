@@ -95,8 +95,8 @@
           <el-upload
             class="upload-demo"
             action="#"
+             :file-list="fileList"
             :http-request="httpRequest"
-            :show-file-list="true"
             :before-upload="beforeAvatarUpload"
           >
             <div class="pdfBox">
@@ -158,7 +158,6 @@ export default {
     // ...mapMutations(['']),
 
      beforeAvatarUpload (file) {
-       console.log(file.type)
        return
       const isJPG = file.type === 'application/pdf'
       const isLt2M = file.size / 1024 / 1024 < 2
@@ -220,8 +219,14 @@ export default {
 
     // 确定上传
     handleUploadingFile() {
-      console.log(this.file)
+      if( !this.file ) {
+        this.$message({
+          message: '请先上传文件',
+          type: "error"
+        })
 
+        return
+      }
       let formData = new FormData();
           formData.append('file', this.file);
           formData.append('materialsId',this.materialsId);
@@ -234,6 +239,9 @@ export default {
 
     handleUploadingMateriaListSucc(res) {
       if( res.code == 200 ) {
+
+        this.fileList = []
+
         this.handleGetMaterialUploadInfo()
         this.$message({
           message: "上传成功!",
@@ -672,4 +680,5 @@ export default {
 .deleteBtn {
   background: #fab6b6;
 }
+
 </style>

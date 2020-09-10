@@ -131,7 +131,9 @@ export default {
     },
     handleGetUserListSucc(res) {
       if(res.code == 200) {
-        this.departmentList = res.data
+        this.departmentList = res.data.filter( item => {
+          return item.type == 'common'
+        })
       } else {
         this.$message.error(res.message);
       }
