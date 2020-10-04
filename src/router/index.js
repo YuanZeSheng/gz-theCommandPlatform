@@ -21,6 +21,10 @@ Vue.use(VueRouter)
     redirect: '/home/index1',
     children: [
       {
+        path: 'home/general',
+        component: () => import(/* webpackChunkName: "general" */ '../components/generalContainer/generalContainer.vue'),
+      },
+      {
         path: 'home/index1',
         component: () => import(/* webpackChunkName: "home1" */ '../components/homeCompoents/home1.vue'),
       },

@@ -1,19 +1,30 @@
 <template>
-  <div class="home3Container" v-loading="loadingFlag"  element-loading-text="数据加载中">
+  <div
+    class="home3Container"
+    v-loading="loadingFlag"
+    element-loading-text="数据加载中"
+  >
     <!-- 模版 -->
-    <el-tabs :tab-position="tabPosition" class="el-table">
-      <el-tab-pane v-for="(item, index) in ciTyList" :key="index" style="font-size: 18px">
+    <el-tabs :tab-position="tabPosition" class="el-table" v-model="activeName">
+      <el-tab-pane
+        v-for="(item, index) in ciTyList"
+        :key="index"
+        style="font-size: 18px"
+        :name="item.name"
+      >
         <span slot="label">
-          <span>
-            {{item.name}}<br>({{item.grade}}分) 
-          </span>
+          <span> {{ item.name }}<br />({{ item.grade }}分) </span>
         </span>
-        <div v-for="(it, ind) in item.content" :key="ind" style="margin-bottom: 35px">
+        <div
+          v-for="(it, ind) in item.content"
+          :key="ind"
+          style="margin-bottom: 35px"
+        >
           <p class="title">
             <span class="titleIcon"></span>
-            {{ind + 1}}. {{it.taskTitle}}
-            <span>(总分：{{it.taskGrade}})</span>
-            <span class="deductMarksNumber">得分：{{it.taskScore}}</span>
+            {{ ind + 1 }}. {{ it.taskTitle }}
+            <span>(总分：{{ it.taskGrade }})</span>
+            <span class="deductMarksNumber">得分：{{ it.taskScore }}</span>
           </p>
 
           <!-- 表头 -->
@@ -21,45 +32,78 @@
             <span
               v-for="(tabelHeaderItem, index3) in tabelHeaderList"
               :key="index3"
-            >{{tabelHeaderItem.name}}</span>
+              >{{ tabelHeaderItem.name }}</span
+            >
           </div>
 
           <!-- 表 -->
           <div class="tableContent">
-            <div
-              class="scoreContent"
-            >
+            <div class="scoreContent">
               <div class="rightBox">
                 <div
                   v-for="(items, index) in it.taskDetailList"
                   :key="index"
-                  :class="['rightContent', index % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
+                  :class="[
+                    'rightContent',
+                    index % 2 == 0 ? 'backgroundBlue' : 'bakcgroundFFF',
+                  ]"
                 >
-                  <p class="fontStyle" style="width: 40%;">{{index + 1}}. {{items.task}}</p>
+                  <p class="fontStyle" style="width: 40%">
+                    {{ index + 1 }}. {{ items.task }}
+                  </p>
                   <!-- 责任单位 -->
-                  <p class="textCenterss fontStyle" style="width: 15%">{{items.department}}</p>
+                  <p class="textCenterss fontStyle" style="width: 15%">
+                    {{ items.department }}
+                  </p>
                   <!-- 提交材料 -->
 
-                  <div style="width: 45%; display: flex;">
+                  <div style="width: 45%; display: flex">
                     <div style="width: 100%">
                       <div
-                        v-for="(materialsListItem, materialsListIndex) in items.materialsList"
-                        :class="['fontStyle', materialsListIndex == 1 ? 'red': 'cur', materialsListIndex == items.materialsList.length - 1 ? 'lastMarginBottom' : 'margimBottom']"
+                        v-for="(materialsListItem,
+                        materialsListIndex) in items.materialsList"
+                        :class="[
+                          'fontStyle',
+                          materialsListIndex == 1 ? 'red' : 'cur',
+                          materialsListIndex == items.materialsList.length - 1
+                            ? 'lastMarginBottom'
+                            : 'margimBottom',
+                        ]"
                         :key="materialsListIndex"
                       >
                         <div class="blockFlex">
                           <div
                             @click="handleShowPdf(materialsListItem)"
-                            style="width: 33.3%;"
-                            :class="[materialsListItem.status == 'true' ? 'fontywc' : 'fontwwc' , 'textCenter']"
+                            style="width: 33.3%"
+                            :class="[
+                              materialsListItem.status == 'true'
+                                ? 'fontywc'
+                                : 'fontwwc',
+                              'textCenter',
+                            ]"
                           >
-                            {{materialsListItem.name}}
+                            {{ materialsListItem.name }}
                           </div>
                           <div style="width: 33.3%" :class="['flexCenter']">
-                            <span :class="[materialsListItem.status == 'true' ? 'zpywc': 'zpwwc']"></span>
                             <span
-                              :class="[materialsListItem.status == 'true' ? 'zpywcStyle': 'zpwwcStyle']"
-                            >{{materialsListItem.status == 'true' ?  '已完成' : '未完成'}}</span>
+                              :class="[
+                                materialsListItem.status == 'true'
+                                  ? 'zpywc'
+                                  : 'zpwwc',
+                              ]"
+                            ></span>
+                            <span
+                              :class="[
+                                materialsListItem.status == 'true'
+                                  ? 'zpywcStyle'
+                                  : 'zpwwcStyle',
+                              ]"
+                              >{{
+                                materialsListItem.status == "true"
+                                  ? "已完成"
+                                  : "未完成"
+                              }}</span
+                            >
                           </div>
 
                           <div
@@ -67,17 +111,29 @@
                             style="width: 33.3%"
                             v-if="materialsListItem.status == 'true'"
                           >
-                          <span style="lineHeight: 46px; marginRight: 20px">{{materialsListItem.materialsGrade}}</span>
+                            <span style="lineheight: 46px; marginright: 20px">{{
+                              materialsListItem.materialsGrade
+                            }}</span>
                             <el-tooltip placement="top" v-if="pfFlag">
-                              <div slot="content">{{materialsListItem.discussionReason}}</div>
-                            
-                            <!-- <el-button
+                              <div slot="content">
+                                {{ materialsListItem.discussionReason }}
+                              </div>
+
+                              <!-- <el-button
                                 class="deductMarksBtn"
                                 
                               >评分</el-button> -->
 
-                              <i class="el-icon-edit deductMarksBtn" @click="handleClickDeductMarks(materialsListItem, items, it)"></i>
-                             
+                              <i
+                                class="el-icon-edit deductMarksBtn"
+                                @click="
+                                  handleClickDeductMarks(
+                                    materialsListItem,
+                                    items,
+                                    it
+                                  )
+                                "
+                              ></i>
                             </el-tooltip>
                           </div>
                         </div>
@@ -105,15 +161,18 @@
         label-width="100px"
         :label-position="lebelPosi"
       >
-
         <el-form-item label="扣分标准：" prop="deductMarks">
           <p>
-            {{discussionRule}}
+            {{ discussionRule }}
           </p>
         </el-form-item>
 
         <el-form-item label="扣分情况：" prop="deductMarks">
-          <el-input-number v-model="deductMarksFrom.deductMarksNumber" :precision="2" :step="deductMarksStep"></el-input-number>
+          <el-input-number
+            v-model="deductMarksFrom.deductMarksNumber"
+            :precision="2"
+            :step="deductMarksStep"
+          ></el-input-number>
         </el-form-item>
 
         <el-form-item label="減分原因：" prop="points">
@@ -122,21 +181,26 @@
 
         <el-form-item label="历史材料：" prop="deductMarks">
           <div class="maxHeightStyle">
-             <p v-for="(pdfItem, pdfIndex) in pdfList" :key="pdfIndex" @click="handleShowPdf(pdfItem)" class="curStyle">
-              {{pdfItem.name}}
+            <p
+              v-for="(pdfItem, pdfIndex) in pdfList"
+              :key="pdfIndex"
+              @click="handleShowPdf(pdfItem)"
+              class="curStyle"
+            >
+              {{ pdfItem.name }}
             </p>
           </div>
-         
         </el-form-item>
 
         <el-form-item label="重新上传：" prop="points">
-          <el-input  v-model="deductMarksFrom.fileName"></el-input>
+          <el-input v-model="deductMarksFrom.fileName"></el-input>
         </el-form-item>
-
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="deductMarksFlag = false">取 消</el-button>
-        <el-button type="primary" @click="handleSaveDeductMarks">确 定</el-button>
+        <el-button type="primary" @click="handleSaveDeductMarks"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -148,35 +212,42 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      fileName: '', //重新上传的材料名称
-      typeId: '',
+      activeName: "",
+      fileName: "", //重新上传的材料名称
+      typeId: "",
       loadingFlag: true,
       tabPosition: "top",
       deductMarksFlag: false,
-      pfFlag: localStorage.getItem('accessRole') == 2,
-      discussionRule: '',
+      pfFlag: localStorage.getItem("accessRole") == 2,
+      discussionRule: "",
       // pdfList
       pdfList: [],
       lebelPosi: "left",
       deductMarksFrom: {
-        deductMarksNumber: '',
-        points: '',
-        taskId : ''
+        deductMarksNumber: "",
+        points: "",
+        taskId: "",
       },
-      deductMarksStep: '',
+      deductMarksStep: "",
       tabelHeaderList: [],
       ciTyList: [],
-      tabelHeaderList: [{
-        name: '任务',
-      }, {
-        name: '责任单位',
-      }, {
-        name: '材料清单',
-      }, {
-        name: '材料状态',
-      }, {
-        name: '得分',
-      }],
+      tabelHeaderList: [
+        {
+          name: "任务",
+        },
+        {
+          name: "责任单位",
+        },
+        {
+          name: "材料清单",
+        },
+        {
+          name: "材料状态",
+        },
+        {
+          name: "得分",
+        },
+      ],
     };
   },
   components: {},
@@ -186,42 +257,44 @@ export default {
   methods: {
     // ...mapMutations(['']),
 
+    handleGetCityAssessmentInfo() {
+      this.loadingFlag = true;
+      let param = {};
+      if (this.$route.query.userid != 'undefined') {
+        param.userId = this.$route.query.userid;
+      }
+      this.api
+        .handleGetCityAssessmentInfo(param)
+        .then(this.handleGetCityAssessmentInfoSucc.bind(this));
+    },
 
-  handleGetCityAssessmentInfo() {
-    this.loadingFlag = true
-    this.api
-      .handleGetCityAssessmentInfo()
-      .then(this.handleGetCityAssessmentInfoSucc.bind(this));
-  },
-
-  handleGetCityAssessmentInfoSucc(res) {
-    setTimeout(() => {
+    handleGetCityAssessmentInfoSucc(res) {
+      setTimeout(() => {
         this.loadingFlag = false;
       }, 1000);
-    if( res.code == 200 ) {
-      this.ciTyList = res.data
-    } else {
-      this.$message.error(res.message)
-    }
-  },
+      if (res.code == 200) {
+        this.ciTyList = res.data;
 
+        if (this.$route.query.type) {
+          return;
+        }
+        this.activeName = res.data[0].name;
+      } else {
+        this.$message.error(res.message);
+      }
+    },
 
-
-
-// 前端
+    // 前端
 
     handleShowPdf(item) {
-      console.log(item)
-
-      if (item.status == 'false') {
+      if (item.status == "false") {
         this.$message({
           message: "该委办局未提交材料",
-          type: "error"
+          type: "error",
         });
 
         return false;
       }
-
 
       const url = item.pdfUrl ? item.pdfUrl : item.url;
       // const url = 'http://210.76.75.221:9181/wkk-report/cszp/showpdf.pdf'
@@ -235,86 +308,67 @@ export default {
     },
 
     handleClickDeductMarks(item, items, it) {
-
-      console.log(item, 'yzs')
-
-
       this.$nextTick(() => {
         if (this.$refs.deductMarksFrom !== undefined) {
           this.$refs.deductMarksFrom.resetFields();
         }
       });
 
-
-      this.pdfList = item.pdfList
+      this.pdfList = item.pdfList;
       this.deductMarksFlag = true;
       this.deductMarksStep = item.gradeRule * 1;
-      this.deductMarksFrom.deductMarksNumber = item.materialsGrade
-      this.discussionRule = item.discussionRule ? item.discussionRule : '暂无'
-      this.deductMarksFrom.taskId = item.materialsId
-      this.deductMarksFrom.points = item.discussionReason
-      this.detailId = items.detailId
-      this.typeId = it.typeId
-
-
+      this.deductMarksFrom.deductMarksNumber = item.materialsGrade;
+      this.discussionRule = item.discussionRule ? item.discussionRule : "暂无";
+      this.deductMarksFrom.taskId = item.materialsId;
+      this.deductMarksFrom.points = item.discussionReason;
+      this.detailId = items.detailId;
+      this.typeId = it.typeId;
     },
 
     handleSaveDeductMarks() {
+      let param = {};
 
-      let param = {}
-
-      param.materialsId = this.deductMarksFrom.taskId
-      param.grade = this.deductMarksFrom.deductMarksNumber
-      param.discussionReason = this.deductMarksFrom.points
-      param.detailId = this.detailId
-      param.fileName = this.deductMarksFrom.fileName
-      param.typeId = this.typeId
-
-
-      console.log(param)
-
-      
+      param.materialsId = this.deductMarksFrom.taskId;
+      param.grade = this.deductMarksFrom.deductMarksNumber;
+      param.discussionReason = this.deductMarksFrom.points;
+      param.detailId = this.detailId;
+      param.fileName = this.deductMarksFrom.fileName;
+      param.typeId = this.typeId;
 
       this.api
         .handleUpdateMaterialsInfo(param)
         .then(this.handleUpdateMaterialsInfoSucc.bind(this));
 
-      
-
-
-      return
-
-
-
-
+      return;
     },
     handleUpdateMaterialsInfoSucc(res) {
-      if( res.code == 200 ) {
-          this.$message({
+      if (res.code == 200) {
+        this.$message({
           message: "评分成功",
-          type: "success"
+          type: "success",
         });
-      this.deductMarksFlag = false
-      this.handleGetCityAssessmentInfo()
+        this.deductMarksFlag = false;
+        this.handleGetCityAssessmentInfo();
       } else {
         this.$message({
           message: res.message,
-          type: "error"
+          type: "error",
         });
       }
-    }
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    this.handleGetCityAssessmentInfo()
+    this.activeName = this.$route.query.type;
+    this.handleGetCityAssessmentInfo();
   },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
-  destroyed() {}
+  destroyed() {},
 };
 </script>
 

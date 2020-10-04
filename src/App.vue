@@ -7,7 +7,7 @@
 <style lang="less">
 #app {
   height: 100%;
-  min-width: 1600px;
+  min-width: 1800px;
   overflow-x: auto;
 }
 .el-tabs__item {

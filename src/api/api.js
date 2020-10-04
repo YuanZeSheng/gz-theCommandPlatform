@@ -131,7 +131,7 @@ export default {
 
     // 获取城市自评列表
     handleGetCityAssessmentInfo(param) {
-        return Post('cityassessment/findCityAssessmentInfo', param)
+        return Get('cityassessment/findCityAssessmentInfo', param)
     },
 
     // 评分
@@ -196,6 +196,13 @@ export default {
 
     handleGetTaskDetail(param) {
         return Post('organization/findHistoryData', param)
+    },
+
+
+// 概览
+
+    handleGetGeneral( param ) {
+        return Get('cityassessment/findTaskData', param)
     }
 
 

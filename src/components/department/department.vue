@@ -108,7 +108,6 @@ export default {
 
     handleGetDepartmentDetail(id) {
       this.departmentValue = id
-      console.log(this.departmentValue, id)
       let param = {
         id
       }
@@ -148,7 +147,12 @@ export default {
     }
 
   },
-  watch: {},
+  watch: {
+    $route () {
+      // console.log(this.$route.params.id, 'watch')
+      this.handleGetDepartmentDetail(this.$route.params.id)
+    },
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},

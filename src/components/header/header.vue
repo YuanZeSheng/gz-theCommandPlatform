@@ -16,10 +16,10 @@
     </el-dropdown>
 
     <span class="log">
-      <img
+      <!-- <img
         src="http://img3.imgtn.bdimg.com/it/u=1052952306,3686393563&fm=26&gp=0.jpg"
         alt
-      />
+      /> -->
 
       
     </span>
