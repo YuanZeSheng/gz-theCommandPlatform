@@ -111,7 +111,7 @@
                             style="width: 33.3%"
                             v-if="materialsListItem.status == 'true'"
                           >
-                            <span style="lineheight: 46px; marginright: 20px">{{
+                            <span style="lineHeight: 46px; marginRight: 20px">{{
                               materialsListItem.materialsGrade
                             }}</span>
                             <el-tooltip placement="top" v-if="pfFlag">
@@ -146,6 +146,10 @@
           </div>
         </div>
       </el-tab-pane>
+
+      <p class="noDataTextStyle" v-if="ciTyList.length == 0">
+        该委办局暂无此任务
+      </p>
     </el-tabs>
 
     <!-- 加减分 -->
@@ -260,8 +264,12 @@ export default {
     handleGetCityAssessmentInfo() {
       this.loadingFlag = true;
       let param = {};
-      if (this.$route.query.userid != 'undefined') {
+      if (this.$route.query.userid != "undefined") {
         param.userId = this.$route.query.userid;
+      }
+
+      if (this.$route.query.type != "undefined") {
+        param.name = this.$route.query.type;
       }
       this.api
         .handleGetCityAssessmentInfo(param)
@@ -274,12 +282,18 @@ export default {
       }, 1000);
       if (res.code == 200) {
         this.ciTyList = res.data;
-
-        if (this.$route.query.type) {
-          return;
+        if (this.$route.query.userid == "undefined") {
+          this.activeName = this.$route.query.type;
+        } else {
+          this.activeName = res.data[0].name;
         }
-        this.activeName = res.data[0].name;
       } else {
+        this.ciTyList = [];
+        this.ciTyList.push({
+          grade: "25",
+          name: "城市安全源头治理",
+          taskId: "202006231000",
+        });
         this.$message.error(res.message);
       }
     },
@@ -357,10 +371,22 @@ export default {
       }
     },
   },
-  watch: {},
+  watch: {
+    $route(to, from) {
+      this.handleGetCityAssessmentInfo();
+    },
+    // this.handleGetCityAssessmentInfo();
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
+  // beforeRouteEnter:(to,from,next)=>{
+  //         // next(vm=>{
+  //         //     // alert(vm.num)
+  //         //     console.log(vm)
+  //         // })
+  //         console.log(from)
+  //     },
   mounted() {
     this.activeName = this.$route.query.type;
     this.handleGetCityAssessmentInfo();
@@ -465,7 +491,7 @@ export default {
 
 .textCenter {
   display: inline-block;
-  text-align: left;
+  text-align: center;
 }
 
 .textLeft {
@@ -614,4 +640,20 @@ export default {
 .textCenterss {
   text-align: center;
 }
+
+.noDataTextStyle {
+}
+
+// /deep/ .el-tabs__header {
+//   width: 100%;
+//   padding-top: 38px;
+//   background: #fff;
+//   top: 85px;
+//   position: fixed;
+//   z-index: 2;
+// }
+
+// /deep/ .el-tabs__content {
+//   margin-top: 111px;
+// }
 </style>

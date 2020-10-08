@@ -47,7 +47,7 @@
                   {{materialsListItem.name}}
                 </p>
                 <p>
-                  {{materialsListItem.updateTime | toDate}}
+                  {{materialsListItem.updateTime}}
                 </p>
                 <p>
                   {{materialsListItem.grade}}

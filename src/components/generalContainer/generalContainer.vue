@@ -4,13 +4,19 @@
     v-loading="loadingFlag"
     element-loading-text="数据加载中"
   >
+  <span class="titleStyle" v-if="$route.query.userName">{{$route.query.userName}}</span>
+   
+
     <!-- <div></div> -->
     <ul>
       <li v-for="(item, index) in list" :key="index">
-        <span class="titleIcon"></span>
-        <span @click="handleToDetail(item)" class="curStyle">{{
-          item.name
-        }}</span>
+        <p :class="item.type == 'no' ? 'noDataStyle' : ''">
+          <i class="el-icon-document" style="marginright: 10px"></i>
+          <span @click="handleToDetail(item)" class="curStyle">{{
+            item.name
+          }}</span>
+        </p>
+
         <el-divider></el-divider>
         <div class="task">
           <span>任务项: </span>
@@ -19,30 +25,30 @@
             :text-inside="false"
             :stroke-width="13"
             :percentage="
-              parseFloat(((item.accomplish / item.taskSum) * 100).toFixed(2))
+              item.taskSum == 0 ? 0 : parseFloat(((item.accomplish / item.taskSum) * 100).toFixed(2))
             "
           ></el-progress>
         </div>
-        <span class="fontStyle" style="marginright: 20px"
-          >已完成数：{{ item.accomplish }}</span
+        <span class="fontStyle" style="marginright: 20px; padding: 0 20px"
+          >总任务数：{{ item.taskSum }}</span
         >
-        <span class="fontStyle">总任务数：{{ item.taskSum }}</span>
+        <span class="fontStyle">已完成数：{{ item.accomplish }}</span>
 
-        <div class="task" style="margintop: 10px">
+        <div class="task" style="margintop: 20px">
           <span>得失分: </span>
           <el-progress
             class="taskProgress"
             :text-inside="false"
             :stroke-width="13"
-            :percentage="
-              parseFloat(((item.score / item.total) * 100).toFixed(2))
+            :percentage=" item.total == 0 ? 0 :  parseFloat(((item.score / item.total) * 100).toFixed(2))
+             
             "
           ></el-progress>
         </div>
-        <span class="fontStyle" style="marginright: 30px"
-          >得分：{{ item.score }}</span
+        <span class="fontStyle" style="marginright: 20px; padding: 0 20px"
+          >总分：{{ item.total }}</span
         >
-        <span class="fontStyle">总分：{{ item.total }}</span>
+        <span class="fontStyle">得分：{{ item.score }}</span>
       </li>
     </ul>
   </div>
@@ -75,6 +81,7 @@ export default {
     // ...mapMutations(['']),
 
     handleGetData() {
+      this.loadingFlag = true;
       let param = {};
 
       if (this.$route.query.id) {
@@ -90,12 +97,27 @@ export default {
       setTimeout(() => {
         this.loadingFlag = false;
       }, 1000);
-      this.list = res.data.filter((item) => {
+
+      res.data.no.map((item) => {
+        item.type = "no";
+      });
+
+      res.data.yes.map((item) => {
+        item.type = "yes";
+      });
+
+      let allList = res.data.yes.concat(res.data.no);
+      this.list = allList.filter((item) => {
         return item.name != "鼓励项";
       });
     },
 
     handleToDetail(item) {
+      if (item.type == "no") {
+        this.$message.error("该委办局暂无此任务");
+        return;
+      }
+
       this.$router.push({
         path:
           `/home/index2?type=` + item.name + "&userid=" + this.$route.query.id,
@@ -129,10 +151,19 @@ export default {
     flex-wrap: wrap;
     overflow: auto;
     li {
+      p {
+        background: #409eff;
+        color: #fff;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        border-radius: 10px 10px 0 0;
+        padding: 0 20px;
+      }
       border-top: 1px solid #eee;
       border-left: 1px solid #eee;
       background: #fefefe;
-      padding: 20px;
+      // padding: 20px;
       margin-right: 1%;
       box-sizing: border-box;
       border-radius: 10px;
@@ -151,12 +182,12 @@ export default {
         background-size: 100% 100%;
         margin-right: 16px;
         float: left;
-        margin-top: 8px;
       }
 
       .task {
         box-sizing: border-box;
         display: flex;
+        padding: 0 20px;
         span {
           font-size: 20px;
           margin-right: 20px;
@@ -179,5 +210,23 @@ export default {
 
 .curStyle {
   cursor: pointer;
+}
+
+/deep/ .el-divider--horizontal {
+  margin-bottom: 30px;
+}
+
+.noDataStyle {
+  background: #eee !important;
+  color: black !important;
+}
+
+.titleStyle {
+  margin-bottom: 20px;
+  display: block;
+}
+
+/deep/ .el-divider--horizontal {
+  margin-top: 0;
 }
 </style>

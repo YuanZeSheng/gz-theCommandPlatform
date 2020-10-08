@@ -29,6 +29,10 @@
 .el-tabs__active-bar {
   height: 8px !important;
 }
+ .el-tabs__content {
+  overflow: auto !important;
+  height: 800px !important;
+}
 
 .el-dialog__header {
   padding: 0 !important;

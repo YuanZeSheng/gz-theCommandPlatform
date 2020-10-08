@@ -2,7 +2,8 @@
   <div class="homeRigtContainer marginLeft" :class="{'content-collapse':collapse}">
     <!-- 模版 -->
     <transition name="move" mode="out-in">
-      <div :class="isHomePage ? 'homeRightHeight' : 'rightContent'">
+      <div :class="isHomePage ? 'homeRightHeight' : 'rightContent'"
+            :style="{background: $route.path=='/home/general'? 'transparent':'#fff' }">
         <router-view />
       </div>
     </transition>
@@ -30,7 +31,6 @@ export default {
   },
   watch: {
     $route() {
-      console.log();
       if (this.$route.path == "/home/index1") {
         this.isHomePage = true;
       } else {

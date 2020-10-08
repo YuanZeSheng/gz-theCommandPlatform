@@ -9,8 +9,13 @@
       text-color="#bfcbd9"
       active-text-color="#20a0ff"
       unique-opened
+      :default-openeds="openeds"
     >
-      <el-menu-item :index="'/home/general'" @click="handleToGeneral" v-if="accessRole == 'guanliyuan'">
+      <el-menu-item
+        :index="'/home/general'"
+        @click="handleToGeneral"
+        v-if="accessRole == 'guanliyuan'"
+      >
         <i class="el-icon-s-platform"></i>
         <span slot="title">概览</span>
       </el-menu-item>
@@ -68,8 +73,18 @@
           <span slot="title" class="titleText">委办局</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item :index="'/home/general' + item.id" v-for="(item, index) in departmentList" :key="index">
-            <router-link :to="'/home/general?id=' + item.id" class="routeBtn" tag="li">{{item.organizstionName}}</router-link>
+          <el-menu-item
+            :index="'/home/general' + item.id"
+            v-for="(item, index) in departmentList"
+            :key="index"
+          >
+            <li
+              class="routeBtn"
+              tag="li"
+              @click="handleClickToGeneralDetai(item)"
+            >
+              {{ item.organizstionName }}
+            </li>
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
@@ -84,8 +99,9 @@ export default {
   data() {
     return {
       // isCollapse: false,
+      openeds: ["/home/index2", "/home/department"],
       accessRole: "admin",
-      departmentList: []
+      departmentList: [],
     };
   },
   components: {},
@@ -99,16 +115,18 @@ export default {
     // ...mapMutations(['']),
 
     handleGetUserList() {
-      this.api.handleGetOrganization().then(this.handleGetUserListSucc.bind(this));
+      this.api
+        .handleGetOrganization()
+        .then(this.handleGetUserListSucc.bind(this));
     },
 
     handleGetUserListSucc(res) {
-      if(res.code == 200) {
-        this.departmentList = res.data.filter( item => {
-          return item.type == 'common'
-        })
+      if (res.code == 200) {
+        this.departmentList = res.data.filter((item) => {
+          return item.type == "common";
+        });
 
-        console.log(this.departmentList)
+        console.log(this.departmentList);
       } else {
         this.$message.error(res.message);
       }
@@ -125,6 +143,20 @@ export default {
     },
     handleToHomePage() {
       this.$router.push({ path: "/home/index1" });
+    },
+    handleClickToGeneralDetai(item) {
+      if (this.$route.query.type) {
+        this.$router.push({
+          path:
+            `/home/index2?type=` +
+            this.$route.query.type +
+            "&userid=" +
+            item.id,
+        });
+        this.$route.query.id = item.id;
+      } else {
+        this.$router.push({ path: "/home/general?id=" + item.id + '&userName=' + item.organizstionName});
+      }
     },
     handleToGeneral() {
       this.$router.push({ path: "/home/general" });

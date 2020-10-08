@@ -2,7 +2,7 @@
   <div class="headerContainer">
     <i v-if="!collapse" class="el-icon-s-fold leftIcon" @click="handleCollapseChage"></i>
     <i v-else class="el-icon-s-unfold leftIcon" @click="handleCollapseChage"></i>
-    <span>大连市示范城市评价系统</span>
+    <span>国家安全发展示范城市推进工作评估系统</span>
     
     <el-dropdown class="loginName" trigger="click">
       <span class="el-dropdown-link">
@@ -116,7 +116,7 @@ export default {
   line-height: 70px;
   background: #242f42;
   // background:linear-gradient(-2deg,rgba(47,120,231,1) 0%,rgba(108,173,238,1) 100%);
-  font-size: 22px;
+  font-size: 28px;
   color: #fff;
   position: relative;
   z-index: 2;

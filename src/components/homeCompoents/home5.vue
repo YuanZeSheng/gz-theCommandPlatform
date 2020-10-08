@@ -1,26 +1,51 @@
 <template>
-  <div class="home3Container" v-loading="loadingFlag" element-loading-text="数据加载中">
+  <div
+    class="home3Container"
+    v-loading="loadingFlag"
+    element-loading-text="数据加载中"
+  >
     <!-- 模版 -->
-    <div style="overflow: hidden; margin-bottom: 20px;">
-      
-      <el-button type="primary" @click="handleClickChangeListType()">组织机构</el-button>
-      
-      <el-button type="primary" @click="handleClickChangeListType('specialist')">专家列表</el-button>
+    <div style="overflow: hidden; margin-bottom: 20px">
+      <el-button type="primary" @click="handleClickChangeListType('origin')"
+        >组织机构</el-button
+      >
 
-      <el-button type="primary" class="addItemBtn" @click="handleClickItemBtn()">
+      <el-button type="primary" @click="handleClickChangeListType('specialist')"
+        >专家列表</el-button
+      >
+
+      <el-button type="primary" @click="handleClickChangeListType('lead')"
+        >领导列表</el-button
+      >
+
+      <el-button
+        type="primary"
+        class="addItemBtn"
+        @click="handleClickItemBtn()"
+      >
         <i class="addIcon"></i>
         <span>新增</span>
       </el-button>
     </div>
 
     <!-- 表头 -->
-    <div class="tableHeader" v-if="organizstionFlag">
-      <span v-for="(tabelHeaderItem, index3) in tableHeader" 
-            :key="index3">{{tabelHeaderItem.name}}</span>
+    <div class="tableHeader" v-if="tableType == 'origin'">
+      <span v-for="(tabelHeaderItem, index3) in tableHeader" :key="index3">{{
+        tabelHeaderItem.name
+      }}</span>
     </div>
-    <div class="tableHeader" v-if="!organizstionFlag">
-      <span v-for="(tabelHeaderItem, index3) in specialistHeader" 
-            :key="index3">{{tabelHeaderItem.name}}</span>
+    <div class="tableHeader" v-if="tableType == 'specialist'">
+      <span
+        v-for="(tabelHeaderItem, index3) in specialistHeader"
+        :key="index3"
+        >{{ tabelHeaderItem.name }}</span
+      >
+    </div>
+
+    <div class="tableHeader" v-if="tableType == 'lead'">
+      <span v-for="(tabelHeaderItem, index3) in leadHeader" :key="index3">{{
+        tabelHeaderItem.name
+      }}</span>
     </div>
 
     <!-- 表 -->
@@ -29,27 +54,35 @@
         :data-id="tabelDetailListItem.id"
         v-for="(tabelDetailListItem, tabelDetailListIndex) in tableDeatil"
         :key="tabelDetailListIndex"
-        :class="['tabContent', 'flexCenter', tabelDetailListIndex % 2 ==0 ? 'backgroundBlue' : 'bakcgroundFFF']"
+        :class="[
+          'tabContent',
+          'flexCenter',
+          tabelDetailListIndex % 2 == 0 ? 'backgroundBlue' : 'bakcgroundFFF',
+        ]"
       >
-        <div class="task textCenter">{{tabelDetailListIndex + 1}}</div>
+        <div class="task textCenter">{{ tabelDetailListIndex + 1 }}</div>
 
-        <div class="department textCenter">{{tabelDetailListItem.organizstionName}}</div>
+        <div class="department textCenter">
+          {{ tabelDetailListItem.organizstionName }}
+        </div>
 
         <div class="evaluationList">
-          <p class="textCenter">{{tabelDetailListItem.organizstionNumber}}</p>
+          <p class="textCenter">{{ tabelDetailListItem.organizstionNumber }}</p>
         </div>
         <div class="evaluationList">
-          <p class="textCenter">{{tabelDetailListItem.organizstionLinkman}}</p>
+          <p class="textCenter">
+            {{ tabelDetailListItem.organizstionLinkman }}
+          </p>
         </div>
         <div class="evaluationList">
-          <p class="textCenter">{{tabelDetailListItem.organizstionTel}}</p>
+          <p class="textCenter">{{ tabelDetailListItem.organizstionTel }}</p>
         </div>
 
         <div class="userInfo textCenter">
-          <p>{{tabelDetailListItem.organizstionUsername}}</p>
+          <p>{{ tabelDetailListItem.organizstionUsername }}</p>
         </div>
         <div class="userInfo textCenter">
-          <p>{{tabelDetailListItem.organizstionPassword}}</p>
+          <p>{{ tabelDetailListItem.organizstionPassword }}</p>
         </div>
         <div class="textCenter flexCenter">
           <el-button
@@ -60,7 +93,7 @@
             <i class="addIcon operationBtnIcon updateBtns"></i>
             <span>编辑</span>
           </el-button>
-          <br/>
+          <br />
           <el-button
             type="primary"
             class="addItemBtn operationBtn deleteBtnBox"
@@ -73,15 +106,35 @@
       </div>
     </div>
 
-    <el-dialog :title="organizstionFlag ? '编辑组织结构' : '编辑专家信息' " :visible.sync="editVisible" width="30%" :close-on-click-modal="false">
-      <el-form ref="updateForm" :model="updateForm" label-width="100px" :label-position="lebelPosi">
-        <el-form-item :label="organizstionFlag ? '组织名称' : '专家姓名'" prop="organizstionName">
+    <el-dialog
+      :title="handleChangeTitle('编辑')"
+      
+      :visible.sync="editVisible"
+      width="30%"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        ref="updateForm"
+        :model="updateForm"
+        label-width="100px"
+        :label-position="lebelPosi"
+      >
+        <el-form-item
+          :label="handleChangLabel('名称')"
+          prop="organizstionName"
+        >
           <el-input v-model="updateForm.organizstionName"></el-input>
         </el-form-item>
-        <el-form-item :label="organizstionFlag ? '组织编号' : '专家编号'" prop="organizstionNumber">
+        <el-form-item
+          :label="handleChangLabel('编号')"
+          prop="organizstionNumber"
+        >
           <el-input v-model="updateForm.organizstionNumber"></el-input>
         </el-form-item>
-        <el-form-item :label="organizstionFlag ? '负责人' : '负责人'" prop="organizstionLinkman">
+        <el-form-item
+          :label="'负责人'"
+          prop="organizstionLinkman"
+        >
           <el-input v-model="updateForm.organizstionLinkman"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="organizstionTel">
@@ -101,15 +154,29 @@
     </el-dialog>
 
     <!-- 新增 -->
-    <el-dialog :title="organizstionFlag ? '新增组织结构' : '新增专家人员'" :visible.sync="addEditVisible" width="30%" :close-on-click-modal="false">
-      <el-form ref="addForm" :model="addForm" label-width="100px" :label-position="lebelPosi">
-        <el-form-item :label="organizstionFlag ? '组织名称' : '专家姓名'" prop="organizstionName">
+    <el-dialog
+      :title="handleChangeTitle('新增')"
+      
+      :visible.sync="addEditVisible"
+      width="30%"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        ref="addForm"
+        :model="addForm"
+        label-width="100px"
+        :label-position="lebelPosi"
+      >
+        <el-form-item :label="handleChangLabel('名称')" prop="organizstionName">
           <el-input v-model="addForm.organizstionName"></el-input>
         </el-form-item>
-        <el-form-item :label="organizstionFlag ? '组织编号' : '专家编号'" prop="organizstionNumber">
+        <el-form-item
+          :label="handleChangLabel('编号')"
+          prop="organizstionNumber"
+        >
           <el-input v-model="addForm.organizstionNumber"></el-input>
         </el-form-item>
-         <el-form-item :label="organizstionFlag ? '负责人' : '负责人'" prop="organizstionLinkman">
+        <el-form-item :label="'负责人'" prop="organizstionLinkman">
           <el-input v-model="addForm.organizstionLinkman"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="organizstionTel">
@@ -142,57 +209,84 @@ export default {
       addEditVisible: false,
       loadingFlag: true,
       organizstionFlag: true,
+      tableType: "origin",
       tableHeader: [
         {
-          name: "序号"
+          name: "序号",
         },
         {
-          name: "组织名称"
+          name: "组织名称",
         },
         {
-          name: "组织编号"
+          name: "组织编号",
         },
         {
-          name: "负责人"
+          name: "负责人",
         },
         {
-          name: "联系电话"
+          name: "联系电话",
         },
         {
-          name: "账号"
+          name: "账号",
         },
         {
-          name: "密码"
+          name: "密码",
         },
         {
-          name: "操作"
-        }
+          name: "操作",
+        },
       ],
       specialistHeader: [
         {
-          name: "序号"
+          name: "序号",
         },
         {
-          name: "专家姓名"
+          name: "专家姓名",
         },
         {
-          name: "专家编号"
+          name: "专家编号",
         },
         {
-          name: "负责人"
+          name: "负责人",
         },
         {
-          name: "联系电话"
+          name: "联系电话",
         },
         {
-          name: "账号"
+          name: "账号",
         },
         {
-          name: "密码"
+          name: "密码",
         },
         {
-          name: "操作"
-        }
+          name: "操作",
+        },
+      ],
+      leadHeader: [
+        {
+          name: "序号",
+        },
+        {
+          name: "领导姓名",
+        },
+        {
+          name: "领导编号",
+        },
+        {
+          name: "负责人",
+        },
+        {
+          name: "联系电话",
+        },
+        {
+          name: "账号",
+        },
+        {
+          name: "密码",
+        },
+        {
+          name: "操作",
+        },
       ],
       tableDeatil: [],
       updateIndex: "",
@@ -202,7 +296,7 @@ export default {
         organizstionUsername: "",
         organizstionPassword: "",
         organizstionLinkman: "",
-        organizstionTel: ""
+        organizstionTel: "",
       },
 
       addForm: {
@@ -211,30 +305,66 @@ export default {
         organizstionUsername: "",
         organizstionPassword: "",
         organizstionLinkman: "",
-        organizstionTel: ""
+        organizstionTel: "",
       },
 
       indexObj: {},
 
-      addIndexObj: {}
+      addIndexObj: {},
     };
   },
   components: {},
   computed: {
-    ...mapState([""])
+    ...mapState([""]),
   },
   methods: {
-
     handleClickChangeListType(type) {
-      if( type == 'specialist' ) {
-        this.organizstionFlag = false
-      } else {
-        this.organizstionFlag = true
+      this.tableType = type;
+      // 专家
+      if (type == "specialist") {
+        this.organizstionFlag = false;
       }
+
+      if (type == "origin") {
+        this.organizstionFlag = true;
+      }
+
+      // 组织
+    },
+    // :title="organizstionFlag ? '编辑组织结构' : '编辑专家信息'"
+    
+    handleChangeTitle(type) {
+      switch (this.tableType) {
+          case "specialist":
+            return type + "专家";
+            break;
+          case "origin":
+            return type + "组织";
+            break;
+          case "lead":
+            return type + "领导";
+            break;
+        }
+    },
+
+    handleChangLabel(type) {
+        switch (this.tableType) {
+          case "specialist":
+            return "专家" + type;
+            break;
+          case "origin":
+            return "组织" + type;
+            break;
+          case "lead":
+            return "领导" + type;
+            break;
+        }
     },
     handleGetUserList() {
-      this.loadingFlag = true
-      this.api.handleGetOrganization().then(this.handleGetUserListSucc.bind(this));
+      this.loadingFlag = true;
+      this.api
+        .handleGetOrganization()
+        .then(this.handleGetUserListSucc.bind(this));
     },
     handleGetUserListSucc(res) {
       setTimeout(() => {
@@ -242,20 +372,31 @@ export default {
       }, 1000);
       if (res.code == 200) {
         // 专家
-        let expertList = res.data.filter( item => {
-          return item.type == 'expert'  
-        } )
+        let expertList = res.data.filter((item) => {
+          return item.type == "expert";
+        });
         // 组织结构
-        let organizationList = res.data.filter( item => {
-          return item.type == 'common'  
-        } )
+        let organizationList = res.data.filter((item) => {
+          return item.type == "common";
+        });
 
-        if( this.organizstionFlag ) {
-          this.tableDeatil = organizationList
-        } else {
-          this.tableDeatil = expertList
+        // 领导列表
+        let leaderList = res.data.filter((item) => {
+          return item.type == "lead";
+        });
+
+        // 专家
+        if (this.tableType == "origin") {
+          this.tableDeatil = organizationList;
         }
 
+        if (this.tableType == "specialist") {
+          this.tableDeatil = expertList;
+        }
+
+        if (this.tableType == "lead") {
+          this.tableDeatil = leaderList;
+        }
       } else {
         this.$message.error(res.message);
       }
@@ -264,7 +405,7 @@ export default {
     handleDelete(tabelDetailListItem) {
       // 二次确认删除
       this.$confirm("确定要删除吗？", "提示", {
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.handleDeleteOrganizationItem(tabelDetailListItem);
@@ -273,21 +414,23 @@ export default {
     },
 
     handleDeleteOrganizationItem(tabelDetailListItem) {
-      this.loadingFlag = true
-      let param = {}
-      param.id = tabelDetailListItem.id
-      this.api.handleDeleteOrganization(param).then(this.handleDeleteOrganizationSucc.bind(this));
+      this.loadingFlag = true;
+      let param = {};
+      param.id = tabelDetailListItem.id;
+      this.api
+        .handleDeleteOrganization(param)
+        .then(this.handleDeleteOrganizationSucc.bind(this));
     },
 
     handleDeleteOrganizationSucc(res) {
       setTimeout(() => {
         this.loadingFlag = false;
       }, 1000);
-      if( res.code == 200 ) {
-        this.$message.success('删除成功')
-        this.handleGetUserList()
+      if (res.code == 200) {
+        this.$message.success("删除成功");
+        this.handleGetUserList();
       } else {
-        this.$message.error(res.message)
+        this.$message.error(res.message);
       }
     },
 
@@ -301,26 +444,34 @@ export default {
         organizstionPassword: editObj.organizstionPassword,
         organizstionLinkman: editObj.organizstionLinkman,
         organizstionTel: editObj.organizstionTel,
-        id: editObj.id
+        id: editObj.id,
       };
       this.editVisible = true;
     },
     saveEdit() {
-      if( this.organizstionFlag ) {
-        this.updateForm.accessRole = 3
-      } else {
-        this.updateForm.accessRole = 2
+      // 专家
+      if (this.tableType == "origin") {
+        this.updateForm.accessRole = 3;
       }
-      this.api.handleUpdateOrganization(this.updateForm).then(this.handleUpdateOrganizationSucc.bind(this));
 
+      if (this.tableType == "specialist") {
+        this.updateForm.accessRole = 2;
+      }
+
+      if (this.tableType == "lead") {
+        this.updateForm.accessRole = 4;
+      }
+      this.api
+        .handleUpdateOrganization(this.updateForm)
+        .then(this.handleUpdateOrganizationSucc.bind(this));
     },
     handleUpdateOrganizationSucc(res) {
-      if( res.code == 200 ) {
-        this.$message.success('修改成功')
-        this.handleGetUserList()
+      if (res.code == 200) {
+        this.$message.success("修改成功");
+        this.handleGetUserList();
         this.editVisible = false;
       } else {
-        this.$message.error(res.message)
+        this.$message.error(res.message);
       }
     },
     handleClickCancle() {
@@ -341,10 +492,16 @@ export default {
       this.addEditVisible = false;
     },
     saveAddItem() {
-      if( this.organizstionFlag ) {
-        this.addForm.accessRole = 3
-      } else {
-        this.addForm.accessRole = 2
+      if (this.tableType == "origin") {
+        this.addForm.accessRole = 3;
+      }
+
+      if (this.tableType == "specialist") {
+        this.addForm.accessRole = 2;
+      }
+
+      if (this.tableType == "lead") {
+        this.addForm.accessRole = 4;
       }
       this.api
         .handleAddOrganization(this.addForm)
@@ -366,12 +523,12 @@ export default {
         }
       });
       this.addEditVisible = true;
-    }
+    },
   },
   watch: {
-    organizstionFlag() {
-      this.handleGetUserList()
-    }
+    tableType() {
+      this.handleGetUserList();
+    },
   },
   beforeCreate() {},
   created() {},
@@ -382,7 +539,7 @@ export default {
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
-  destroyed() {}
+  destroyed() {},
 };
 </script>
 
@@ -493,10 +650,6 @@ export default {
 
   box-sizing: border-box;
 
-
-
-
-
   div {
     width: 14%;
   }
@@ -583,7 +736,6 @@ export default {
   );
   border: none;
 }
-
 .addItemBtn {
   float: right;
   width: 118px;
