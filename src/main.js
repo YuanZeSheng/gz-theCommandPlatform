@@ -8,7 +8,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store/store';
-import api from './api/api.js'  
+import api from './api/api.js'
 import filter from "./filter/filter.js"
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
@@ -19,10 +19,18 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './assets/common.less'
 import utils from '../src/utils/utils.js'
 
+window.addEventListener("click", function () {
+  if (router.currentRoute.name != 'index3') {
+    utils.enterFullScreen();
+  } else {
+    utils.enterScrenn()
+  }
 
+});
 //  路由判断登录 根据路由配置文件的参数
 router.beforeEach((to, from, next) => {
-  if (to.name == 'Login' || to.name == 'page404') {
+
+  if (to.name == 'Login') {
     next();
   } else {
     if (window.localStorage.getItem('ms_username') != null) {
@@ -33,9 +41,9 @@ router.beforeEach((to, from, next) => {
         return item == jurisdiction
       })
 
-      if( filterList.length != 0 ) {
+      if (filterList.length != 0) {
         next();
-      }  else {
+      } else {
         ElementUI.Message({
           message: '暂无权限访问该路径, 即将返回',
           type: 'error'
@@ -64,9 +72,7 @@ Vue.use(ElementUI);
 Vue.prototype.api = api
 
 
-window.addEventListener("click", function() {
-  utils.enterFullScreen();
-});
+
 
 
 new Vue({

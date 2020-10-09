@@ -43,6 +43,7 @@ const routes = [
       },
       {
         path: 'home/index3',
+        name: 'index3',
         component: () => import(/* webpackChunkName: "home3" */ '../components/homeCompoents/home3.vue'),
         meta: {
           rolu: [3]
