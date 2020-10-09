@@ -1,85 +1,119 @@
 <template>
   <div class="login-wrap">
-    <div class="headerBox">
-      <div class="leftBox">
-        <div class="logBack"></div>
-        <div class="logTextBack"></div>
-      </div>
-
-      <div class="rightBox">
-        <p class="tiBoxPos">
-          <span class="duStyle">21<span class="iconDuStyle">°c</span></span>
-          <img class="tqIconStyle" src="./images/tianqi.png" />
-          <span class="tqStyleType">阴<br />天</span>
-        </p>
-
-        <p class="dateStyle">
-          2020年10月08日<span class="mounTyStyle">星期五</span>
-        </p>
-      </div>
-    </div>
-
-    <p class="messageBox">
-      <img src="./images/喇叭.png" alt="" />
-      【通知】经济发展经济发展经济发展经济发展...更多
-    </p>
-
-    <div class="containerBox">
-      <div class="boxStyle1">
-        <div class="bo1" @click="handleChangeLoginModalFalg">
-          <p class="routeJumpText">
-            <span class="numberStyles">1</span>、领导服务
-          </p>
+    <div class="cententBoxs">
+      <div class="headerBox">
+        <div class="leftBox">
+          <div class="logBack"></div>
+          <div class="logTextBack"></div>
         </div>
-        <div class="bo2" @click="handleChangeLoginModalFalg">
-          <p class="routeJumpText">
-            <span class="numberStyles">2</span>、委办局服务
+
+        <div class="rightBox">
+          <p class="tiBoxPos">
+            <span class="duStyle">21<span class="iconDuStyle">°c</span></span>
+            <img class="tqIconStyle" src="./images/tianqi.png" />
+            <span class="tqStyleType">阴<br />天</span>
+          </p>
+
+          <p class="dateStyle">
+            {{ xDate }}<span class="mounTyStyle">星期五</span>
           </p>
         </div>
       </div>
 
-      <div class="boxStyle2" @click="handleChangeLoginModalFalg">
-        <p class="routeJumpText">
-          <span class="numberStyles">3</span>、专家服务
-        </p>
-      </div>
+      <p class="messageBox">
+        <img src="./images/喇叭.png" alt="" />
+        【通知】经济发展经济发展经济发展经济发展...更多
+      </p>
 
-      <div class="boxStyle3">
-        <div class="box3Top" @click="handleChangeLoginModalFalg">
-          <p class="routeJumpText">
-            <span class="numberStyles">4</span>、政策导读
-          </p>
-        </div>
-
-        <div class="box3Bottom">
-          <div class="box3BottmLeft" @click="handleChangeLoginModalFalg">
+      <div class="containerBox">
+        <div class="boxStyle1">
+          <div
+            class="bo1"
+            @click="handleChangeLoginModalFalg('领导服务')"
+            @mouseenter="handleEnter($event)"
+            @mouseleave="handleLeave($event)"
+          >
             <p class="routeJumpText">
-              <span class="numberStyles">5</span>、城市进度
+              <span class="numberStyles">1</span>、领导服务
             </p>
           </div>
-          <div class="box3BottmRight" @click="handleChangeLoginModalFalg">
+          <div
+            class="bo2"
+            @click="handleChangeLoginModalFalg('委办局服务')"
+            @mouseenter="handleEnter($event)"
+            @mouseleave="handleLeave($event)"
+          >
             <p class="routeJumpText">
-              <span class="numberStyles">6</span>、系统说明
+              <span class="numberStyles">2</span>、委办局服务
             </p>
           </div>
         </div>
+
+        <div
+          class="boxStyle2"
+          @click="handleChangeLoginModalFalg('专家服务')"
+          @mouseenter="handleEnter($event)"
+          @mouseleave="handleLeave($event)"
+        >
+          <p class="routeJumpText">
+            <span class="numberStyles">3</span>、专家服务
+          </p>
+        </div>
+
+        <div class="boxStyle3">
+          <div
+            class="box3Top"
+            @click="handleChangeLoginModalFalg('政策导读')"
+            @mouseenter="handleEnter($event)"
+            @mouseleave="handleLeave($event)"
+          >
+            <p class="routeJumpText">
+              <span class="numberStyles">4</span>、政策导读
+            </p>
+          </div>
+
+          <div class="box3Bottom">
+            <div
+              class="box3BottmLeft"
+              @click="handleChangeLoginModalFalg('城市进度')"
+              @mouseenter="handleEnter($event)"
+              @mouseleave="handleLeave($event)"
+            >
+              <p class="routeJumpText">
+                <span class="numberStyles">5</span>、城市进度
+              </p>
+            </div>
+            <div
+              class="box3BottmRight"
+              @click="handleChangeLoginModalFalg('系统说明')"
+              @mouseenter="handleEnter($event)"
+              @mouseleave="handleLeave($event)"
+            >
+              <p class="routeJumpText">
+                <span class="numberStyles">6</span>、系统说明
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="boxStyle4"
+          @click="handleChangeLoginModalFalg('配置管理')"
+          @mouseenter="handleEnter($event)"
+          @mouseleave="handleLeave($event)"
+        >
+          <p class="routeJumpText">
+            <span class="numberStyles">7</span>、配置管理
+          </p>
+        </div>
       </div>
 
-      <div class="boxStyle4" @click="handleChangeLoginModalFalg">
-        <p class="routeJumpText">
-          <span class="numberStyles">7</span>、配置管理
-        </p>
-      </div>
+      <div class="footerText"></div>
     </div>
 
-    <div class="footerText"></div>
-
-    <el-dialog
-      :visible.sync="loginModFlag"
-      width="30%"
-    >
+    <el-dialog :visible.sync="loginModFlag" width="30%">
       <div class="ms-login">
-        <div class="ms-title">登录</div>
+        <div class="ms-title">{{ loginType }}</div>
         <el-form
           :model="param"
           :rules="rules"
@@ -88,7 +122,7 @@
           class="ms-content"
         >
           <el-form-item prop="userName">
-            <el-input v-model="param.userName" placeholder="请输入账号">
+            <el-input v-model="param.userName" :placeholder="placeholderValue">
               <el-button slot="prepend" icon="el-icon-user-solid"></el-button>
             </el-input>
           </el-form-item>
@@ -114,8 +148,18 @@
 
 <script>
 export default {
+  mounted() {
+    window.localStorage.removeItem("ms_usernameid");
+    window.localStorage.removeItem("ms_username");
+    window.localStorage.removeItem("name");
+    window.localStorage.removeItem("accessRole");
+    this.handleGetDate();
+  },
   data: function () {
     return {
+      placeholderValue: "",
+      xDate: "",
+      loginType: "",
       loginModFlag: false,
       param: {
         userName: "",
@@ -136,10 +180,71 @@ export default {
           this.$refs.login.resetFields();
         }
       });
-    }
+    },
   },
   methods: {
-    handleChangeLoginModalFalg() {
+    handleChangePlaceholder() {
+      switch (that.loginType) {
+        case "配置管理":
+          this.placeholderValue = "请输入管理员账号";
+          break;
+        case "专家服务":
+          this.placeholderValue = "请输入专家账号";
+          break;
+        case "委办局服务":
+          this.placeholderValue = "请输入委办局账号";
+          break;
+        case "领导服务":
+          this.placeholderValue = "请输入领导账号";
+          break;
+      }
+    },
+    handleGetDate() {
+      var now = new Date();
+      var year = now.getFullYear(); //年
+      var month =
+        now.getMonth() + 1 < 10
+          ? "0" + (now.getMonth() + 1)
+          : now.getMonth() + 1; //月
+      var day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate(); //日
+      var hh = now.getHours(); //时
+      var mm = now.getMinutes(); //分
+
+      let xDate = year + "年" + month + "月" + day + "日";
+      this.xDate = xDate;
+    },
+
+    handleEnter($event) {
+      $event.currentTarget.classList.remove("mouserLeave");
+      $event.currentTarget.className += " mouserEnter";
+    },
+
+    handleLeave($event) {
+      $event.currentTarget.classList.remove("mouserEnter");
+      $event.currentTarget.className += " mouserLeave";
+    },
+
+    handleChangeLoginModalFalg(type) {
+      this.loginType = type;
+      if (type == "政策导读" || type == "城市进度" || type == "系统说明") {
+        this.$message("正在接入 敬请期待");
+        return;
+      }
+      switch (this.loginType) {
+        case "配置管理":
+          this.placeholderValue = "请输入管理员账号";
+          break;
+        case "专家服务":
+          this.placeholderValue = "请输入专家账号";
+          break;
+        case "委办局服务":
+          this.placeholderValue = "请输入委办局账号";
+          break;
+        case "领导服务":
+          this.placeholderValue = "请输入领导账号";
+          break;
+      }
+
       this.loginModFlag = true;
     },
     submitForm() {
@@ -158,8 +263,55 @@ export default {
 
               localStorage.setItem("accessRole", res.data.accessRole);
 
+              // 1 admin  管理员 配置管理
+              // 2 专家 专家服务
+              // 3 委办局 委办局服务
+              // 4 领导
+
+              switch (that.loginType) {
+                case "配置管理":
+                  if (res.data.accessRole != 1) {
+                    that.$message.error("请登录管理员账号");
+                    return;
+                  }
+                  break;
+                case "专家服务":
+                  if (res.data.accessRole != 2) {
+                    that.$message.error("请登录专家账号");
+                    return;
+                  }
+                  break;
+                case "委办局服务":
+                  if (res.data.accessRole != 3) {
+                    that.$message.error("请登录委办局账号");
+                    return;
+                  }
+                  break;
+                case "领导服务":
+                  if (res.data.accessRole != 4) {
+                    that.$message.error("请登录领导账号");
+                    return;
+                  }
+                  break;
+              }
+
+              if (res.data.accessRole == 1) {
+                that.$router.push("/home/index1");
+              }
+
+              if (res.data.accessRole == 2) {
+                that.$router.push("/home/index1");
+              }
+
+              if (res.data.accessRole == 3) {
+                that.$router.push("/home/index3");
+              }
+
+              if (res.data.accessRole == 4) {
+                that.$router.push("/home/general");
+              }
+
               that.$message.success("登录成功");
-              that.$router.push("/home/index1");
             } else {
               that.$message.error(res.message);
             }
@@ -361,6 +513,7 @@ export default {
 }
 
 .login-wrap {
+  width: 1920px;
   box-sizing: border-box;
   padding: 76px 132px;
   position: relative;
@@ -449,5 +602,20 @@ export default {
 
 /deep/ .el-dialog__headerbtn {
   display: none;
+}
+
+.mouserEnter {
+  transition: all 0.5s;
+  transform: scale(1.09);
+}
+
+.mouserLeave {
+  transition: all 0.5s;
+  transform: scale(1);
+}
+
+.cententBoxs {
+  width: 1646px;
+  margin: 0 auto;
 }
 </style>

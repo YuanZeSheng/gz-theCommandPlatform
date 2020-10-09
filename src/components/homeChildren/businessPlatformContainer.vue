@@ -3,14 +3,15 @@
     <!-- echarts -->
     <div class="echartsContent" id="echartsContent"></div>
 
-		<!-- 业务平台right -->
-		<div class="rightContent">
-			<p v-for="(item, index) in list" :key="index" class="numberBox">
-				<span class="border"></span>
-				<span>{{item.name}}</span>
-				<span class='number'>{{item.number}}</span>分
-			</p>
-		</div>
+    <!-- 业务平台right -->
+    <div class="rightContent">
+      <p v-for="(item, index) in list" :key="index" class="numberBox">
+        <span class="border"></span>
+        <span>{{ item.name }}</span>
+        <span class="number">{{ item.number }}</span
+        >分
+      </p>
+    </div>
   </div>
 </template>
 
@@ -20,15 +21,18 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-			list: [{
-				name: '基础分',
-				number: 0
-			}, {
-				name: '奖励分',
-				number: 0
-      }],
-      totalPoints: 0
-		};
+      list: [
+        {
+          name: "基础分",
+          number: 0,
+        },
+        {
+          name: "奖励分",
+          number: 0,
+        },
+      ],
+      totalPoints: 0,
+    };
   },
   components: {},
   computed: {
@@ -43,30 +47,31 @@ export default {
     },
 
     handleGetHomeBusinessPlatformInfoSucc(res) {
-      if( res.code == 200 ) {
-        this.list.map( item => {
-          if( item.name == '基础分' ) {
-            item.number = res.data.basics
+      if (res.code == 200) {
+        this.list.map((item) => {
+          if (item.name == "基础分") {
+            item.number = res.data.basics;
           }
 
-          if( item.name == '奖励分' ) {
-            item.number = res.data.award
+          if (item.name == "奖励分") {
+            item.number = res.data.award;
           }
-        } )
+        });
 
-        this.totalPoints = res.data.totalPoints
-        this.handleInitEcharts()
+        this.totalPoints = res.data.totalPoints;
+        this.handleInitEcharts();
       } else {
         this.$message.error(res.message);
       }
     },
 
-
     handleInitEcharts() {
-      let myChart = this.$echarts.init(
-        document.getElementById("echartsContent")
-			);
-			
+      if (document.getElementById("echartsContent")) {
+        var myChart = this.$echarts.init(
+          document.getElementById("echartsContent")
+        );
+      }
+
       let axisTickLength = 0; //刻度线宽度
       let value = this.totalPoints;
       let colorRegionRate = (value / 100).toFixed(2);
@@ -84,63 +89,63 @@ export default {
             radius: "85%",
             startAngle: "225",
             endAngle: "-45",
-						splitNumber: "100",
-						center: ["45%", "54%"], 　
+            splitNumber: "100",
+            center: ["45%", "54%"],
             pointer: {
-              show: false
+              show: false,
             },
             detail: {
-              show: false
+              show: false,
             },
             axisLine: {
               show: true,
               lineStyle: {
                 color: [[1, "#0BA6FF"]],
                 width: 3,
-                opacity: 1
-              }
+                opacity: 1,
+              },
             },
             axisTick: {
-              show: false
+              show: false,
             },
             splitLine: {
-              show: false
+              show: false,
             },
             axisLabel: {
-              show: false
-            }
+              show: false,
+            },
           },
           {
             type: "gauge",
             name: "第二层",
             radius: "75%",
             startAngle: "225",
-						endAngle: "-45",
-						center: ["45%", "54%"], 　
+            endAngle: "-45",
+            center: ["45%", "54%"],
             splitNumber: 4,
             pointer: {
               show: true,
-              length: "53%"
+              length: "53%",
             },
             // 仪表盘指针样式。
             itemStyle: {
-							color: "#519BEC",
-							borderWidth: 120,	
-						},
-						pointer: {
-                width: 7,//指针的宽度
-                length:"68%", //指针长度，按照半圆半径的百分比
-                shadowColor : '#ccc', //默认透明
-                shadowBlur: 5
+              color: "#519BEC",
+              borderWidth: 120,
+            },
+            pointer: {
+              width: 7, //指针的宽度
+              length: "68%", //指针长度，按照半圆半径的百分比
+              shadowColor: "#ccc", //默认透明
+              shadowBlur: 5,
             },
             data: [
               {
                 value: value,
-                name: "总分"
-              }
+                name: "总分",
+              },
             ],
             title: {
-              show: false
+              show: false,
             },
             axisLine: {
               show: true,
@@ -148,8 +153,8 @@ export default {
                 color: [
                   // 有数值的部分
                   [
-										colorRegionRate,
-										'#3C7AD9'
+                    colorRegionRate,
+                    "#3C7AD9",
                     // new echarts.graphic.LinearGradient(0, 0, 1, 0, [
                     //   {
                     //     offset: 0,
@@ -162,82 +167,80 @@ export default {
                     // ])
                   ],
                   // 底色
-                  [
-                    1, 'rgba(81,155,236,.15)'
-                  ]
+                  [1, "rgba(81,155,236,.15)"],
                 ],
                 width: 20,
                 shadowOffsetX: 0,
                 shadowOffsetY: 0,
-                opacity: 1
-              }
+                opacity: 1,
+              },
             },
             axisTick: {
-              show: false
+              show: false,
             },
             splitLine: {
-              show: false
+              show: false,
             },
             detail: {
-              show: false
+              show: false,
             },
             axisLabel: {
-              show: false
+              show: false,
             },
-            animationDuration: 2000
+            animationDuration: 2000,
           },
 
           {
             name: "与div背景色相同模拟axisTick",
             type: "gauge",
-						radius: "62%",
-						center: ["45%", "54%"], 　
+            radius: "62%",
+            center: ["45%", "54%"],
             startAngle: "225",
             endAngle: "-45",
             splitNumber: 1,
             pointer: {
-              show: false
+              show: false,
             },
             title: {
-              show: false
+              show: false,
             },
             detail: {
               show: true,
               offsetCenter: [0, "80%"],
-              formatter: value => {
+              formatter: (value) => {
                 return [`{c|总分} {a|${value}}`];
               },
               rich: {
                 a: {
                   color: "#3C7AD9",
                   fontWeight: 600,
-									fontSize: 30,
-									fontWeight: 600
+                  fontSize: 30,
+                  fontWeight: 600,
                 },
                 b: {
                   color: "#3C7AD9",
                   fontWeight: 600,
-                  fontSize: 36
+                  fontSize: 36,
                 },
                 c: {
                   color: "#3C7AD9",
                   fontWeight: 600,
-                  fontSize: 20
-                }
-              }
+                  fontSize: 20,
+                },
+              },
             },
             data: [
               {
                 value: value,
-                name: "警押比"
-              }
+                name: "警押比",
+              },
             ],
             axisLine: {
               show: false,
               lineStyle: {
                 width: 1,
-                opacity: 0
-              }
+                opacity: 0,
+              },
             },
             axisTick: {
               show: true,
@@ -246,83 +249,83 @@ export default {
               lineStyle: {
                 // 与div背景色相同
                 color: "red",
-                width: 5
-              }
+                width: 5,
+              },
             },
             splitLine: {
-              show: false
+              show: false,
             },
             axisLabel: {
-              show: false
-            }
-          }
-        ]
+              show: false,
+            },
+          },
+        ],
       };
 
       myChart.setOption(option);
-    }
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    this.handleGetHomeBusinessPlatformInfo()
+    this.handleGetHomeBusinessPlatformInfo();
     this.handleInitEcharts();
   },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
-  destroyed() {}
+  destroyed() {},
 };
 </script>
 
 <style scoped lang="less" >
 .businessPlatformContainer {
-	display: flex;
-	height: 100%;
-	justify-self: center;
-	align-self: center;
-	.echartsContent {
-		width: 50%;
-		height: 100%;
-	}
-	.rightContent {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
+  display: flex;
+  height: 100%;
+  justify-self: center;
+  align-self: center;
+  .echartsContent {
+    width: 50%;
+    height: 100%;
+  }
+  .rightContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-	.border {
-		display: inline-block;
-		width: 4px;
-		height: 100%;
-		background: #3780F8;
-	}
+  .border {
+    display: inline-block;
+    width: 4px;
+    height: 100%;
+    background: #3780f8;
+  }
 
-	.numberBox {
-		width: 270px;
-		height: 74px;
-		background:rgba(81,155,236, .15);
-		line-height: 74px;
-		margin-bottom: 30px;
-		font-size:20px;
-		color: #3780F8;
-		font-weight: 700;
-		span {
-			float: left;
-		}
-		span:nth-child(1) {
-		}
-		span:nth-child(2) {
-			margin-left: 36px;
-		}
-		span:nth-child(3) {
-			font-size:40px;
-			display: inline-block;
-			width: 100px;
-			text-align: center;
-		}
-	}
+  .numberBox {
+    width: 270px;
+    height: 74px;
+    background: rgba(81, 155, 236, 0.15);
+    line-height: 74px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    color: #3780f8;
+    font-weight: 700;
+    span {
+      float: left;
+    }
+    span:nth-child(1) {
+    }
+    span:nth-child(2) {
+      margin-left: 36px;
+    }
+    span:nth-child(3) {
+      font-size: 40px;
+      display: inline-block;
+      width: 100px;
+      text-align: center;
+    }
+  }
 }
 </style>

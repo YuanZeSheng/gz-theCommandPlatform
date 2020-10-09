@@ -47,9 +47,12 @@ export default {
     },
     //柱
     handleGetCityEcharts(datax, dataInY, dataOutY) {
-      let myChart = this.$echarts.init(
-        document.getElementById("scoringEcharts")
-      );
+
+       if (document.getElementById("scoringEcharts")) {
+        var myChart = this.$echarts.init(
+          document.getElementById("scoringEcharts")
+        );
+      }
       let option = {
         // backgroundColor: "#fff",
         color: ["#3C7AD9"],

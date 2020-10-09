@@ -47,9 +47,13 @@ export default {
     },
 
     handleGetCityPieEcharts(dataPie) {
-      let myChart = this.$echarts.init(
-        document.getElementById("dropPointsEchats")
-      );
+
+      if (document.getElementById("dropPointsEchats")) {
+        var myChart = this.$echarts.init(
+          document.getElementById("dropPointsEchats")
+        );
+      }
+    
       let option = {
         backgroundColor: "#fff",
         animation: true,

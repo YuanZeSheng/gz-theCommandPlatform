@@ -3,7 +3,7 @@
     <!-- 模版 -->
     <transition name="move" mode="out-in">
       <div :class="isHomePage ? 'homeRightHeight' : 'rightContent'"
-            :style="{background: $route.path=='/home/general'? 'transparent':'#fff' }">
+            :style="{background: $route.path=='/home/general' || $route.path == '/home/index1' ? 'transparent':'#fff' }">
         <router-view />
       </div>
     </transition>
